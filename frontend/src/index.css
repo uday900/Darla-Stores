@@ -1,0 +1,43 @@
+@import 'tailwindcss';
+
+@layer base {
+    .form-input{
+        @apply w-full px-3 py-2 border border-slate-400 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500;
+    }
+    .primary-button{
+        @apply py-2 px-4 rounded-md text-white font-medium transition-colors duration-200 cursor-pointer bg-indigo-600 hover:bg-indigo-700
+    }
+
+    .disable-button{
+        @apply text-sm bg-gray-400 text-white py-2 px-4 rounded-md cursor-not-allowed hover:bg-gray-400
+    }
+    .secondary-button{
+        @apply text-sm font-semibold px-4 py-2 border border-gray-800 rounded-md hover:bg-gray-200 cursor-pointer
+    }
+
+
+    .hover-effect{
+        @apply p-2 hover:bg-gray-300 cursor-pointer hover:underline
+    }
+
+    .input-field{
+        @apply w-full border border-gray-300 rounded-lg p-2 cursor-pointer
+    }
+
+
+    .left-right-arrow{
+        @apply absolute left-0 top-1/2 transform -translate-y-1/2 bg-transparent p-2 rounded-full
+    }
+    .delete-button{
+        @apply bg-red-500 text-white text-sm py-2 px-4 rounded-lg shadow-md hover:bg-red-600 cursor-pointer
+    }
+    .cancel-button{
+        @apply bg-gray-500 hover:bg-gray-700 text-white px-4 py-2 rounded-lg mr-2 cursor-pointer
+    }
+
+    .selection-field{
+        @apply border border-slate-300 outline-sky-500 p-2 rounded  cursor-pointer
+    }
+
+    
+}

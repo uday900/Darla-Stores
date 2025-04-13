@@ -1,0 +1,267 @@
+import { useEffect, useState } from 'react';
+import { Link, useNavigate, Navigate } from 'react-router-dom';
+import { FaSearch, FaUser, FaShoppingCart, FaSignOutAlt, FaBars, FaTimes } from 'react-icons/fa';
+import { AuthContext } from '../state-management/AuthContext';
+import { useContext } from 'react';
+import { toast } from 'react-toastify';
+import UserContext from '../state-management/UserContext';
+
+const Navbar = () => {
+    const [searchQuery, setSearchQuery] = useState('');
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [showMobileSearch, setShowMobileSearch] = useState(false);
+    const [cartCount, setCartCount] = useState(0);
+    const navigate = useNavigate();
+
+
+    // state values
+    const { loading, error, message, isAuthenticated, isAdmin,logout } = useContext(AuthContext);
+    const { fetchUserCart, loading: cartLoading, cart } = useContext(UserContext);
+    const user = JSON.parse(localStorage.getItem('user'));
+// useEffect(() => {
+//     const token = localStorage.getItem("token");
+//     // if(!token){
+//     //     console.log("token not found");
+//     //     logout();
+//     // }
+// }, []);
+    // For cart testing
+    const cartItemsCount = 3;
+
+
+    const handleSearch = (e) => {
+        e.preventDefault();
+        if (searchQuery.trim()) {
+            navigate(`/search?query=${encodeURIComponent(searchQuery)}`);
+            setShowMobileSearch(false);
+        }
+    };
+
+    const handleLogout = () => {
+        logout();
+        
+        toast.success('Logged out successfully');
+        navigate('/login');
+    };
+
+    const toggleMenu = () => {
+        setIsMenuOpen(!isMenuOpen);
+        setShowMobileSearch(false);
+    };
+
+    const toggleMobileSearch = () => {
+        setShowMobileSearch(!showMobileSearch);
+        setIsMenuOpen(false);
+    };
+
+    useEffect(() => {
+        if (isAuthenticated) {
+            fetchUserCart(user.id);
+        }
+    }, [isAuthenticated]);
+
+    useEffect(() => {
+        if (cart) {
+            setCartCount(cart?.length || 0);
+        }
+    }, [cart]);
+
+    return (
+        <nav className="bg-white shadow-md sticky w-full top-0 z-50">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div className="flex justify-between items-center h-16">
+                    {/* Left side - Firm Name */}
+                    <div className="flex-shrink-0">
+                        <Link to="/" className="text-2xl font-bold ">
+                            Darla <span className="text-indigo-600">Stores</span>
+                        </Link>
+                    </div>
+
+                    {/* Search Bar - Desktop & Tablet */}
+                    <div className="hidden md:block lg:block flex-1 max-w-2xl mx-4">
+                        <form onSubmit={handleSearch} className="relative">
+                            <input
+                                type="text"
+                                placeholder="Search products..."
+                                value={searchQuery}
+                                onChange={(e) => setSearchQuery(e.target.value)}
+                                className="form-input w-full px-4 py-2 pr-10"
+                            />
+                            <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                                <FaSearch className="text-gray-400" />
+                            </div>
+                        </form>
+                    </div>
+
+                    {/* Mobile Icons (Search & Menu) */}
+                    <div className="flex items-center gap-2 md:hidden">
+                        {/* Mobile Search Icon */}
+                        <button
+                            onClick={toggleMobileSearch}
+                            className="p-2 rounded-md text-gray-700 hover:text-indigo-600"
+                        >
+                            <FaSearch className="h-5 w-5" />
+                        </button>
+
+                        {/* Menu Button */}
+                        <button
+                            onClick={toggleMenu}
+                            className="p-2 rounded-md text-gray-700 hover:text-indigo-600"
+                        >
+                            {isMenuOpen ? (
+                                <FaTimes className="h-6 w-6" />
+                            ) : (
+                                <FaBars className="h-6 w-6" />
+                            )}
+                        </button>
+                    </div>
+
+                    {/* Desktop Menu */}
+                    <div className="hidden lg:flex items-center space-x-4">
+                        {!isAuthenticated ? (
+                            <div className="flex items-center space-x-4">
+                                <Link
+                                    to="/login"
+                                    className="text-gray-700 hover:text-indigo-600 px-3 py-2 rounded-md text-sm font-medium"
+                                >
+                                    Login
+                                </Link>
+                                <Link
+                                    to="/register"
+                                    className="primary-button text-sm"
+                                >
+                                    Register
+                                </Link>
+                            </div>
+                        ) : (
+                            <div className="flex items-center space-x-4">
+                                {user?.role === "USER" && (
+                                    <>
+                                        {/* User profile */}
+                                        <Link to="/user/profile" className="flex items-center gap-2 px-4 py-2 hover:bg-gray-100 rounded-full hover:text-indigo-600">
+                                            <FaUser className="h-4 w-4" />
+                                            <span className="text-gray-700 font-medium">
+                                                {user?.name}
+                                            </span>
+                                        </Link>
+                                        {/* Shopping Cart */}
+                                        <Link to="/cart" className="relative p-2 hover:bg-gray-100 rounded-full group">
+                                            <FaShoppingCart className="h-5 w-5 text-gray-700 group-hover:text-indigo-600" />
+                                          
+                                                <span className="absolute -top-1 -right-1 bg-indigo-600 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
+                                                    {cartCount}
+                                                </span>
+                                         
+                                        </Link>
+                                    </>
+                                )}
+
+                                {/* Admin Dashboard Link */}
+                                {user?.role === 'ADMIN' && (
+                                    <Link
+                                        to="/admin/dashboard"
+                                        className="text-gray-700 hover:text-indigo-600 px-3 py-2 rounded-md text-sm font-medium flex items-center gap-2"
+                                    >
+                                        Admin Dashboard
+                                    </Link>
+                                )}
+
+                                {/* Logout Button */}
+                                <button
+                                    onClick={handleLogout}
+                                    className="text-gray-700 hover:text-red-600 cursor-pointer px-3 py-2 rounded-md text-sm font-medium flex items-center gap-2"
+                                >
+                                    Logout
+                                    <FaSignOutAlt className="h-4 w-4" />
+                                </button>
+                            </div>
+                        )}
+                    </div>
+                </div>
+
+                {/* Mobile Search Bar */}
+                {showMobileSearch && (
+                    <div className="md:hidden py-2">
+                        <form onSubmit={handleSearch} className="relative">
+                            <input
+                                type="text"
+                                placeholder="Search products..."
+                                value={searchQuery}
+                                onChange={(e) => setSearchQuery(e.target.value)}
+                                className="form-input w-full px-4 py-2 pr-10"
+                                autoFocus
+                            />
+                            <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                                <FaSearch className="text-gray-400" />
+                            </div>
+                        </form>
+                    </div>
+                )}
+
+                {/* Mobile & Tablet Menu */}
+                {isMenuOpen && (
+                    <div className="lg:hidden">
+                        <div className="px-2 pt-2 pb-3 space-y-1">
+                            {!isAuthenticated ? (
+                                <>
+                                    <Link
+                                        to="/login"
+                                        className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-50"
+                                    >
+                                        Login
+                                    </Link>
+                                    <Link
+                                        to="/register"
+                                        className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-50"
+                                    >
+                                        Register
+                                    </Link>
+                                </>
+                            ) : (
+                                <>
+                                    {user?.role === "USER" && (
+                                        <>
+                                            <div className="px-3 py-2 rounded-md text-base font-medium text-gray-700">
+                                                <FaUser className="inline h-4 w-4 mr-2" />
+                                                {user?.name}
+                                            </div>
+                                            <Link
+                                                to="/cart"
+                                                className="flex items-center px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-50"
+                                            >
+                                                <FaShoppingCart className="h-5 w-5 mr-2" />
+                                                Cart
+                                                {cartItemsCount > 0 && (
+                                                    <span className="ml-2 bg-indigo-600 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
+                                                        {cartItemsCount}
+                                                    </span>
+                                                )}
+                                            </Link>
+                                        </>
+                                    )}
+                                    {user?.role === 'ADMIN' && (
+                                        <Link
+                                            to="/admin/dashboard"
+                                            className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-50"
+                                        >
+                                            Admin Dashboard
+                                        </Link>
+                                    )}
+                                    <button
+                                        onClick={handleLogout}
+                                        className="w-full text-left px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-red-600 hover:bg-gray-50 flex items-center"
+                                    >
+                                        Logout
+                                        <FaSignOutAlt className="h-4 w-4 ml-2" />
+                                    </button>
+                                </>
+                            )}
+                        </div>
+                    </div>
+                )}
+            </div>
+        </nav>
+    );
+};
+
+export default Navbar;
