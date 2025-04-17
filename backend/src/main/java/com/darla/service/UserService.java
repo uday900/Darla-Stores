@@ -28,11 +28,14 @@ import com.darla.dto.UserDto;
 import com.darla.entity.Cart;
 import com.darla.entity.Order;
 import com.darla.entity.Product;
+import com.darla.entity.Review;
 import com.darla.entity.User;
 import com.darla.exception_handling.NotFoundException;
+import com.darla.mapper.Mapper;
 import com.darla.repository.CartRepository;
 import com.darla.repository.OrderRepository;
 import com.darla.repository.ProductRepository;
+import com.darla.repository.ReviewRepository;
 import com.darla.repository.UserRepository;
 import com.razorpay.RazorpayException;
 
@@ -55,9 +58,6 @@ public class UserService {
 	private JwtService jwtService;
 
 	@Autowired
-	private JavaMailSender javaMailSender;
-
-	@Autowired
 	private OrderRepository orderRepository;
 
 	@Value("${frontend.url}")
@@ -71,13 +71,19 @@ public class UserService {
 
 	private RazorPayService razorPayService;
 	private EmailService emailService;
+	private ReviewRepository reviewRepository;
 
-	UserService(RazorPayService razorPayService, EmailService emailService) {
+	UserService(
+			RazorPayService razorPayService,
+			ReviewRepository reviewRepository,
+			EmailService emailService) {
 		this.razorPayService = razorPayService;
 		this.emailService = emailService;
+		this.reviewRepository = reviewRepository;
 	}
 
 	// account deletion
+	@Transactional
 	public Response deleteAccount(Long userId, String password) {
 		User user = userRepository.findById(userId)
 				.orElseThrow(() -> new NotFoundException("No Accound found with id " + userId));
@@ -92,11 +98,19 @@ public class UserService {
 			// delete all orders
 			List<Order> orders = orderRepository.findByUserId(userId);
 			orderRepository.deleteAll(orders);
+			
+			// delete all reviews
+			List<Review> reviews = reviewRepository.findByUserId(userId);
+			reviewRepository.deleteAll(reviews);
 
 			// delete user
 			userRepository.delete(user);
 			res.setStatus(200);
-			res.setMessage("Account deleted successfully");
+			res.setMessage("Your Account deleted successfully");
+			
+			// Add to activity logs
+			ActivityLogs.addEntry("User account deleted with id " + userId);
+			
 		} else {
 			res.setStatus(400);
 			res.setMessage("Invalid credentials");
@@ -117,15 +131,13 @@ public class UserService {
 				String token = jwtService.generateToken(username, expirationTime);
 				// sending the token and user info to the user
 				User user = userOpt.get();
-				UserDto userDto = UserDto.builder().id(user.getId()).name(user.getName()).email(user.getEmail())
-						.role(user.getRole()).city(user.getCity()).state(user.getState()).country(user.getCountry())
-						.district(user.getDistrict()).street(user.getStreet()).createdAt(user.getCreatedAt())
-						.phoneNumber(user.getPhoneNumber()).build();
+				
 
+//				System.out.println("User logged in: " + user.getZipCode());
 				res.setStatus(200);
 				res.setMessage("Logged in successful");
 				res.setToken(token);
-				res.setUser(userDto);
+				res.setUser(Mapper.mapToUserDto(user));
 			} else {
 				res.setStatus(401);
 				res.setMessage("Invalid credentials");
@@ -142,16 +154,7 @@ public class UserService {
 	public UserDto getUserInfo(Long userId) {
 		User user = userRepository.findById(userId)
 				.orElseThrow(() -> new NotFoundException("User not found with id " + userId));
-		return UserDto.builder().id(userId).name(user.getName()).email(user.getEmail())
-
-		// only for testing
-//				.password(user.getPassword())
-
-				.role(user.getRole()).city(user.getCity()).state(user.getState()).country(user.getCountry())
-				.district(user.getDistrict()).street(user.getStreet()).createdAt(user.getCreatedAt())
-				.phoneNumber(user.getPhoneNumber())
-
-				.build();
+		return Mapper.mapToUserDto(user);
 	}
 
 	@Transactional
@@ -232,18 +235,6 @@ public class UserService {
 				.formatted(user.getName(), otp);
 		// Store the OTP in Redis with a TTL of 5 minutes
 		otpService.storeOtpInRedis(email, otp);
-//		try {
-//			MimeMessage message = javaMailSender.createMimeMessage();
-//			MimeMessageHelper helper = new MimeMessageHelper(message, true);
-//
-//			helper.setTo(email);
-//			helper.setSubject("OTP Verification Code");
-//			helper.setText(htmlTemplate, true); // Set HTML content
-//
-//			javaMailSender.send(message);
-//		} catch (Exception e) {
-//			throw new RuntimeException("Failed to send email", e);
-//		}
 
 		// Send the email using the EmailService
 		String emailResponse;
@@ -291,6 +282,7 @@ public class UserService {
 		user.setCity(userDto.getCity());
 		user.setStreet(userDto.getStreet());
 		user.setZipCode(userDto.getZipCode());
+		user.setState(userDto.getState());
 
 		userRepository.save(user);
 
@@ -348,7 +340,8 @@ public class UserService {
 		// check if the product is in stock
 		Product product = cart.getProduct();
 		if (product.getStock() < cart.getQuantity() + 1) {
-			throw new RuntimeException("Product is out of stock");
+			throw new RuntimeException(
+					"Only " + product.getStock() + " stock is available for the product " + product.getName());
 		}
 		cart.setQuantity(cart.getQuantity() + 1);
 		cartRepository.save(cart);
@@ -383,7 +376,7 @@ public class UserService {
 			return CartDto.builder().id(item.getId()).userId(item.getUser().getId())
 					.productName(item.getProduct().getName()).imageData(item.getProduct().getImageData())
 					.brand(item.getProduct().getBrand()).price(item.getProduct().getPrice())
-					.qunaitity(item.getQuantity()).build();
+					.quantity(item.getQuantity()).build();
 		}).toList();
 
 		return cartItemsDto;
@@ -421,10 +414,7 @@ public class UserService {
 		}
 		Order newOrder = Order.builder().user(user).product(product).quantity(orderRequest.getQuantity())
 				.totalAmount(orderRequest.getQuantity() * product.getPrice()).createdAt(LocalDateTime.now())
-				.status("PENDING")
-				.paymentStatus("PENDING")
-				.shippingAddress(orderRequest.getShippingAddress())
-				.build();
+				.status("PENDING").paymentStatus("PENDING").shippingAddress(orderRequest.getShippingAddress()).build();
 		// check payment method
 		if (!orderRequest.getPaymentMode().toLowerCase().equals("razorpay")) {
 			// proceed with cash on delivery
@@ -460,6 +450,9 @@ public class UserService {
 
 		res.setStatus(200);
 
+
+		// logs to activity
+		ActivityLogs.addEntry("A new order placed an order with ID: " + newOrder.getId());
 		return res;
 	}
 
@@ -478,6 +471,17 @@ public class UserService {
 			res.setStatus(404);
 			res.setMessage("No items in cart");
 			return res;
+		} else {
+			// check if all items are in stock
+			for (Cart cart : cartItems) {
+				Product product = cart.getProduct();
+				if (product.getStock() <= 0)
+					throw new RuntimeException("Product is out of stock");
+				if (product.getStock() < cart.getQuantity()) {
+					throw new RuntimeException(String.format("Only %d stock is available for the product %s",
+							product.getStock(), product.getName()));
+				}
+			}	
 		}
 
 		Double totalAmount = 0.0;
@@ -498,6 +502,9 @@ public class UserService {
 			}
 			res.setStatus(200);
 			res.setMessage("Order placed successfully");
+			
+			// Add to activity logs
+			ActivityLogs.addEntry("A new order placed an order with ID: " + cartItems.get(0).getId());
 			return res;
 		}
 
@@ -557,13 +564,13 @@ public class UserService {
 
 				orderRepository.save(order);
 			}
-			
+
 			// proceed to delete cart items in-case of check out
 			if (orders.size() > 1) {
 				Long userId = orders.get(0).getUser().getId();
 				// remove item from cart
 				List<Cart> cartItem = cartRepository.findByUser(userId);
-				
+
 				for (Cart item : cartItem) {
 					cartRepository.delete(item);
 				}
@@ -571,67 +578,12 @@ public class UserService {
 			res.setStatus(200);
 			res.setMessage("Payment Successfully done and orders confirmed successfully!");
 		}
-		return res;
-	}
-
-	// payment failure
-	@Transactional
-	public Response paymentFailure(String razorpayOrderId) {
-		Response res = new Response();
-		List<Order> order = orderRepository.findByRazorpayOrderId(razorpayOrderId);
-		if (!order.isEmpty()) {
-//			Order existingOrder = order.get();
-			// update order status to failed and cancel the order
-			for (Order existingOrder : order) {
-				// update order status to failed and cancel the order
-//				existingOrder.setPaymentStatus("FAILED");
-//				existingOrder.setStatus("CANCELED");
-//				orderRepository.save(existingOrder);
-				
-				
-				/*
-				 * Delete order 
-				 * 
-				 */
-				orderRepository.delete(existingOrder);
-			}
-
-			res.setStatus(400);
-			res.setMessage("Payment failed, order canceled successfully!");
-		} else {
-			res.setStatus(404);
-			res.setMessage("Order not found!");
-		}
-		return res;
-	}
-
-	// place order old
-	@Transactional
-	public String placeOrder(Long userId, Long productId, Integer quantity) {
-		User user = userRepository.findById(userId)
-				.orElseThrow(() -> new NotFoundException("User not found with id " + userId));
-		Product product = productRepository.findById(productId)
-				.orElseThrow(() -> new NotFoundException("User not found with id " + productId));
-		if (product.getStock() <= 0)
-			throw new RuntimeException("Product is out of stock");
-
-		if (product.getStock() < quantity) {
-			throw new RuntimeException(String.format("Only %d stock is available for the product %s",
-					product.getStock(), product.getName()));
-		}
-
-		Order newOrder = Order.builder().user(user).product(product).quantity(quantity)
-				.totalAmount(quantity * product.getPrice()).createdAt(LocalDateTime.now()).status("PENDING").build();
-
-		orderRepository.save(newOrder);
-
-		// reduce stock
-		product.setStock(product.getStock() - quantity);
-		productRepository.save(product);
-
-		// send email, with order details like order id, product name, quantity, total
-		// amount
-		String email = user.getEmail();
+		
+		// Add to activity logs
+		ActivityLogs.addEntry("Payment successfully done for order with ID: " + orders.get(0).getId());
+		
+		// send email to user
+		String email = orders.get(0).getUser().getEmail();	
 		String subject = "Order Confirmation";
 		String htmlTemplate = """
 				    			<!DOCTYPE html>
@@ -657,8 +609,6 @@ public class UserService {
 
 				        <div class="order-details">
 				            <p><strong>Order ID:</strong> %d</p>
-				            <p><strong>Product Name:</strong> %s</p>
-				            <p><strong>Quantity:</strong> %d</p>
 				            <p><strong>Total Amount:</strong> $%.2f</p>
 				        </div>
 
@@ -669,8 +619,8 @@ public class UserService {
 				</body>
 				</html>
 
-				    			""".formatted(user.getName(), newOrder.getId(), product.getName(), quantity,
-				newOrder.getTotalAmount());
+				    			""".formatted(orders.get(0).getUser().getName(), orders.get(0).getId(),
+				orders.get(0).getTotalAmount());
 		// Send the email using the EmailService
 		String emailResponse;
 		try {
@@ -680,148 +630,415 @@ public class UserService {
 		}
 		// Log the email response
 		System.out.println("Email sent: " + emailResponse);
-		// Log the order details
-		System.out.println("Order ID: " + newOrder.getId());
-		System.out.println("User ID: " + user.getId());
-
-		// add to activity logs
-		ActivityLogs.addEntry("Order placed with id " + newOrder.getId());
-
-		return "Order placed";
+		return res;
 	}
 
+	// payment failure
+	@Transactional
+	public Response paymentFailure(String razorpayOrderId) {
+		Response res = new Response();
+		List<Order> order = orderRepository.findByRazorpayOrderId(razorpayOrderId);
+		if (!order.isEmpty()) {
+//			Order existingOrder = order.get();
+			// update order status to failed and cancel the order
+			for (Order existingOrder : order) {
+				// update order status to failed and cancel the order
+//				existingOrder.setPaymentStatus("FAILED");
+//				existingOrder.setStatus("CANCELED");
+//				orderRepository.save(existingOrder);
+
+				/*
+				 * Delete order
+				 * 
+				 */
+				orderRepository.delete(existingOrder);
+			}
+
+			res.setStatus(400);
+			res.setMessage("Payment failed, order canceled successfully!");
+		} else {
+			res.setStatus(404);
+			res.setMessage("Order not found!");
+		}
+		return res;
+	}
+
+//	// place order old
+//	@Transactional
+//	public String placeOrder(Long userId, Long productId, Integer quantity) {
+//		User user = userRepository.findById(userId)
+//				.orElseThrow(() -> new NotFoundException("User not found with id " + userId));
+//		Product product = productRepository.findById(productId)
+//				.orElseThrow(() -> new NotFoundException("User not found with id " + productId));
+//		if (product.getStock() <= 0)
+//			throw new RuntimeException("Product is out of stock");
+//
+//		if (product.getStock() < quantity) {
+//			throw new RuntimeException(String.format("Only %d stock is available for the product %s",
+//					product.getStock(), product.getName()));
+//		}
+//
+//		Order newOrder = Order.builder().user(user).product(product).quantity(quantity)
+//				.totalAmount(quantity * product.getPrice()).createdAt(LocalDateTime.now()).status("PENDING").build();
+//
+//		orderRepository.save(newOrder);
+//
+//		// reduce stock
+//		product.setStock(product.getStock() - quantity);
+//		productRepository.save(product);
+//
+//		// send email, with order details like order id, product name, quantity, total
+//		// amount
+//		String email = user.getEmail();
+//		String subject = "Order Confirmation";
+//		String htmlTemplate = """
+//				    			<!DOCTYPE html>
+//				<html>
+//				<head>
+//				    <meta charset="UTF-8">
+//				    <title>Order Confirmation</title>
+//				    <style>
+//				        body { font-family: Arial, sans-serif; background-color: #f4f4f4; padding: 20px; }
+//				        .container { max-width: 600px; background-color: #ffffff; padding: 20px; border-radius: 8px;
+//				                    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); }
+//				        h2 { color: #333; }
+//				        p { font-size: 16px; color: #555; }
+//				        .order-details { margin-top: 20px; }
+//				        .footer { margin-top: 20px; font-size: 14px; color: #888; }
+//				    </style>
+//				</head>
+//				<body>
+//				    <div class="container">
+//				        <h2>Order Confirmation</h2>
+//				        <p>Dear %s,</p>
+//				        <p>Your order has been successfully placed!</p>
+//
+//				        <div class="order-details">
+//				            <p><strong>Order ID:</strong> %d</p>
+//				            <p><strong>Product Name:</strong> %s</p>
+//				            <p><strong>Quantity:</strong> %d</p>
+//				            <p><strong>Total Amount:</strong> $%.2f</p>
+//				        </div>
+//
+//				        <div class="footer">
+//				            <p>Best Regards,<br>Darla Store</p>
+//				        </div>
+//				    </div>
+//				</body>
+//				</html>
+//
+//				    			""".formatted(user.getName(), newOrder.getId(), product.getName(), quantity,
+//				newOrder.getTotalAmount());
+//		// Send the email using the EmailService
+//		String emailResponse;
+//		try {
+//			emailResponse = emailService.sendEmailWithHtmlTemplate(email, subject, htmlTemplate);
+//		} catch (Exception e) {
+//			throw new RuntimeException("Failed to send email", e);
+//		}
+//		// Log the email response
+//		System.out.println("Email sent: " + emailResponse);
+//		// Log the order details
+//		System.out.println("Order ID: " + newOrder.getId());
+//		System.out.println("User ID: " + user.getId());
+//
+//		// add to activity logs
+//		ActivityLogs.addEntry("Order placed with id " + newOrder.getId());
+//
+//		return "Order placed";
+//	}
+//
 	public Response updateOrder(Long orderId, String status) {
+
 		
 		Response res = new Response();
 		Order order = orderRepository.findById(orderId)
 				.orElseThrow(() -> new NotFoundException("order not found or not exists"));
 		
-		// check if the order is refund initiated or not
-		if (order.getStatus().equals("REFUND_ISSUED")) {
-			throw new RuntimeException("Order must be refunded first");
-		}
-		
-		
-		// check if the status is delivered,
-		// if the order is not paid
-		if (!order.getPaymentStatus().equals("COMPLETED") && status.equals("DELIVERED")) {
-			throw new RuntimeException("payment is not done yet for this order");
-		}
-		// check if the order delivered or not
-				if (order.getStatus().equals("DELIVERED") || order.getStatus().equals("CANCELED")) {
-					throw new RuntimeException("Order has been delivered or canceled");
-				}
-				
-				
-		// change payment status to paid, if the order is paid in case of cash on delivery
-		if (
-				order.getPaymentMethod().equals("CASH_ON_DELIVERY") &&
-				status.equals("COMPLETED") && !order.getPaymentStatus().equals("COMPLETED")) {
-			order.setPaymentStatus("COMPLETED");
-			order.setStatus("DELIVERED");
-			orderRepository.save(order);
-			res.setStatus(200);
-			res.setMessage("Order status updated successfully");
-			return res;
-		}
-		
-		if (status.equals("COMPLETED") && order.getPaymentStatus().equals("COMPLETED")) {
-			throw new RuntimeException("Order already completed");
+		/*
+		 * check if the order is delivered or
+		 * refund issued or canceled
+		 * then throw exception
+		 */
+		if ( order.getStatus().equals("DELIVERED") ||
+				order.getStatus().equals("REFUND_ISSUED") ||
+				order.getStatus().equals("CANCELED")) {
+			throw new RuntimeException("You are not allowed to update the order. It may be delivered or canceled or issued refund");
 		}
 		
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		boolean isAdmin = auth.getAuthorities().stream()
-                .anyMatch(role -> role.getAuthority().equals("ROLE_ADMIN"));
-
-		// check if the request comes from user with only cancel order
-		if (!isAdmin && !status.equals("CANCELED")) {
-			throw new RuntimeException("You are not allowed to update order status");
-		}
+		boolean isAdmin = auth.getAuthorities().stream().anyMatch(role -> role.getAuthority().equals("ROLE_ADMIN"));
 		
-		// check user pay the amount or not
-		if (status.equals("CANCELED") && (order.getPaymentId() == null || order.getPaymentId().isEmpty())) {
-			// proceed to cancel order
-			order.setStatus(status.toUpperCase());
-			order.setPaymentStatus("CANCELED");
-			orderRepository.save(order);
-	        ActivityLogs.addEntry("Order canceled without payment: Order ID " + orderId);
-	        
-	        res.setStatus(200);
-	        res.setMessage("Order canceled successfully");
-	        
-	        return res;		
-	      
-//			return "Your order has been cancelled successfully";
-		}
-		
-		if (status.equals("CANCELED")) {
-			order.setStatus("REFUND_ISSUED");
-			order.setPaymentStatus("REFUND_INITIATED");
+		/*
+		 * check if the person is user
+		 * then he can only cancel the order
+		 * if the order is not delivered, then he can cancel the order
+		 * if the order is delivered, then he can not cancel the order
+		 * if amount is not paid, simply cancel the order
+		 * if amount is paid, then issue refund
+		 * 
+		 */
+		if (!isAdmin) {
+			if (!status.equals("CANCELED")) {
+				throw new RuntimeException("You are not allowed to update order status");
+			}
+			// check if the payment is done or not
+			if (order.getPaymentStatus().equals("COMPLETED")) {
+				// issue refund
+				order.setStatus("REFUND_ISSUED");
+				order.setPaymentStatus("REFUND_INITIATED");
+				orderRepository.save(order);
+				ActivityLogs.addEntry("Order status updated with id " + orderId);
+				
+			} else {
+				// proceed to cancel order
+				order.setStatus(status.toUpperCase());
+				
+				// set the product stock to the original stock
+				Product product = order.getProduct();
+				product.setStock(product.getStock() + order.getQuantity());
+				productRepository.save(product);
+				orderRepository.save(order);
+				
+				
+				ActivityLogs.addEntry("Order canceled without payment: Order ID " + orderId);
+			}
 			
-			orderRepository.save(order);
-			ActivityLogs.addEntry("Order status updated with id " + orderId);
+			res.setStatus(200);
+			res.setMessage("Order canceled successfully");
+			
+			// send email to user
+			sendOrderUpdateMail(orderId, status);
+			
+
+			return res;
+		}
+		// restrict canceling order for admin
+		if (status.equals("CANCELED")) {
+			throw new RuntimeException("You are not allowed to cancel the order");
+		}
+
+
+		/*
+		 * incoming status is delivered
+		 * if the order is not paid
+		 * then throw exception
+		 * if the order is paid
+		 * then update the order status to delivered
+		 * 
+		 */
+		if (status.equals("DELIVERED")) {
+			// check if the payment is done or not
+			if (order.getPaymentStatus().equals("COMPLETED")) {
+				// update order status to delivered
+				order.setStatus(status);
+				orderRepository.save(order);
+				
+			} else {
+				// throw exception
+				throw new RuntimeException("Payment is not done yet for this order");
+			}
 			
 			res.setStatus(200);
 			res.setMessage("Order status updated successfully");
 			
+			// send email to user
+			sendOrderUpdateMail(orderId, status);
+			// add to activity logs
+			ActivityLogs.addEntry("Order status updated with id " + orderId);
 			return res;
-
-//			return String.format("Order with id %d status updated successfully", orderId);
 		}
-		
-		// handle payment refund here
-		
-		 order.setStatus(status);
-		 orderRepository.save(order);
-		
+	
+
+		/*
+		 * If the status is completed
+		 * it is only for cash on delivery
+		 */
+		if (status.equals("COMPLETED")) {
+			// check the payment method
+			if (order.getPaymentMethod().equals("CASH_ON_DELIVERY") && 
+					!order.getPaymentStatus().equals("COMPLETED")) {
+				// update order status to delivered
+				order.setStatus("DELIVERED");
+				order.setPaymentStatus("COMPLETED");
+				orderRepository.save(order);
+				res.setStatus(200);
+				res.setMessage("Order status updated successfully");
+				
+				// send email to user
+				sendOrderUpdateMail(orderId, status);
+				// add to activity logs
+				ActivityLogs.addEntry("Order status updated with id " + orderId);
+				
+				return res;
+			} else {
+				throw new RuntimeException("You are not allowed to update order status to " + status);
+			}
+			
+		}
+	
+
+
+		order.setStatus(status);
+		orderRepository.save(order);
+
 		// add to activity logs
 		ActivityLogs.addEntry("Order status updated with id " + orderId);
 
 		res.setStatus(200);
 		res.setMessage("Order status updated successfully");
-//		return String.format("Order with id %d status updated successfully", orderId)
+		
+		// send email to user
+		sendOrderUpdateMail(orderId, status);
+		
+		
 		return res;
 	}
 	
+	// send mail to user order status update
+	public void sendOrderUpdateMail(Long orderId, String status) {
+		
+		Order order = orderRepository.findById(orderId)
+				.orElseThrow(() -> new NotFoundException("order not found or not exists"));
+		// creating email template
+		
+		String htmlTemplate = """
+				    			<!DOCTYPE html>
+				<html>
+				<head>
+				    <meta charset="UTF-8">
+				    <title>Order Status Update</title>
+				    <style>
+				        body { font-family: Arial, sans-serif; background-color: #f4f4f4; padding: 20px; }
+				        .container { max-width: 600px; background-color: #ffffff; padding: 20px; border-radius: 8px;
+				                    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); }
+				        h2 { color: #333; }
+				        p { font-size: 16px; color: #555; }
+				        .order-details { margin-top: 20px; }
+				        .footer { margin-top: 20px; font-size: 14px; color: #888; }
+				    </style>
+				</head>
+				<body>
+				    <div class="container">
+				        <h2>Order Status Update</h2>
+				        <p>Dear %s,</p>
+				        <p>Your order status has been updated!</p>
+
+				        <div class="order-details">
+				            <p><strong>Order ID:</strong> %d</p>
+				            <p><strong>Status:</strong> %s</p>
+				        </div>
+
+				        <div class="footer">
+				            <p>Best Regards,<br>Darla Store</p>
+				        </div>
+				    </div>
+				</body>
+				</html>
+
+				    			""".formatted(order.getUser().getName(), orderId, status);	
+		// Send the email using the EmailService
+		String emailResponse;
+		try {
+			emailResponse = emailService.sendEmailWithHtmlTemplate(
+					order.getUser().getEmail(), 
+					"Order Status Update",
+					htmlTemplate);
+		} catch (Exception e) {
+			throw new RuntimeException("Failed to send email", e);
+		}
+		
+		// Log the email response
+		System.out.println("Email sent: " + emailResponse);
+		
+	}
+
 	// issue refund
 	public String issueRefundByAdmin(Long orderId) {
-        Order order = orderRepository.findById(orderId)
-                .orElseThrow(() -> new NotFoundException("Order not found"));
+		Order order = orderRepository.findById(orderId).orElseThrow(() -> new NotFoundException("Order not found"));
 
-        if ("REFUNDED".equalsIgnoreCase(order.getPaymentStatus())) {
-            throw new RuntimeException("Order already refunded");
-        }
+		if ("REFUNDED".equalsIgnoreCase(order.getPaymentStatus())) {
+			throw new RuntimeException("Order already refunded");
+		}
 
-        String paymentId = order.getPaymentId();
-        if (paymentId == null || paymentId.trim().isEmpty()) {
-            throw new RuntimeException("Payment not found for this order");
-        }
+		String paymentId = order.getPaymentId();
+		if (paymentId == null || paymentId.trim().isEmpty()) {
+			throw new RuntimeException("Payment not found for this order");
+		}
 
-        try {
-            Double refundAmountInPaise = order.getTotalAmount() * 100; // Razorpay needs amount in paise
+		try {
+			Double refundAmountInPaise = order.getTotalAmount() * 100; // Razorpay needs amount in paise
 
-            // Call Razorpay refund
-            String refundResponse = razorPayService.issueRefund(paymentId, refundAmountInPaise);
+			// Call Razorpay refund
+			String refundResponse = razorPayService.issueRefund(paymentId, refundAmountInPaise);
 
-            // Update order status
-            order.setStatus("CANCELED");
-            order.setPaymentStatus("REFUNDED");
-            orderRepository.save(order);
+			// Update order status
+			order.setStatus("CANCELED");
+			order.setPaymentStatus("REFUNDED");
+			
+			// set the product stock to the original stock
+			Product product = order.getProduct();
+			product.setStock(product.getStock() + order.getQuantity());
+			productRepository.save(product);
+			orderRepository.save(order);
 
-            // Log it
-//            ActivityLogs.addEntry("Refund issued for Order ID: " + orderId + ", Payment ID: " + paymentId);\
-            ActivityLogs.addEntry("Partial refund of ₹" + order.getTotalAmount() +
-                    " issued for Order ID: " + orderId + ", Payment ID: " + paymentId);
-            return "Refund successful for order ID: " + orderId;
+			// Log it
+			ActivityLogs.addEntry("Refund issued for order ID: " + orderId + " rupees " + order.getTotalAmount()
+					+ " with payment ID: " + paymentId);
 
-        } catch (Exception e) {
-            e.printStackTrace();
-            return "Refund failed: " + e.getMessage();
-        }
-        
+		} catch (Exception e) {
+			e.printStackTrace();
+			return "Refund failed: " + e.getMessage();
+		}
+
+		// send email, with order details like order id, product name, quantity, total
+		String email = order.getUser().getEmail();
+		String subject = "Refund Confirmation";
+		// send html template with order details
+		String htmlTemplate = """
+				    			<!DOCTYPE html>
+				<html>
+				<head>
+				    <meta charset="UTF-8">
+				    <title>Your Order has been successfully cancelled and Amount is refunded</title>
+				    <style>
+				        body { font-family: Arial, sans-serif; background-color: #f4f4f4; padding: 20px; }
+				        .container { max-width: 600px; background-color: #ffffff; padding: 20px; border-radius: 8px;
+				                    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); }
+				        h2 { color: #333; }
+				        p { font-size: 16px; color: #555; }
+				        .footer { margin-top: 20px; font-size: 14px; color: #888; }
+				    </style>
+				</head>
+				<body>
+				    <div class="container">
+				        <h2>Your Order has been successfully cancelled and Amount is refunded</h2>
+				        <p>Dear %s,</p>
+				        <p>Amount has been refunded! for the order %d</p>
+				        <p><strong>Payment ID:</strong> %s</p>
+				        <p><strong>Total Amount:</strong> $%.2f</p>
+
+				        <div class="footer">
+				            <p>Best Regards,<br>Darla Store</p>
+				        </div>
+				    </div>
+				</body>
+				</html>
+
+				    			""".formatted(order.getUser().getName(), orderId, paymentId, order.getTotalAmount());
+// Send the email using the EmailService
+		String emailResponse;
+		try {
+			emailResponse = emailService.sendEmailWithHtmlTemplate(email, subject, htmlTemplate);
+		} catch (Exception e) {
+			throw new RuntimeException("Failed to send email", e);
+		}
+// Log the email response
+		System.out.println("Email sent: " + emailResponse);
+
+		return "Refund successful for order ID: " + orderId;
 //        return "Refund failed";
-    }
-	
+	}
 
 	public List<OrderDto> fetchAllOrders() {
 		List<Order> orders = orderRepository.findAll();
@@ -854,55 +1071,16 @@ public class UserService {
 						.paymentMethod(order.getPaymentMethod()).paymentStatus(order.getPaymentStatus())
 						.shippingAddress(order.getShippingAddress())
 //						.razorpayOrderId(order.getRazorpayOrderId())
-						.paymentId(order.getPaymentId())
-						.imageData(order.getProduct().getImageData())
+						.paymentId(order.getPaymentId()).imageData(order.getProduct().getImageData())
 
 						.build())
 				.toList();
 		return ordersDto;
 	}
 
-	@Transactional
-	public String checkOut(Long userId) {
-		User user = userRepository.findById(userId)
-				.orElseThrow(() -> new NotFoundException("User not found with id " + userId));
-		List<Cart> cartItems = cartRepository.findByUser(userId);
-
-		cartItems.forEach((item) -> {
-
-			if (item.getProduct().getStock() < item.getQuantity()) {
-				throw new RuntimeException(String.format("Only %d stock is available for the product %s",
-						item.getProduct().getStock(), item.getProduct().getName()));
-			}
-
-			Order order = Order.builder().user(user).product(item.getProduct()).quantity(item.getQuantity())
-					.totalAmount(item.getQuantity() * item.getProduct().getPrice()).status("PENDING")
-					.createdAt(LocalDateTime.now())
-
-					.build();
-
-			orderRepository.save(order);
-
-			// reduce stock
-			Product product = item.getProduct();
-			product.setStock(product.getStock() - item.getQuantity());
-			productRepository.save(product);
-
-		});
-		// Add to activity logs
-		ActivityLogs.addEntry("Order placed with user %d cart items".formatted(userId));
-
-		// remove items from cart
-		cartRepository.deleteAll(cartItems);
-
-		
-
-		return "Orders placed with your cart items";
-	}
-
+	
 	public Response updatePassword(Long userId, String oldPassword, String newPassword) {
-		User user = userRepository.findById(userId)
-				.orElseThrow(() -> new NotFoundException("User not found with id " + userId));
+		User user = userRepository.findById(userId).orElseThrow(() -> new NotFoundException("No Account found"));
 
 		if (user.getPassword().isEmpty())
 			throw new RuntimeException("You have not set password yet!");
@@ -914,15 +1092,17 @@ public class UserService {
 //		String encodedPassword = new BCryptPasswordEncoder(12).encode(oldPassword);
 //		System.out.println(encodedPassword.equals(user.getPassword()));	
 
-		if (encoder.matches(oldPassword, user.getPassword())) {
-			user.setPassword(new BCryptPasswordEncoder(12).encode(newPassword));
-			res.setStatus(200);
-			res.setMessage("Password updated Successfully");
-			userRepository.save(user);
-		} else {
+		if (!encoder.matches(oldPassword, user.getPassword())) {
 			res.setMessage("Wrong Password!");
 			res.setStatus(400);
+			return res;
+
 		}
+
+		user.setPassword(new BCryptPasswordEncoder(12).encode(newPassword));
+		res.setStatus(200);
+		res.setMessage("Password updated Successfully");
+		userRepository.save(user);
 
 		// send email to user, with password updated successfully
 		String email = user.getEmail();
@@ -1040,11 +1220,8 @@ public class UserService {
 			throw new NotFoundException("Session expired! Please Login again");
 		}
 		User user = userOpt.get();
-		UserDto userDto = UserDto.builder().id(user.getId()).name(user.getName()).email(user.getEmail())
-				.role(user.getRole()).city(user.getCity()).state(user.getState()).country(user.getCountry())
-				.district(user.getDistrict()).street(user.getStreet()).createdAt(user.getCreatedAt())
-				.phoneNumber(user.getPhoneNumber()).build();
-		res.setUser(userDto);
+		
+		res.setUser(Mapper.mapToUserDto(user));
 		res.setStatus(200);
 		res.setMessage("Logged in successfully");
 		return res;
@@ -1063,15 +1240,12 @@ public class UserService {
 				Long expirationTime = 24 * 60 * 60 * 1000L;
 				String token = jwtService.generateToken(email, expirationTime);
 				// sending the token and user info to the user
-				UserDto userDto = UserDto.builder().id(user.getId()).name(user.getName()).email(user.getEmail())
-						.role(user.getRole()).city(user.getCity()).state(user.getState()).country(user.getCountry())
-						.district(user.getDistrict()).street(user.getStreet()).createdAt(user.getCreatedAt())
-						.phoneNumber(user.getPhoneNumber()).build();
+				
 				Response response = new Response();
 				response.setStatus(200);
 				response.setMessage("Login successful");
 				response.setToken(token);
-				response.setUser(userDto);
+				response.setUser(Mapper.mapToUserDto(user));
 				return response;
 
 			} else {
@@ -1102,9 +1276,11 @@ public class UserService {
 
 		List<User> users = userRepository.findAll();
 		List<UserDto> usersDto = users.stream().map((user) -> {
-			return UserDto.builder().id(user.getId()).name(user.getName()).email(user.getEmail()).role(user.getRole())
-					.city(user.getCity()).state(user.getState()).country(user.getCountry()).district(user.getDistrict())
-					.street(user.getStreet()).createdAt(user.getCreatedAt()).phoneNumber(user.getPhoneNumber()).build();
+			// check if the user is admin or not
+			// if user is admin then skip that user
+			if (user.getRole().equals("ADMIN"))
+				return null;
+			return Mapper.mapToUserDto(user);
 		}).toList();
 
 		return usersDto;

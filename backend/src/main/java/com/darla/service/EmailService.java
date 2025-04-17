@@ -28,7 +28,7 @@ public class EmailService {
             e.printStackTrace();
             return "Error while sending email: " + e.getMessage();
         }
-        return "Email sent successfully to " + to;
+        return "An Email sent Successfully" + to;
 	}
 
 }

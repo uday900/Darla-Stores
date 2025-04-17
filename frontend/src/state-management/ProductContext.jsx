@@ -16,6 +16,8 @@ export const ProductProvider = ({ children }) => {
   const [message, setMessage] = useState(null);
   const [reviews, setReviews] = useState([])
 
+  const [searchQuery, setSearchQuery] = useState('');
+
   const [carousels, setCarousels] = useState([]);
 
   
@@ -186,6 +188,13 @@ export const ProductProvider = ({ children }) => {
       fetchProducts();
     } catch (error) {
       toast.error(error.response?.data?.message || "Failed to add product");
+      if (error.response?.data?.errors) {
+              const errorsFromServer = error.response.data.errors;
+              // console.log(errorsFromServer);
+              Object.keys(errorsFromServer).forEach((key) => {
+                toast.error(errorsFromServer[key]);
+              })
+            }
     } finally {
       setLoading(false);
     }
@@ -200,10 +209,38 @@ export const ProductProvider = ({ children }) => {
       navigate('/admin/products');
     } catch (error) {
       toast.error(error.response?.data?.message || "Failed to update product");
+      if (error.response?.data?.errors) {
+              const errorsFromServer = error.response.data.errors;
+              // console.log(errorsFromServer);
+              Object.keys(errorsFromServer).forEach((key) => {
+                toast.error(errorsFromServer[key]);
+              })
+            }
     } finally {
       setLoading(false);
     }
   };
+
+  const deleteProduct = async (id) =>{
+    setLoading(true);
+    try {
+      const response = await api.delete(`/products/${id}`);
+      toast.success(response.data.message);
+      fetchProducts();
+      navigate('/admin/products');
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Failed to update product");
+      if (error.response?.data?.errors) {
+              const errorsFromServer = error.response.data.errors;
+              // console.log(errorsFromServer);
+              Object.keys(errorsFromServer).forEach((key) => {
+                toast.error(errorsFromServer[key]);
+              })
+            }
+    } finally {
+      setLoading(false);
+    }
+  }
 
   // === CAROUSEL APIs ===
   const fetchCarousels = async () => {
@@ -263,6 +300,8 @@ export const ProductProvider = ({ children }) => {
         message,
         fetchMetrics,
 
+        searchQuery, setSearchQuery,
+
         // Carousel State and Functions
         carousels,
         setCarousels,
@@ -281,6 +320,7 @@ export const ProductProvider = ({ children }) => {
         fetchProductById,
         addProduct,
         updateProduct,
+        deleteProduct,
 
         // reviews
         reviews,

@@ -16,7 +16,11 @@ function Search() {
 
     // state values
     const { categories, loading, error, message, fetchCategories } = useContext(CategoryContext);
-    const { products, fetchProductsBySearch, loading: productsLoading , error: productsError } = useContext(ProductContext)
+    const { products, fetchProductsBySearch, loading: productsLoading , error: productsError,
+        setSearchQuery, 
+        searchQuery
+
+    } = useContext(ProductContext)
     const [filterProducts, setFilterProducts] = useState();
     useEffect(()=>{
         fetchCategories()

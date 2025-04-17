@@ -37,8 +37,10 @@ function ManageCarousel() {
   };
 
   const handleDelete = (index) => {
-    setCarousels((prev) => prev.filter((_, i) => i !== index));
+    if(window.confirm('Are you sure you want to delete this image?')){
+      setCarousels((prev) => prev.filter((_, i) => i !== index));
     deleteCarouselImage(index);
+    }
   };
   function formatDateTime(isoString) {
     const date = new Date(isoString);
@@ -67,7 +69,7 @@ function ManageCarousel() {
       {/* Upload Section */}
       <form onSubmit={handleSubmit} className="space-y-4 mb-10">
         <div>
-          <label className="block text-sm font-medium text-gray-700">Upload Image</label>
+          <label className="block text-sm font-medium text-gray-700">Upload Image (Make sure image has dimensions of 1200px x 500px)</label>
           <input
             type="file"
             accept="image/*"

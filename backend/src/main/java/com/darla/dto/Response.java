@@ -24,6 +24,8 @@ public class Response {
 	private RazorpayOrderResponseDto razorpayOrder;
 	private Map<String, Object> metrics;
 	
+	private Map<String, Object> errors;
+	
 	private String message;
 	
 	private Integer status;

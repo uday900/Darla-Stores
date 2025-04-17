@@ -1,14 +1,14 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { FaEdit, FaBoxOpen, FaEyeSlash, FaEye } from 'react-icons/fa';
-import { FiLogOut } from 'react-icons/fi';
-import UserContext from '../state-management/UserContext';
-import { AuthContext } from '../state-management/AuthContext';
-import Loading from '../components/Loading';
-import { toast } from 'react-toastify';
-import { Link, Outlet } from 'react-router-dom';
+import { Link, Outlet, useLocation } from 'react-router-dom';
 
 function UserDashboard() {
-  const [activeTab, setActiveTab] = useState('profile');
+  // fetch active tab from url 
+  const location = useLocation();
+  const path = location.pathname; // "/user/update-password"
+
+  const lastSegment = path.split("/").filter(Boolean).pop(); // "update-password"
+
+  const [activeTab, setActiveTab] = useState(lastSegment);
   return (
     <div className="max-w-4xl mx-auto mt-8 p-6 bg-white rounded shadow">
       {/* Nav Tabs */}

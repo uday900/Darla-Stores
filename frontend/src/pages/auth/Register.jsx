@@ -20,6 +20,7 @@ const Register = () => {
         district: '',
         street: '',
         phoneNumber: '',
+        zipCode: ''
     });
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -272,6 +273,20 @@ const Register = () => {
                             </div>
 
                             <div>
+                                <label htmlFor="city" className="block text-sm font-medium text-gray-700">
+                                    City
+                                </label>
+                                <input
+                                    id="city"
+                                    name="city"
+                                    type="text"
+                                    value={formData.city}
+                                    onChange={handleChange}
+                                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                                    placeholder="Enter city"
+                                />
+                            </div>
+                            <div>
                                 <label htmlFor="district" className="block text-sm font-medium text-gray-700">
                                     District
                                 </label>
@@ -287,19 +302,21 @@ const Register = () => {
                             </div>
 
                             <div>
-                                <label htmlFor="city" className="block text-sm font-medium text-gray-700">
-                                    City
+                                <label htmlFor="zipCode" className="block text-sm font-medium text-gray-700">
+                                    Zip Code
                                 </label>
                                 <input
-                                    id="city"
-                                    name="city"
+                                    id="zipCode"
+                                    name="zipCode"
                                     type="text"
-                                    value={formData.city}
+                                    value={formData.zipCode}
                                     onChange={handleChange}
                                     className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-                                    placeholder="Enter city"
+                                    placeholder="Enter Zipcode ex: 523105"
                                 />
                             </div>
+
+                           
 
                             <div>
                                 <label htmlFor="state" className="block text-sm font-medium text-gray-700">

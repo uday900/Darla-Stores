@@ -1,6 +1,7 @@
 import { createContext, useState } from "react";
 import api from "../api-services/apiConfig";
 import { toast } from "react-toastify";
+import { Link } from "react-router-dom";
 
 export const UserContext = createContext();
 
@@ -10,6 +11,7 @@ export const UserProvider = ({ children }) => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState(null);
+  const [error, setError] = useState(null);
 
   // === PLACE ORDER ===
   const placeOrder = async (userId, productId, quantity) => {
@@ -147,7 +149,7 @@ export const UserProvider = ({ children }) => {
       });
       toast.success(response.data);
       fetchUserCart(userId);
-      window.location.reload();
+      // window.location.reload();
     } catch (error) {
       toast.error(error.response?.data?.message || "Failed to decrement quantity");
     } finally {
@@ -173,10 +175,19 @@ export const UserProvider = ({ children }) => {
     setLoading(true);
     try {
       const response = await api.put(`/user/update/profile?userId=${userId}`, userData);
-      toast.success(response.data);
+      // toast.success(response.data);
+      setMessage(response.data);
       userInfo(userId);
     } catch (error) {
-      toast.error(error.response?.data?.message || "Failed to update profile");
+      // toast.error(error.response?.data?.message || "Failed to update profile");
+      setError(error.response?.data?.message || "Failed to update profile");
+      if (error.response?.data?.errors) {
+        const errorsFromServer = error.response.data.errors;
+        // console.log(errorsFromServer);
+        Object.keys(errorsFromServer).forEach((key) => {
+          toast.error(errorsFromServer[key]);
+        })
+      }
     } finally {
       setLoading(false);
     }
@@ -186,7 +197,7 @@ export const UserProvider = ({ children }) => {
     try {
       const response = await api.get(`/user/info?userId=${userId}`);
       localStorage.setItem("user", JSON.stringify(response.data));
-      window.location.reload();
+      // window.location.reload();
       return response.data;
     } catch (error) {
       toast.error(error.response?.data?.message || "Failed to fetch user info");
@@ -212,9 +223,13 @@ export const UserProvider = ({ children }) => {
       const response = await api.post(`/user/update-password?userId=${userId}`, null, {
         params: { oldPassword:currentPassword, newPassword }
       });
-      toast.success(response.data);
+
+      setMessage(response.data.message);
+      // toast.success(response.data.message);
+      // navigate('/user/profile');
     } catch (error) {
-      toast.error(error.response?.data?.message || "Failed to update password");
+      // toast.error(error.response?.data?.message || "Failed to update password");
+      setError(error.response?.data?.message || "Failed to update password");
     } finally {
       setLoading(false);
     }
@@ -236,14 +251,21 @@ export const UserProvider = ({ children }) => {
     }
   }
 
+  const clearLogs = () => {
+    setError('');
+    setMessage('');
+  }
+
   return (
     <UserContext.Provider
       value={{
+        clearLogs,
         orders,
         cart,
         users,
         loading,
         message,
+        error,
         placeOrder,
         updateOrder,
         fetchAllOrders,

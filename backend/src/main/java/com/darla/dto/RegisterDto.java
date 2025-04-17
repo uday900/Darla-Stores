@@ -43,8 +43,8 @@ public class RegisterDto {
     private String street;
     
     //    @NotBlank(message = "Zip code is required")
-    @NotBlank(message = "Zip code is required")
-    @Pattern(regexp = "^\\d{5}$", message = "Zip code must be 5 digits")
+//    @NotBlank(message = "Zip code is required")
+//    @Pattern(regexp = "^\\d{5}$", message = "Zip code must be 5 digits")
     private String zipCode;
 
     @NotBlank(message = "Phone number is required")

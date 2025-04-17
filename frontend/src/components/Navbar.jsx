@@ -4,10 +4,14 @@ import { FaSearch, FaUser, FaShoppingCart, FaSignOutAlt, FaBars, FaTimes } from 
 import { AuthContext } from '../state-management/AuthContext';
 import { useContext } from 'react';
 import { toast } from 'react-toastify';
+import logo from '../assets/logo.jpg'
 import UserContext from '../state-management/UserContext';
+import { ImCross } from "react-icons/im";
+import ProductContext from '../state-management/ProductContext';
 
 const Navbar = () => {
-    const [searchQuery, setSearchQuery] = useState('');
+    // const [searchQuery, setSearchQuery] = useState('');
+    const { searchQuery, setSearchQuery } = useContext(ProductContext);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [showMobileSearch, setShowMobileSearch] = useState(false);
     const [cartCount, setCartCount] = useState(0);
@@ -15,9 +19,11 @@ const Navbar = () => {
 
 
     // state values
-    const { loading, error, message, isAuthenticated, isAdmin,logout } = useContext(AuthContext);
+    const { loading,logout } = useContext(AuthContext);
     const { fetchUserCart, loading: cartLoading, cart } = useContext(UserContext);
     const user = JSON.parse(localStorage.getItem('user'));
+    const isAuthenticated = localStorage.getItem('isAuthenticated');
+    const isAdmin = localStorage.getItem('isAdmin') === 'true';
 // useEffect(() => {
 //     const token = localStorage.getItem("token");
 //     // if(!token){
@@ -26,22 +32,36 @@ const Navbar = () => {
 //     // }
 // }, []);
     // For cart testing
-    const cartItemsCount = 3;
+    // const cartItemsCount = 3;
 
+
+    useEffect(() => {
+        // Clear the search query when navigating away from /search
+        if (location.pathname !== "/search") {
+          setSearchQuery("");
+        }
+      }, [location]);
 
     const handleSearch = (e) => {
         e.preventDefault();
         if (searchQuery.trim()) {
-            navigate(`/search?query=${encodeURIComponent(searchQuery)}`);
+            
+            // setSearchQuery('');
             setShowMobileSearch(false);
+            navigate(`/search?query=${encodeURIComponent(searchQuery)}`);
         }
     };
 
+
     const handleLogout = () => {
-        logout();
+        
+        if(window.confirm("Are you sure you want to logout?")){
+            logout();
         
         toast.success('Logged out successfully');
         navigate('/login');
+        }
+        
     };
 
     const toggleMenu = () => {
@@ -55,14 +75,20 @@ const Navbar = () => {
     };
 
     useEffect(() => {
-        if (isAuthenticated) {
+        if (isAuthenticated && !isAdmin) {
             fetchUserCart(user.id);
         }
     }, [isAuthenticated]);
 
     useEffect(() => {
         if (cart) {
-            setCartCount(cart?.length || 0);
+            // setCartCount(cart?.length || 0);
+            // iterate through the cart and count the number of items
+            let count = 0;
+            cart.forEach((item) => {
+                count += item.quantity;
+            });
+            setCartCount(count);
         }
     }, [cart]);
 
@@ -73,7 +99,8 @@ const Navbar = () => {
                     {/* Left side - Firm Name */}
                     <div className="flex-shrink-0">
                         <Link to="/" className="text-2xl font-bold ">
-                            Darla <span className="text-indigo-600">Stores</span>
+                            {/* Darla <span className="text-indigo-600">Stores</span> */}
+                            <img src={logo} alt="logo" className="w-32"/>
                         </Link>
                     </div>
 
@@ -87,14 +114,36 @@ const Navbar = () => {
                                 onChange={(e) => setSearchQuery(e.target.value)}
                                 className="form-input w-full px-4 py-2 pr-10"
                             />
-                            <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
-                                <FaSearch className="text-gray-400" />
+                            {/* remove button */}
+                            { searchQuery && (
+                            
+                                <button
+                                type='button'
+                                    onClick={() => setSearchQuery('')}
+                                    className="absolute inset-y-0 right-5 pr-5 flex items-center cursor-pointer">
+                                    <ImCross className="text-gray-400 text-sm hover:text-gray-500" />
+                                </button>
+                            
+                            )}
+                            <div
+                            type="submit"
+                            className="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer">
+                                <FaSearch className="text-gray-400 hover:text-gray-500" />
                             </div>
                         </form>
                     </div>
 
                     {/* Mobile Icons (Search & Menu) */}
                     <div className="flex items-center gap-2 md:hidden">
+                    { searchQuery && (
+                            
+                            <button
+                                onClick={() => setSearchQuery('')}
+                                className="absolute inset-y-0 top-16 right-5 pr-7 flex items-center cursor-pointer">
+                                <ImCross className="text-gray-400 text-sm hover:text-gray-500" />
+                            </button>
+                        
+                        )}
                         {/* Mobile Search Icon */}
                         <button
                             onClick={toggleMobileSearch}
@@ -231,9 +280,10 @@ const Navbar = () => {
                                             >
                                                 <FaShoppingCart className="h-5 w-5 mr-2" />
                                                 Cart
-                                                {cartItemsCount > 0 && (
+                                                {cartCount > 0 && (
                                                     <span className="ml-2 bg-indigo-600 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
-                                                        {cartItemsCount}
+                                                        {cartCount
+                                                        }
                                                     </span>
                                                 )}
                                             </Link>

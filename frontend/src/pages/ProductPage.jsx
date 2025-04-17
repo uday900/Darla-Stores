@@ -130,9 +130,13 @@ function ProductPage() {
         navigate(`/checkout/${product.id}`);
     };
 
-    const handleDeleteReview = (reviewId) => {
+    const handleDeleteReview = async (reviewId) => {
         // console.log('Deleting review:', reviewId, userId);
-        deleteReview(reviewId, user.id);
+        if(window.confirm("Are you sure you want to delete this review?"))
+        {
+            await deleteReview(reviewId, user.id);
+        }
+        
     };
 
     const handleAddReview = (e) => {
@@ -234,7 +238,7 @@ function ProductPage() {
                             className={`inline-block px-3 py-1 text-sm font-medium rounded-full 
                                 ${product?.stock > 0 ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}
                         >
-                            {product?.stock > 0 ? `${product?.stock} in stock` : 'Out of stock'}
+                            {product?.stock > 0 ?  `${product?.stock < 5? `only ${product?.stock} available` : `${product?.stock} in stock`}` : 'Out of stock'}
                         </span>
 
                         {product?.sizes &&
@@ -302,7 +306,7 @@ function ProductPage() {
                                             className="border border-gray-200 p-4 rounded-md shadow-sm"
                                         >
                                             <div> <span className='font-semibold'>{review.userName}</span>
-                                                <span className='text-sm ml-4'>reviewed on {(review.createdAt)}</span>
+                                                <span className='text-sm ml-4'>reviewed on {new Date(review.createdAt).toLocaleString()}</span>
 
                                                 {isAuthenticated && review.userId === user.id && <button className='ml-2 text-sm text-red-600 cursor-pointer hover:text-red-900'
                                                     onClick={() => handleDeleteReview(review.id, review.userId)}>remove review

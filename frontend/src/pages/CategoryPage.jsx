@@ -8,106 +8,131 @@ import ProductContext from '../state-management/ProductContext';
 
 function CategoryPage() {
     const { categoryName } = useParams();
-// dummy data
-// const categories = [
-//     {
-//         name: 'Men',
-//         description: 'Men\'s clothing',
+    // dummy data
+    // const categories = [
+    //     {
+    //         name: 'Men',
+    //         description: 'Men\'s clothing',
 
-//     },
-//     {
-//         name: 'Women',
-//         description: 'Women\'s clothing',
-//     },
-//     {
-//         name: 'Kids',
-//         description: 'Kids\' clothing',
-//     }
-// ];
-// const products = [
-//     {
-//         id: 1,
-//         name: 'Product 1',
-//         description: 'Product 1 description',
-//         price: 100,
-//         rating: 4.5,
-//         image: image1,
-//         category: 'Men',
-//         brand: 'Brand 1'
-//     },
-//     {
-//         id: 2,
-//         name: 'Product 2',
-//         description: 'Product 2 description',
-//         price: 200,
-//         rating: 4.5,
-//         image: image1,
-//         category: 'Men',
-//         brand: 'Brand 2'
-//     },
-//     {
-//         id: 3,
-//         name: 'Product 3',
-//         description: 'Product 3 description',
-//         price: 300,
-//         rating: 4.5,
-//         image: image1,
-//         category: 'Men',
-//         brand: 'Brand 3'
-//     },
-//     {
-//         id: 4,
-//         name: 'Product 4',
-//         description: 'Product 4 description',
-//         price: 400,
-//         rating: 4.5,
-//         image: image1,
-//         category: 'Men',
-//         brand: 'Brand 4'
-//     },
-//     {
-//         id: 5,
-//         name: 'Product 5',
-//         description: 'Product 5 description',
-//         price: 501,
-//         rating: 4.5,
-//         image: image1,
-//         category: 'Men',
-//         brand: 'Brand 4'
-//     },
+    //     },
+    //     {
+    //         name: 'Women',
+    //         description: 'Women\'s clothing',
+    //     },
+    //     {
+    //         name: 'Kids',
+    //         description: 'Kids\' clothing',
+    //     }
+    // ];
+    // const products = [
+    //     {
+    //         id: 1,
+    //         name: 'Product 1',
+    //         description: 'Product 1 description',
+    //         price: 100,
+    //         rating: 4.5,
+    //         image: image1,
+    //         category: 'Men',
+    //         brand: 'Brand 1'
+    //     },
+    //     {
+    //         id: 2,
+    //         name: 'Product 2',
+    //         description: 'Product 2 description',
+    //         price: 200,
+    //         rating: 4.5,
+    //         image: image1,
+    //         category: 'Men',
+    //         brand: 'Brand 2'
+    //     },
+    //     {
+    //         id: 3,
+    //         name: 'Product 3',
+    //         description: 'Product 3 description',
+    //         price: 300,
+    //         rating: 4.5,
+    //         image: image1,
+    //         category: 'Men',
+    //         brand: 'Brand 3'
+    //     },
+    //     {
+    //         id: 4,
+    //         name: 'Product 4',
+    //         description: 'Product 4 description',
+    //         price: 400,
+    //         rating: 4.5,
+    //         image: image1,
+    //         category: 'Men',
+    //         brand: 'Brand 4'
+    //     },
+    //     {
+    //         id: 5,
+    //         name: 'Product 5',
+    //         description: 'Product 5 description',
+    //         price: 501,
+    //         rating: 4.5,
+    //         image: image1,
+    //         category: 'Men',
+    //         brand: 'Brand 4'
+    //     },
 
-// ];
+    // ];
 
     const [showAll, setShowAll] = useState(false);
-   
+
     const [selectedBrands, setSelectedBrands] = useState([]);
     const [isFilterVisible, setIsFilterVisible] = useState(false); // For mobile filter toggle
     const [selectedPriceRanges, setSelectedPriceRanges] = useState([]);
 
+    // t2
+    const [priceRanges, setPriceRanges] = useState([]);
+
     // state values
     const { categories, loading, error, message, fetchCategories } = useContext(CategoryContext);
-    const { products, fetchProductsByCategory, loading: productsLoading , error: productsError } = useContext(ProductContext)
+    const { products, fetchProductsByCategory, loading: productsLoading, error: productsError } = useContext(ProductContext)
     const [filterProducts, setFilterProducts] = useState();
-    useEffect(()=>{
+    useEffect(() => {
         fetchCategories()
-    },[])
-    useEffect(()=>{
+    }, [])
+    useEffect(() => {
         setFilterProducts(products)
-    },[products])
-    useEffect(()=>{
+
+        // t2 ---------
+        const prices = products.map((product) => product.price);
+        if (prices.length === 0) return;
+        console.log(prices);
+        const minPrice = Math.min(...prices);
+        const maxPrice = Math.max(...prices);
+
+        const step = Math.ceil((maxPrice - minPrice) / 5);
+        const ranges = [];
+        console.log(minPrice, maxPrice, step);
+        for (let i = 0; i < 5; i++) {
+            const start = minPrice + i * step;
+            const end = i === 4 ? maxPrice : start + step - 1;
+            ranges.push({ min:start, max:end, label: `${start} - ${end}` });
+            console.log(start, end, "i is", i, "step is", step);
+        }
+
+        setPriceRanges(ranges);
+
+        // t2 ---------
+    }, [products])
+    useEffect(() => {
         // fetchCategories(),
 
-        const handleFunction = async () =>{
+        const handleFunction = async () => {
             await fetchProductsByCategory(categoryName);
         }
         handleFunction();
-    },[categoryName])
-    const priceRanges = [
-        { label: "0 - 500", min: 0, max: 500 },
-        { label: "500 - 1000", min: 500, max: 1000 },
-        { label: "1000 - 2000", min: 1000, max: 2000 },
-        { label: "2000+", min: 2000, max: Infinity },
-    ];
+    }, [categoryName])
+    // const priceRanges = [
+    //     { label: "0 - 500", min: 0, max: 500 },
+    //     { label: "500 - 1000", min: 500, max: 1000 },
+    //     { label: "1000 - 2000", min: 1000, max: 2000 },
+    //     { label: "2000 - 5000", min: 2000, max: 5000 },
+    //     { label: "5000+", min: 5000, max: Infinity },
+    // ];
 
     const handleBrandFilter = (e) => {
         if (e.target.checked) {
@@ -119,25 +144,18 @@ function CategoryPage() {
 
     const handlePriceFilterChange = (e, min, max) => {
         // filter products man
-        if (e.target.checked){
+        if (e.target.checked) {
 
-            if (selectedPriceRanges.length === 0){
+            if (selectedPriceRanges.length === 0) {
                 setSelectedPriceRanges([{ min, max }]);
                 return;
             }
             setSelectedPriceRanges([...selectedPriceRanges, { min, max }]);
 
-        } else{
+        } else {
             setSelectedPriceRanges(selectedPriceRanges.filter((range) => range.min !== min || range.max != max));
         }
-        // setSelectedPriceRanges((prev) =>{
-        //     // check min, max already present
 
-        //     prev.some((range) => range.min !== min && range.max != max)
-        //     ? selectedPriceRanges.filter((range) => range.min !== min || range.max != max)
-        //     : [...prev, { min, max }]
-        // });
-        
     }
 
     useEffect(() => {
@@ -148,14 +166,14 @@ function CategoryPage() {
             );
             overAllFilteredProducts = filteredProductsbyBrand;
             // setFilterProducts(filteredProductsbyBrand);
-        } 
+        }
         // else {
         //     setFilterProducts(products);
         // }
 
         if (selectedPriceRanges && selectedPriceRanges.length > 0) {
             const filteredProductsByPrice = products.filter((product) =>
-                selectedPriceRanges.some((range) => 
+                selectedPriceRanges.some((range) =>
                     product.price >= range.min && product.price <= range.max
                 )
             );
@@ -167,46 +185,38 @@ function CategoryPage() {
         setFilterProducts(overAllFilteredProducts);
     }, [selectedBrands, selectedPriceRanges]);
 
-    // useEffect(() => {
-    //     fetchProductsByCategory(categoryName);
-    //     setFilterProducts(products);
-    // }, [categoryName]);
-
-    // useEffect(() => {
-    //     setFilterProducts(products);
-    // }, [products]);
 
     const Card = ({ product, categoryName }) => {
         return (
             <Link to={`/product/${product.id}`} className='hover:scale-105 transition-all duration-300'>
-            <div
-               className="bg-white p-3 rounded-lg shadow hover:shadow-lg transition duration-300"
-           >
-               <div className="w-full items-center mb-2">
-                   <img
-                       src={`data:image/png;base64,${product.imageData}`}
-                       alt={product.name}
-                       className="max-h-full object-contain"
-                   />
-               </div>
+                <div
+                    className="bg-white p-3 rounded-lg shadow hover:shadow-lg transition duration-300"
+                >
+                    <div className="w-full items-center mb-2">
+                        <img
+                            src={`data:image/png;base64,${product.imageData}`}
+                            alt={product.name}
+                            className="max-h-full object-contain"
+                        />
+                    </div>
 
-               <h3 className="text-sm font-medium text-gray-800">
-                   {product.name}
-               </h3>
+                    <h3 className="text-sm font-medium text-gray-800">
+                        {product.name}
+                    </h3>
 
-               {/* Rating and reviews */}
-               <div className="flex justify-between items-center text-sm mt-1">
-                   <span>
-                       <span className="text-md font-semibold text-gray-900">₹</span>
-                       {product.price}
-                   </span>
-                   <span className="flex items-center gap-1 bg-green-600 text-white px-2 py-0.5 rounded text-xs font-semibold">
-                       {product.rating}
-                       <FaStar className="text-xs" />
-                   </span>
-               </div>
-           </div>
-          </Link>
+                    {/* Rating and reviews */}
+                    <div className="flex justify-between items-center text-sm mt-1">
+                        <span>
+                            <span className="text-md font-semibold text-gray-900">₹</span>
+                            {product.price}
+                        </span>
+                        <span className="flex items-center gap-1 bg-green-600 text-white px-2 py-0.5 rounded text-xs font-semibold">
+                            {product.rating}
+                            <FaStar className="text-xs" />
+                        </span>
+                    </div>
+                </div>
+            </Link>
         );
     };
     const clearFilter = () => {
@@ -216,7 +226,7 @@ function CategoryPage() {
         const checkboxes = document.querySelectorAll('input[type="checkbox"]');
         checkboxes.forEach((checkbox) => {
             checkbox.checked = false;
-        }); 
+        });
     };
     return (
         <>
@@ -265,12 +275,12 @@ function CategoryPage() {
                     {/* price filters */}
                     <div>
                         <p>Price Filter</p>
-                        {priceRanges.map(({ label, min, max }) => (
+                        {priceRanges?.map(({ label, min, max }) => (
                             <label key={label} style={{ display: "block", cursor: "pointer" }}>
                                 <input type='checkbox'
-                                className='mx-1 cursor-pointer'
+                                    className='mx-1 cursor-pointer'
                                     onClick={(e) => handlePriceFilterChange(e, min, max)}
-                                    // checked={priceRanges.some(range => range.min === min && range.max === max)}
+                                // checked={priceRanges.some(range => range.min === min && range.max === max)}
                                 />
                                 {label}
                             </label>

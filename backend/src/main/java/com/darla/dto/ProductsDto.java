@@ -4,6 +4,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
+import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -31,25 +32,20 @@ public class ProductsDto {
 	@NotNull(message = "Product stock is required")
 	@Min(value = 0, message = "Stock must be greater than 0")
 	private Integer stock;
-
-//	@NotNull(message = "Product rating is required")
-//	@Min(value = 0, message = "Rating must be greater than 0")
-//	private Double rating;
+	
+	@Min(value = 0, message = "Rating must be greater than 0")
+	@Max(value = 5, message = "Rating must be below 5")
+	private Double rating;
 
 	@NotEmpty(message = "Product brand is required")
 	private String brand;
 
+	@NotEmpty(message = "Product image name is required")
 	private String colors;
 
+	@NotEmpty(message = "Product image name is required")
 	private String sizes;
 
-//	private String imageName;
-//
-//	private byte[] imageData;
-	
-//	@NotNull(message = "Product image is required")
-//	private MultipartFile imageFile;
-	
 	@NotNull(message = "Product image path is required")
 	private String imagePath;
 

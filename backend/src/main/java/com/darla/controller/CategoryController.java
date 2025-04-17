@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.darla.dto.CategoryDto;
 import com.darla.dto.Response;
@@ -38,15 +39,30 @@ public class CategoryController {
 	
 	// Add several categories [for testing purpose only]
 	// return a response entity and accept a list of category dto
-	@PostMapping("/add-categories")
+//	@PostMapping("/add-categories")
+//	@PreAuthorize("hasRole('ROLE_ADMIN')")
+//	public ResponseEntity<Response> addCategories(@RequestBody List<@Valid CategoryDto> categoryDtos) {
+//		// call the service to add the categories
+//		String message = categoryService.addCategories(categoryDtos);
+//		
+//		Response response = Response.builder().message(message).build();
+//
+//		return ResponseEntity.ok(response);
+//	}
+	
+	/*
+	 * upload multiple categories through csv file
+	 * have a csv file
+	 * with name, description
+	 */
+	@PostMapping("/upload-csv")
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	public ResponseEntity<Response> addCategories(@RequestBody List<@Valid CategoryDto> categoryDtos) {
-		// call the service to add the categories
-		String message = categoryService.addCategories(categoryDtos);
-		
-		Response response = Response.builder().message(message).build();
+	public ResponseEntity<Response> uploadCategories(
+			@RequestParam("file") MultipartFile file) {
+		// call the service to upload the categories
+		Response response = categoryService.uploadCategories(file);
 
-		return ResponseEntity.ok(response);
+		return ResponseEntity.status(response.getStatus()).body(response);
 	}
 	
 	// Get all categories

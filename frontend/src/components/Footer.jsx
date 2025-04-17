@@ -57,7 +57,9 @@ const Footer = () => {
         <div>
           <h3 className="text-lg font-semibold mb-3">About Us</h3>
           <ul className="space-y-2">
-            <li><a href="" className="hover:underline">Darla's Store</a></li>
+            <li><Link to = '/'
+            onClick={() => window.scrollTo(0, 0)}
+             className="hover:underline">Darla's Store</Link></li>
             <li><a href="mailto:udaykirandarla2002gmail.com" className="hover:underline">darlastore2025@gmail.com</a></li>
             <li >+91 6301436515</li>
           </ul>

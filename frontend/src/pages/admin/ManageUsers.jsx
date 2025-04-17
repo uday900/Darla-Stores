@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import UserContext from '../../state-management/UserContext';
 
 // Dummy data simulating the UserDto
@@ -33,13 +33,16 @@ function ManageUsers() {
   const [search, setSearch] = useState('');
 
   // state values
-  const { users, loading, error, message } = useContext(UserContext);
+  const { users, loading, error, message, fetchAllUsers } = useContext(UserContext);
 
+  useEffect(() => {
+    fetchAllUsers();
+  }, []);
   const filteredUsers = users.filter(
     (user) =>
-      user.name.toLowerCase().includes(search.toLowerCase()) ||
-      user.email.toLowerCase().includes(search.toLowerCase()) ||
-      user.phoneNumber.includes(search)
+      user?.name.toLowerCase().includes(search.toLowerCase()) ||
+      user?.email.toLowerCase().includes(search.toLowerCase()) ||
+      user?.phoneNumber.includes(search)
   );
 
   return (
@@ -70,22 +73,22 @@ function ManageUsers() {
               <th className="p-3 border">Country</th>
               <th className="p-3 border">Street</th>
               <th className="p-3 border">Created At</th>
-              <th className="p-3 border">Actions</th>
+              {/* <th className="p-3 border">Actions</th> */}
             </tr>
           </thead>
           <tbody>
-            {filteredUsers.map((user) => (
+            {filteredUsers?.map((user) => (
               <tr key={user.id} className="text-sm border-t">
-                <td className="p-3 border">{user.id}</td>
-                <td className="p-3 border">{user.name}</td>
-                <td className="p-3 border">{user.email}</td>
-                <td className="p-3 border">{user.phoneNumber}</td>
-                <td className="p-3 border">{user.city}</td>
-                <td className="p-3 border">{user.district}</td>
-                <td className="p-3 border">{user.state}</td>
-                <td className="p-3 border">{user.country}</td>
-                <td className="p-3 border">{user.street}</td>
-                <td className="p-3 border">{new Date(user.createdAt).toLocaleString()}</td>
+                <td className="p-3 border">{user?.id}</td>
+                <td className="p-3 border">{user?.name}</td>
+                <td className="p-3 border">{user?.email}</td>
+                <td className="p-3 border">{user?.phoneNumber || 'N/A'}</td>
+                <td className="p-3 border">{user?.city || 'N/A'}</td>
+                <td className="p-3 border">{user?.district || 'N/A'}</td>
+                <td className="p-3 border">{user?.state || 'N/A'}</td>
+                <td className="p-3 border">{user?.country || 'N/A'}</td>
+                <td className="p-3 border">{user?.street || 'N/A'}</td>
+                <td className="p-3 border">{new Date(user?.createdAt).toLocaleString()}</td>
                 {/* <td className="p-3 border">
                     <button 
                     onClick={() => {
@@ -100,7 +103,7 @@ function ManageUsers() {
                   </td>   */}
               </tr>
             ))}
-            {filteredUsers.length === 0 && (
+            {filteredUsers?.length === 0 && (
               <tr>
                 <td colSpan="9" className="text-center p-4 text-gray-500">
                   No users found.

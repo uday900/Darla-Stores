@@ -107,10 +107,15 @@ const Login = () => {
     };
 
     const handleForgotSubmit = async (e) => {
+        setFormData({email: '', password: ''});
         e.preventDefault();
         try {
             const result = await sendOtpToEmail(forgotEmail);
-            setOtpSent(true);
+            if (result.status === 200) {
+                setOtpSent(true);
+            }
+
+            // setOtpSent(true);
             // toast.success(result.message);
         } catch (err) {
             toast.error(err || "Failed to send OTP!");
@@ -125,7 +130,13 @@ const Login = () => {
         // calling verifyOtp
         try {
             const result = await verifyOtp({email: forgotEmail, otp: resetData.otp, password: resetData.newPassword});
-            toast.success(result.message);
+            if (result.status === 200)
+            {
+                toast.success(result.message);
+                setResetData({otp: '', newPassword: '', confirmPassword: ''});
+                setShowForgotForm(false);
+            }
+           
         } catch (err) {
             toast.error(err || "Failed to verify OTP!");
         }
@@ -372,7 +383,7 @@ const Login = () => {
                         setOtpSent(false);
                         setResetData({ otp: '', newPassword: '', confirmPassword: '' });
                     }}
-                    className="flex items-center gap-2 text-indigo-600 hover:text-indigo-500 hover:underline"
+                    className="flex items-center gap-2 text-indigo-600 hover:text-indigo-500 hover:underline cursor-pointer"
                 >
                     <FaArrowLeft className="h-4 w-4" />
                     Back to Login

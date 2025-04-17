@@ -61,6 +61,7 @@ public class AuthController {
 		String res = userService.sendOtpToEmail(email);
 		Response response = new Response();
 		response.setMessage(res);
+		response.setStatus(HttpStatus.OK.value());
 		
 		return ResponseEntity.status(HttpStatus.OK).body(response);
 	}

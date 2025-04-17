@@ -58,7 +58,9 @@ export const AuthProvider = ({ children }) => {
       setError(err.response?.data?.message || 'Registration failed');
       toast.error(err.response?.data?.message || 'Registration failed');
     }
-    setLoading(false);
+    finally{
+      setLoading(false);
+    }
   };
 
   const sendOtpToEmail = async (email) => {
@@ -68,11 +70,14 @@ export const AuthProvider = ({ children }) => {
       const res = await api.post(`/auth/send-otp-to-email?email=${email}`);
       setMessage(res.data.message);
       toast.success(res.data.message);
+      return res.data;
     } catch (err) {
       setError(err.response?.data?.message || 'Sending OTP failed');
       toast.error(err.response?.data?.message || 'Sending OTP failed');
     }
-    setLoading(false);
+    finally{
+      setLoading(false);
+    }
   };
 
   const verifyOtp = async ({ email, otp, password }) => {
@@ -81,13 +86,16 @@ export const AuthProvider = ({ children }) => {
     try {
       const res = await api.post(`/auth/verify-otp-and-set-password?email=${email}&otp=${otp}&password=${password}`);
       setMessage(res.data.message);
-      toast.success(res.data.message);
-      navigate('/login');
+      // toast.success(res.data.message);
+      // navigate('/login');
+      return res.data;
     } catch (err) {
       setError(err.response?.data?.message || 'Verification failed');
       toast.error(err.response?.data?.message || 'Verification failed');
     }
-    setLoading(false);
+    finally{
+      setLoading(false);
+    }
   };
 
   const verifyToken = async (tokenParam) => {
@@ -112,8 +120,9 @@ export const AuthProvider = ({ children }) => {
       setError(err.response?.data?.message || 'Token verification failed');
       toast.error(err.response?.data?.message || 'Token verification failed');
       logout(); // optionally clear
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   const logout = () => {
@@ -147,7 +156,9 @@ export const AuthProvider = ({ children }) => {
       setError(err.response?.data?.message || 'Account deletion failed');
       toast.error(err.response?.data?.message || 'Account deletion failed');
     }
-    setLoading(false);
+    finally{
+      setLoading(false);
+    }
   };
 
   return (

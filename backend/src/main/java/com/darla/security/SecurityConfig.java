@@ -59,6 +59,8 @@ public class SecurityConfig {
 						.permitAll()
 						.requestMatchers(HttpMethod.GET, "/category/**").permitAll()
 						.requestMatchers(HttpMethod.GET, "/products/**").permitAll()
+//						.requestMatchers(HttpMethod.POST, "/category/upload-csv").permitAll()
+//						.requestMatchers(HttpMethod.POST, "/products/upload-csv").permitAll()
 						.anyRequest()
 						.authenticated()
 						)

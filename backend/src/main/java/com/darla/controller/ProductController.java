@@ -94,18 +94,27 @@ public class ProductController {
 	}
 	
 	// add multiple products 
-	@PostMapping("/add-multiple")
+//	@PostMapping("/add-multiple")
+//	@PreAuthorize("hasRole('ROLE_ADMIN')")
+//	public ResponseEntity<Response> addMultipleProducts(
+//			
+//			@RequestBody List<@Valid ProductsDto> productsDto) throws IOException {
+//			
+//		Response response = new Response();
+//		String res = productService.addMultipleProducts(productsDto);
+//		
+//		response.setMessage(res);
+//		return ResponseEntity.ok(response);
+//	}
+	
+	// upload products through csv file
+	@PostMapping("/upload-csv")
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	public ResponseEntity<Response> addMultipleProducts(
-			
-			@RequestBody List<@Valid ProductsDto> productsDto) throws IOException {
-			
-		Response response = new Response();
-		String res = productService.addMultipleProducts(productsDto);
-		
-		response.setMessage(res);
-		return ResponseEntity.ok(response);
+	public ResponseEntity<Response> uploadProducts(@RequestParam("file") MultipartFile file) {
+		Response response = productService.uploadProducts(file);
+		return ResponseEntity.status(response.getStatus()).body(response);
 	}
+	
 	// fetch show case products
 	@GetMapping("/showcase")
 	public ResponseEntity<Map<String, List<ProductDto>>> fetchShowcaseProducts() {
@@ -171,12 +180,6 @@ public class ProductController {
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public ResponseEntity<Response> deleteProduct(@PathVariable Long id) {
 		Response response = new Response();
-		if (id == null) {
-            response.setMessage("Id cannot be null");
-            return ResponseEntity
-                    .status(HttpStatus.BAD_REQUEST)
-                    .body(response);
-            }
 		
 		String message = productService.deleteProduct(id);
 		response.setMessage(message);

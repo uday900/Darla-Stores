@@ -1,6 +1,6 @@
-import React from 'react'
+import React, { useContext, useEffect } from 'react'
 import Navbar from './components/Navbar'
-import { Routes, Route, Navigate } from 'react-router-dom'
+import { Routes, Route, Navigate, useLocation } from 'react-router-dom'
 import PageNotFound from './components/PageNotFound'
 import Register from './pages/auth/Register'
 import Login from './pages/auth/Login'
@@ -24,8 +24,17 @@ import UserProfile from './components/UserProfile'
 import UserOrders from './components/UserOrders'
 import UserAccountInformation from './components/UserAccountInformation'
 import UserUpdatePassword from './components/UserUpdatePassword'
+import ProductContext from './state-management/ProductContext'
+import Loading from './components/Loading'
 function App() {
+  const location = useLocation();
+  const { setSearchQuery } = useContext(ProductContext)
 
+  useEffect(() => {
+    if (location.pathname !== '/search') {
+      setSearchQuery('');
+    }
+  }, [location])
   return (
     <>
       <Navbar />
@@ -38,11 +47,6 @@ function App() {
         <Route path='/category/:categoryName' element={<CategoryPage />} />
         <Route path='/checkout/:productId' element={<PrivateRoute><CheckOutPage /></PrivateRoute>} />
         <Route path='/search' element={<Search />} />
-
-        {/* <Route path='/user/profile' element={<PrivateRoute><UserProfilePage /></PrivateRoute>} /> */}
-        {/* creating nested routes for user profile
-      user profile has, profile, orders, update-password, account-information
-       */}
 
         <Route path="/user" element={<PrivateRoute><UserDashboard /></PrivateRoute>}>
           <Route index element={<UserProfile />} />
@@ -58,6 +62,7 @@ function App() {
         <Route path='/admin/*' element={<PrivateRoute adminRoute={true}><AdminRoutes /></PrivateRoute>} />
         <Route path='/error' element={<ErrorPage />} />
         <Route path='/unauthorized' element={<AuthRequired />} />
+        <Route path='/loading' element={<Loading />} /> 
 
         <Route path='*' element={<PageNotFound />} />
       </Routes>

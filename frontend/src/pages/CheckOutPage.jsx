@@ -7,14 +7,16 @@ import UserContext from '../state-management/UserContext';
 import api from '../api-services/apiConfig';
 import Loading from '../components/Loading';
 
+const RAZORPAY_KEY = import.meta.env.VITE_RAZORPAY_KEY;
 const CheckoutPage = () => {
 
   const navigate = useNavigate();
   const [selectedSize, setSelectedSize] = useState('');
   const [selectedColor, setSelectedColor] = useState('');
   const [quantity, setQuantity] = useState(1);
-  const [shippingAddress, setShippingAddress] = useState('Madhapur, Hyderabad, Telangana, India');
+  // const [shippingAddress, setShippingAddress] = useState('');
   const [totalPrice, setTotalPrice] = useState(0);
+  const [totalItems, setTotalItems] = useState(1);
   const [paymentMode, setPaymentMode] = useState('Cash on Delivery');
   const [paymentDetails, setPaymentDetails] = useState(null);
   const [errorDetails, setErrorDetails] = useState(null);
@@ -30,6 +32,13 @@ const CheckoutPage = () => {
   const { placeOrder, loading: orderLoading } = useContext(UserContext);
   const user = JSON.parse(localStorage.getItem('user'));
   const isAuthenticated = localStorage.getItem('isAuthenticated');
+
+  const [shippingAddress, setShippingAddress] = useState(
+    [user.street, user.city, user.district, user.state, user.zipCode]
+      .filter((item) => item) // filters out null, undefined, and empty strings
+      .join(', ')
+  );
+  
 
   useEffect(() => {
     if (productId) {
@@ -103,7 +112,7 @@ const CheckoutPage = () => {
 
   const openRazorpay = (order) => {
     const options = {
-      key: "rzp_test_Oshunm39FDxDGQ",
+      key: RAZORPAY_KEY,
       amount: order.amount,
       currency: order.currency,
       name: "Darla Stores",
@@ -221,16 +230,18 @@ const CheckoutPage = () => {
         openRazorpay(orderDataFromServer);
       } else {
         toast.success(response.data.message);
-        navigate("/user/profile");
+        navigate("/user/orders");
       }
-      // openRazorpay(orderDataFromServer);
-      // const response = await fetch("http://localhost:8080/createOrder?amount=20&currency=INR&receipt=receipt1", {
-      //   method: "POST",
-      // });
-      // const orderData = await response.json();
-      // openRazorpay(orderData);
     } catch (error) {
       console.error("Error creating order:", error);
+      toast.error(error.response?.data?.message || 'Order creation failed');
+      if (error.response?.data?.errors) {
+        const errorsFromServer = error.response.data.errors;
+        // console.log(errorsFromServer);
+        Object.keys(errorsFromServer).forEach((key) => {
+          toast.error(errorsFromServer[key]);
+        })
+      }
     } finally {
       setPaymentLoading(false);
     }
@@ -281,9 +292,9 @@ const CheckoutPage = () => {
                         </span>
         <div className="inline-block ml-2">
           <button
-            className={`${quantity >= product.stock ? 'bg-slate-200 text-white text-sm py-1 px-3 rounded-lg shadow-md cursor-not-allowed' :'bg-slate-400 text-white text-sm py-1 px-3 rounded-lg shadow-md hover:bg-slate-500 cursor-pointer'}`}
+            className={`${quantity >= product?.stock ? 'bg-slate-200 text-white text-sm py-1 px-3 rounded-lg shadow-md cursor-not-allowed' :'bg-slate-400 text-white text-sm py-1 px-3 rounded-lg shadow-md hover:bg-slate-500 cursor-pointer'}`}
             onClick={() => setQuantity(quantity + 1)}
-            disabled={quantity >= product.stock}
+            disabled={quantity >= product?.stock}
           >
             +
           </button>

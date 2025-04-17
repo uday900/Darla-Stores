@@ -6,6 +6,7 @@ import { AuthContext } from '../state-management/AuthContext';
 import Loading from '../components/Loading';
 import { toast } from 'react-toastify';
 import { getColor } from './getColor';
+import { Link } from 'react-router-dom';
 
 function UserOrders() {
   const [editMode, setEditMode] = useState(false);
@@ -88,7 +89,7 @@ function UserOrders() {
     const confirmed = window.confirm('Are you sure you want to cancel this order?');
     if (confirmed) {
       await updateOrder(orderId, 'CANCELED');
-      toast.success("Order cancelled successfully!");
+      // toast.success("Order cancelled successfully!");
     }
   };
   
@@ -115,12 +116,16 @@ function UserOrders() {
                 <div key={order.id} className="p-4 border border-gray-200 rounded flex flex-col md:flex-row gap-4 items-start">
   
                 {/* Left: Product Image */}
-                <div className="w-full md:w-40 h-40 flex-shrink-0">
+                <div className="w-full md:w-40 h-40 flex-shrink-0 hover:scale-105 transition-all duration-300">
+                  <Link to = {`/product/${order.productId}`}
+                  
+                  >
                   <img
                     src={`data:image/png;base64,${order.imageData}`} // replace with your image field or placeholder
                     alt={order?.productName}
                     className="w-full h-full object-cover rounded"
                   />
+                  </Link>
                 </div>
               
                 {/* Right: Order Details */}
@@ -129,8 +134,7 @@ function UserOrders() {
                   <p><span className="font-medium">Product:</span> {order.productName}</p>
                   <p><span className="font-medium">Quantity:</span> {order.quantity}</p>
                   <p><span className="font-medium">Total Amount:</span> ₹{order.totalAmount}</p>
-                  <p><span className="font-medium">Order Date:</span> {formatDateTime(order.createdAt || '')}</p>
-              
+                 
                   <p>
                     <span className="font-medium">Status:</span>
                     <span className={'ml-2 px-3 py-1 rounded-full text-xs font-semibold tracking-wide shadow-sm ' + getColor(order.status)}>
@@ -154,8 +158,12 @@ function UserOrders() {
                   )}
               
                   <p><span className="font-medium">Delivery Address:</span> {order.shippingAddress || 'N/A'}</p>
+                  <p><span className="font-medium">Order Date:</span> {formatDateTime(order.createdAt || '')}</p>
               
-                  {order?.status !== 'CANCELED' && order?.status !== 'DELIVERED' && (
+              
+                  {order?.status !== 'CANCELED' && 
+                  order?.status !== 'REFUND_ISSUED' &&
+                  order?.status !== 'DELIVERED' && (
                     <button
                       className="mt-3 cursor-pointer text-white rounded-full bg-red-500 px-4 py-2 text-sm hover:bg-red-600"
                       onClick={() => handleCancelOrder(order.id)}

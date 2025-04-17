@@ -3,36 +3,6 @@ import UserContext from '../../state-management/UserContext';
 import Loading from '../../components/Loading';
 import { getColor } from '../../components/getColor';
 
-const dummyOrders = [
-  // ... (your existing data)
-  {
-    id: 1,
-    userId: 1,
-    productName: 'Product 1',
-    quantity: 2,
-    totalAmount: 100,
-    status: 'Pending',
-    createdAt: '2023-01-01',
-  },
-  {
-    id: 2,
-    userId: 2,
-    productName: 'Product 2',
-    quantity: 1,
-    totalAmount: 50,
-    status: 'Delivered',
-    createdAt: '2023-01-02',
-  },
-  {
-    id: 3,
-    userId: 3,
-    productName: 'Product 3',
-    quantity: 3,
-    totalAmount: 150,
-    status: 'Cancelled',
-    createdAt: '2023-01-03',
-  },
-];
 
 function ManageOrders() {
   // const [orders, setOrders] = useState(dummyOrders);
@@ -44,11 +14,12 @@ function ManageOrders() {
 
 
   // 'REFUND_ISSUED', 'REFUND_INITIATED', 
-  const statusOptions = ['PENDING','CONFIRMED',  'SHIPPED', 'OUT_OF_DELIVERY', 'DELIVERED', 'CANCELED', 'COMPLETED'];
+  const statusOptions = ['PENDING','CONFIRMED',  'SHIPPED', 'OUT_OF_DELIVERY', 'DELIVERED', 'COMPLETED'];
   const statusOptionsForFilter = ['PENDING','CONFIRMED',  'SHIPPED', 'OUT_OF_DELIVERY', 'DELIVERED', 'CANCELED', 'COMPLETED', 'REFUND_ISSUED', 'REFUND_INITIATED'];
 
   // state values
-  const { orders, loading, message, error, 
+  const { orders, 
+    loading, message, error, 
     updateOrder,
      fetchAllOrders,
      refund 
@@ -58,27 +29,6 @@ function ManageOrders() {
     fetchAllOrders();
   }, [])
 
-
-  // useEffect(() => {
-  //   if (searchTerm === '') {
-  //     setFilteredOrders(orders);
-  //     return;
-  //   }
-  //   setFilteredOrders(
-  //     // FILTER ONLY ORDER ID
-  //     orders.filter((order) => order.id.toString().startsWith(searchTerm) || order.id === Number(searchTerm) || order.status == statusFilter )
-  //   );
-  // }, [orders, searchTerm]);
-
-  // useEffect(() => {
-  //   if (statusFilter === '') {
-  //     setFilteredOrders(orders);
-  //     return;
-  //   }
-  //   setFilteredOrders(
-  //     orders.filter((order) => order.status === statusFilter)
-  //   );
-  // }, [orders, statusFilter]);
 
   useEffect(() => {
     let filtered = orders;
@@ -110,40 +60,14 @@ function ManageOrders() {
     setEditedStatuses({ id: id, status: newStatus });
   };
 
-  const handleSave = (id) => {
+  const handleSave =async (id) => {
     // updateOrder(id, );
     console.log(editedStatuses)
-    updateOrder(id, editedStatuses.status);
+    await updateOrder(id, editedStatuses.status);
     setEditedStatuses({});
 
     fetchAllOrders();
   };
-  // const getColor = (status) => {
-  //   switch (status?.toUpperCase()) {
-  //     case 'PAID': return 'text-green-800 bg-green-200 '
-  //     case 'DELIVERED':
-  //     case 'REFUNDED':
-  //     case 'COMPLETED':
-  //     case 'OUT_OF_DELIVERY':
-  //       return 'text-green-600  bg-green-200';
-  //     case 'CONFIRMED':
-  //       return 'text-blue-800 rounded text-sm bg-blue-200';
-  //     case 'SHIPPED':
-  //       return 'text-yellow-600 font-bold bg-yellow-200';
-  //     case 'CANCELLED':
-  //     case 'CANCELED':
-  //     case 'REFUND_INITIATED':
-  //     case 'REFUND_ISSUED':
-  //     case 'FAILED':
-  //       return 'text-red-600 font-bold bg-red-200';
-  //     case 'PENDING':
-  //       return 'text-red-600 font-bold bg-red-200';
-  //     case 'RETURNED':
-  //       return 'text-red-600 font-bold bg-red-200';
-  //     default:
-  //       return 'text-gray-600 font-bold bg-gray-200';
-  //   }
-  // };
 
   if (loading ) {
     return <Loading />;

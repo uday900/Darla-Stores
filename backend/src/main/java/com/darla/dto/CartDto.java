@@ -18,6 +18,6 @@ public class CartDto {
 	private String brand;
 	private Double price;
 	
-	private Integer qunaitity;
+	private Integer quantity;
 
 }

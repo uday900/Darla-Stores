@@ -58,7 +58,7 @@ const CategoriesBar = () => {
     };
 
     return (
-        <div className="mx-2 z-40 bg-white border-b border-gray-200 sticky top-16">
+        <div className="z-40 bg-white border-b border-gray-200 sticky top-16">
             <div className="max-w-7xl mx-auto">
                 <div className="relative flex justify-center items-center">
                     {/* Left Navigation Button - Hidden on Mobile */}
@@ -94,7 +94,7 @@ const CategoriesBar = () => {
 
                                 </Link>
                                 <span 
-                                class="absolute z-50  w-max p-2 left-1/2 -translate-x-1/2 top-full hidden group-hover:flex bg-slate-500 text-white text-sm px-3 rounded shadow-md">
+                                className="absolute z-50  w-max p-2 left-1/2 -translate-x-1/2 top-full hidden group-hover:flex bg-slate-500 text-white text-sm px-3 rounded shadow-md">
                                 
                                     {category?.description}
                                 </span>

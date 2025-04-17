@@ -7,13 +7,13 @@ import Loading from '../components/Loading';
 import { toast } from 'react-toastify';
 
 function UserUpdatePassword() {
-  const [editMode, setEditMode] = useState(false);
-  const [activeTab, setActiveTab] = useState('profile');
+ 
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [passwordError, setPasswordError] = useState('');
 
+  const [showCurrentPassword, setShowCurrentPassword] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [passwordStrength, setPasswordStrength] = useState({
@@ -23,38 +23,43 @@ function UserUpdatePassword() {
     hasNumber: false,
     hasSpecialChar: false,
   });
-  const [filteredOrders, setFilteredOrders] = useState([]);
 
-  const [user, setUser] = useState({
-  });
 
-  console.log("userpasswordupdate")
+  // console.log("userpasswordupdate")
 
-  const { updateProfile,
+  const {
     updatePassword,
-    loading, error, message,
-    orders,
-    fetchOrdersByUser,
-    updateOrder,
-
+    loading, 
+    error, 
+    message,
+    clearLogs,
   } = useContext(UserContext);
 
-  const { loading: authLoading, logout, deleteAccount } = useContext(AuthContext);
-
-  // const [user, setUser] = useState({
-  //   name: 'John Doe',
-  //   email: 'john@gmail.com',
-  //   phone: '1234567890',
-  //   city: 'New York',
-  //   state: 'NY',
-  //   country: 'USA',
-  //   zipCode: '10001',
-  //   street: '123 Main St',
-  // });
   const userData = JSON.parse(localStorage.getItem('user'));
 
-  const handleUpdatePassword = () => {
-    updatePassword(user.id, currentPassword, newPassword);
+  useEffect(() => {
+    if (error) {
+      toast.error(error);
+    }
+    else if (message) {
+      toast.success(message);
+      setCurrentPassword('');
+      setNewPassword('');
+      setConfirmPassword('');
+      setPasswordError('');
+      setPasswordStrength({
+        hasMinLength: false,
+        hasUpperCase: false,
+        hasLowerCase: false,
+        hasNumber: false,
+        hasSpecialChar: false,
+      })
+
+    }
+    clearLogs();  
+  }, [error, message])
+  const handleUpdatePassword = async () => {
+    await updatePassword(userData.id, currentPassword, newPassword);
   };
 
 
@@ -108,7 +113,7 @@ function UserUpdatePassword() {
     newPassword &&
     confirmPassword;
 
-  if (loading || authLoading) return <Loading />
+  if (loading) return <Loading />
   return (
     <div className="max-w-4xl mx-auto mt-8 p-6 bg-white rounded shadow">
 
@@ -122,9 +127,30 @@ function UserUpdatePassword() {
               <div className="relative">
                 <label className="block text-gray-600">Current Password</label>
                 <input
-                  type={showPassword ? 'text' : 'password'}
+                  type={showCurrentPassword ? 'text' : 'password'}
                   value={currentPassword}
                   onChange={(e) => setCurrentPassword(e.target.value)}
+                  className="w-full mt-1 p-2 border border-gray-300 rounded pr-10"
+                />
+                <span
+                  className="absolute right-3 top-9 cursor-pointer text-gray-600"
+                  onClick={() => setShowCurrentPassword(!showCurrentPassword)}
+                >
+                  {showCurrentPassword ? <FaEyeSlash /> : <FaEye />}
+                </span>
+              </div>
+
+              <div className="relative">
+                <label className="block text-gray-600">New Password</label>
+                <input
+                  type={showPassword ? 'text' : 'password'}
+                  value={newPassword}
+                  onChange={(e) => {
+                    setNewPassword(e.target.value);
+                    checkPasswordStrength(e.target.value);
+                  }}
+                  max={16}
+                  min={8}
                   className="w-full mt-1 p-2 border border-gray-300 rounded pr-10"
                 />
                 <span
@@ -132,25 +158,6 @@ function UserUpdatePassword() {
                   onClick={() => setShowPassword(!showPassword)}
                 >
                   {showPassword ? <FaEyeSlash /> : <FaEye />}
-                </span>
-              </div>
-
-              <div className="relative">
-                <label className="block text-gray-600">New Password</label>
-                <input
-                  type={showConfirmPassword ? 'text' : 'password'}
-                  value={newPassword}
-                  onChange={(e) => {
-                    setNewPassword(e.target.value);
-                    checkPasswordStrength(e.target.value);
-                  }}
-                  className="w-full mt-1 p-2 border border-gray-300 rounded pr-10"
-                />
-                <span
-                  className="absolute right-3 top-9 cursor-pointer text-gray-600"
-                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                >
-                  {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
                 </span>
               </div>
               <PasswordRequirements />

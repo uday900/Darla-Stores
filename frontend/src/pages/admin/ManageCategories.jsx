@@ -1,5 +1,8 @@
 import React, { useContext, useEffect, useState } from 'react';
 import CategoryContext from '../../state-management/CategoryContext';
+import Loading from '../../components/Loading';
+import { toast } from 'react-toastify';
+import api from '../../api-services/apiConfig';
 
 // Dummy category data
 const dummyCategories = [
@@ -20,6 +23,10 @@ function ManageCategories() {
   const [search, setSearch] = useState('');
   const [newCategory, setNewCategory] = useState({ name: '', description: '' });
   const [editingCategory, setEditingCategory] = useState(null);
+  const [csvFile, setCsvFile] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isOpenBulkUploadModal, setIsOpenBulkUploadModal] = useState(false);
+  
 
   // use context
   const { categories, fetchCategories,
@@ -54,7 +61,10 @@ function ManageCategories() {
   };
 
   const handleDelete = (id) => {
-    deleteCategory(id);
+    if (window.confirm('Are you sure you want to delete this category?. Every product in this category will be deleted as well')) {
+      deleteCategory(id);
+    }
+    
   };
 
   const handleUpdate = () => {  
@@ -63,7 +73,51 @@ function ManageCategories() {
     // setNewCategory({ name: '', description: '' });
   };
 
+  const handleUploadCsvFile = async () => {
+
+    if (!csvFile || csvFile === null) {
+      toast.error('Please select a CSV file');
+      return;
+    }
+    const formData = new FormData();
+    formData.append("file", csvFile);
+
+    console.log(csvFile);
+
+    setIsLoading(true);
+    try {
+      const res = await api.post("/category/upload-csv", formData);
+      console.log(res); 
+      if (res.status === 200) {
+        toast.success(res.data.message);
+        fetchCategories();
+      }
+      else {
+        toast.error(res.data.message);
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error(error.response?.data?.message || 'Failed to upload CSV file');
+      if (error.response?.data?.errors) {
+        const errorsFromServer = error.response.data.errors;
+        // console.log(errorsFromServer);
+        Object.keys(errorsFromServer).forEach((key) => {
+          toast.error(errorsFromServer[key]);
+        })
+      }
+    } finally {
+      setIsLoading(false);
+      setIsOpenBulkUploadModal(false);
+    }
+  }
+
+
   const isFormValid = !Object.values(newCategory).some((value) => value === '' || value === null);
+
+
+  if (loading || isLoading) {
+    return <Loading />;
+  }
 
   return (
     <div className="p-6">
@@ -92,6 +146,13 @@ function ManageCategories() {
           disabled={loading || !isFormValid}
         >
           {loading ? 'Adding...' : 'Add Category'}
+        </button>
+        <button
+        type='button' 
+        className="primary-button px-4 py-2 rounded-md shadow-md mx-2"
+        onClick={() => setIsOpenBulkUploadModal(true)}
+        >
+          + Add Bulk
         </button>
       </form>
 
@@ -176,6 +237,49 @@ function ManageCategories() {
     <p className="text-center text-gray-500 col-span-full">No categories found.</p>
   )}
 </div>
+
+  {/* Modal for bulk upload */}
+  {isOpenBulkUploadModal && (
+  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+    <div className="relative bg-white p-6 w-full max-w-md rounded-2xl shadow-xl">
+      
+      {/* Close Icon */}
+      <button
+        onClick={() => setIsOpenBulkUploadModal(false)}
+        className="absolute top-3 right-3 text-gray-600 hover:text-gray-900 text-2xl"
+      >
+        &times;
+      </button>
+
+      <h2 className="text-xl font-semibold">Upload File in CSV Format</h2>
+      {/* Provide a way to upload a CSV file, with fields name and description */}
+      <p className='mb-4'>Please upload a CSV file with the following columns: name, description</p>
+
+      <input
+        type="file"
+        accept=".csv"
+        onChange={(e) => setCsvFile(e.target.files[0])}
+        className="w-full mb-4 border rounded px-3 py-2 cursor-pointer"
+      />
+
+      <div className="flex justify-end space-x-3">
+        <button
+          onClick={() => setIsOpenBulkUploadModal(false)}
+          className="px-4 py-2 rounded bg-gray-200 hover:bg-gray-300 text-gray-700 cursor-pointer"
+        >
+          Cancel
+        </button>
+        <button
+          onClick={()=>handleUploadCsvFile()} // ✅ call the function, not return it
+          className="px-4 py-2 rounded bg-blue-600 hover:bg-blue-700 text-white cursor-pointer"
+        >
+          Submit
+        </button>
+      </div>
+    </div>
+  </div>
+)}
+
 
     </div>
   );

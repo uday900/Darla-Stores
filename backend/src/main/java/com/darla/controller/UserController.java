@@ -11,6 +11,7 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.*;
 
 import com.darla.dto.CartDto;
+import com.darla.dto.CheckOutRequest;
 import com.darla.dto.OrderDto;
 import com.darla.dto.OrderRequest;
 import com.darla.dto.RazorPaymentResponse;
@@ -64,9 +65,8 @@ public class UserController {
 			@RequestParam String newPassword
 			){
 		Response res = userService.updatePassword(userId, oldPassword, newPassword);
-		if (res.getStatus() == 200)	return ResponseEntity.status(HttpStatus.OK).body(res);
 		
-		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(res);
+		return ResponseEntity.status(res.getStatus()).body(res);
 	}
 	
 	// get user-info
@@ -98,9 +98,13 @@ public class UserController {
         return ResponseEntity.ok(response);
     }
 	
-   
+   /*
+    * cart details
+    * API mappings for cart
+    */
     // Add product to cart
     @PostMapping("/cart/add")
+    @PreAuthorize("hasRole('ROLE_USER')")
     public ResponseEntity<String> addToCart(
     		@RequestParam Long userId,
     		@RequestParam Long productId) {
@@ -110,6 +114,7 @@ public class UserController {
     
     // Remove product from cart
     @DeleteMapping("/cart/remove")
+    @PreAuthorize("hasRole('ROLE_USER')")
     public ResponseEntity<String> removeFromCart(
     		@RequestParam Long userId,
     		@RequestParam Long cartId) {
@@ -119,6 +124,7 @@ public class UserController {
 
     // Increment product quantity
     @PutMapping("/cart/increment")
+    @PreAuthorize("hasRole('ROLE_USER')")
     public ResponseEntity<String> incrementQuantity(
     		@RequestParam Long userId, 
     		@RequestParam Long cartId) {
@@ -128,6 +134,7 @@ public class UserController {
 
     // Decrement product quantity
     @PutMapping("/cart/decrement")
+    @PreAuthorize("hasRole('ROLE_USER')")
     public ResponseEntity<String> decrementQuantity(
     		@RequestParam Long userId, 
     		@RequestParam Long cartId) {
@@ -137,6 +144,7 @@ public class UserController {
 
     // Fetch user cart
     @GetMapping("/cart")
+    @PreAuthorize("hasRole('ROLE_USER')")
     public ResponseEntity<List<CartDto>> fetchUserCart(
     		@RequestParam Long userId) {
         List<CartDto> cartItems = userService.fetchUserCart(userId);
@@ -158,7 +166,7 @@ public class UserController {
     @PostMapping("/order/create")
     @PreAuthorize("hasRole('ROLE_USER')")
     public ResponseEntity<Response> createOrder(
-    		@RequestBody OrderRequest orderRequest
+    		@Valid @RequestBody OrderRequest orderRequest
     		) throws RazorpayException{
     	if (orderRequest.getQuantity() <= 0) {
     		 throw new IllegalArgumentException("Quantity must be greater than 0");
@@ -173,18 +181,20 @@ public class UserController {
     // check out with razorpay
     @PostMapping("/order/checkout")
     @PreAuthorize("hasRole('ROLE_USER')")
-	public ResponseEntity<Response> checkOutWithRazorPay(@RequestBody OrderRequest orderRequest)
+	public ResponseEntity<Response> checkOutWithRazorPay(
+			
+			@Valid @RequestBody CheckOutRequest orderRequest)
 			throws RazorpayException {
 		
-		System.out.println("order request: " + orderRequest.toString());
+//		System.out.println("order request: " + orderRequest.toString());
 		Response response = userService.checkOutWithRazorPay(orderRequest.getUserId(), orderRequest.getPaymentMode(), orderRequest.getShippingAddress());
 		return ResponseEntity.status(response.getStatus()).body(response);
-
 	}
     
     // verify order with razorpay
     @PostMapping("/order/verify")
-	public ResponseEntity<Response> verifyOrder( @RequestBody RazorPaymentResponse razorPaymentResponse) throws RazorpayException {
+	public ResponseEntity<Response> verifyOrder( 
+			@Valid @RequestBody RazorPaymentResponse razorPaymentResponse) throws RazorpayException {
 		System.out.println("razorpay response: " + razorPaymentResponse.toString());
     	
     	Response response = userService.verifyOrderWithRazorPay(razorPaymentResponse);
@@ -213,23 +223,23 @@ public class UserController {
         return ResponseEntity.ok(res);
     }
     
-    @PostMapping("/order/place")
-    @PreAuthorize("hasRole('ROLE_USER')")
-    public ResponseEntity<Response> placeOrder(
-    		@RequestParam Long userId,
-    		@RequestParam Long productId,
-    		@RequestParam Integer quantity
-    		) throws RazorpayException{
-				if (quantity <= 0) {
-					throw new IllegalArgumentException("Quantity must be greater than 0");
-				}
-    	String message = userService.placeOrder(userId,
-    			productId, quantity);
-    	Response response = new Response();
-    	response.setMessage(message);
-  
-		return ResponseEntity.ok(response);
-    }
+//    @PostMapping("/order/place")
+//    @PreAuthorize("hasRole('ROLE_USER')")
+//    public ResponseEntity<Response> placeOrder(
+//    		@RequestParam Long userId,
+//    		@RequestParam Long productId,
+//    		@RequestParam Integer quantity
+//    		) throws RazorpayException{
+//				if (quantity <= 0) {
+//					throw new IllegalArgumentException("Quantity must be greater than 0");
+//				}
+//    	String message = userService.placeOrder(userId,
+//    			productId, quantity);
+//    	Response response = new Response();
+//    	response.setMessage(message);
+//  
+//		return ResponseEntity.ok(response);
+//    }
    
   
    @PutMapping("/order/update")
@@ -259,16 +269,16 @@ public class UserController {
 			   );
    }
    
-   @PostMapping("/order/check-out")
-   @PreAuthorize("hasRole('ROLE_USER')")
-	public ResponseEntity<Response> checkOut(
-			@RequestParam Long userId){
-	   Response response = new Response();
-	   String msg = userService.checkOut(userId);
-	   response.setMessage(msg);
-	   
-		return ResponseEntity.ok(response);
-	}
+//   @PostMapping("/order/check-out")
+//   @PreAuthorize("hasRole('ROLE_USER')")
+//	public ResponseEntity<Response> checkOut(
+//			@RequestParam Long userId){
+//	   Response response = new Response();
+//	   String msg = userService.checkOut(userId);
+//	   response.setMessage(msg);
+//	   
+//		return ResponseEntity.ok(response);
+//	}
     
 	
 

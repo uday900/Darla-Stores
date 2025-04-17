@@ -52,6 +52,13 @@ export const CategoryProvider = ({ children }) => {
       fetchCategories();
     } catch (error) {
       toast.error(error.response?.data?.message || "Failed to add category");
+      if (error.response?.data?.errors) {
+              const errorsFromServer = error.response.data.errors;
+              // console.log(errorsFromServer);
+              Object.keys(errorsFromServer).forEach((key) => {
+                toast.error(errorsFromServer[key]);
+              })
+            }
     } finally {
       setLoading(false);
     }

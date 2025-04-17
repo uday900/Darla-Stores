@@ -33,28 +33,41 @@ public class GlobalException {
 	// handle validation exceptions
 	@ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ResponseEntity<Map<String, String>> handleValidationExceptions(MethodArgumentNotValidException ex) {
+    public Response handleValidationExceptions(MethodArgumentNotValidException ex) {
         
-		Map<String, String> errors = new HashMap<>();
+		Map<String, Object> errors = new HashMap<>();
         for (FieldError error : ex.getBindingResult().getFieldErrors()) {
             errors.put(error.getField(), error.getDefaultMessage());
         }
-        return ResponseEntity.badRequest().body(errors);
+       
+        Response res = new Response();
+        res.setMessage("Validation failed. Please check your input.");
+        res.setErrors(errors);
+        res.setStatus(HttpStatus.BAD_REQUEST.value());
+        return res;
+//        return ResponseEntity.badRequest().body(errors);
     }
 	
 	@ExceptionHandler(HandlerMethodValidationException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ResponseEntity<Map<String, String>> handleValidationExceptions(HandlerMethodValidationException ex) {
+    public Response handleValidationExceptions(HandlerMethodValidationException ex) {
         
-		Map<String, String> errors = new HashMap<>();
+		Map<String, Object> errors = new HashMap<>();
         
 		ex.getAllErrors().forEach(err -> errors.put("err", err.getDefaultMessage()));
-        return ResponseEntity.badRequest().body(errors);
+		
+		        // Handle the validation errors here
+		Response res = new Response();
+		res.setMessage("Validation failed. Please check your input.");
+		res.setErrors(errors);
+		res.setStatus(HttpStatus.BAD_REQUEST.value());
+		        return res;
+//        return ResponseEntity.badRequest().body(errors);
     }
 	
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(ConstraintViolationException.class)
-    public Map<String, Object> handleConstraintViolation(ConstraintViolationException ex) {
+    public Response handleConstraintViolation(ConstraintViolationException ex) {
         Map<String, Object> errors = new HashMap<>();
         Set<ConstraintViolation<?>> violations = ex.getConstraintViolations();
 
@@ -66,13 +79,20 @@ public class GlobalException {
         errors.put("message", "Validation failed. Please check your input.");
         errors.put("status", HttpStatus.BAD_REQUEST.value());
 
-        return errors;
+        Response res = new Response();
+        res.setMessage("Validation failed. Please check your input.");
+       res.setErrors(errors);
+           res.setStatus(HttpStatus.BAD_REQUEST.value());
+        return res;
     }
 	
 	@ExceptionHandler(AuthorizationDeniedException.class)
 	@ResponseStatus(HttpStatus.FORBIDDEN)
 	public ResponseEntity<Response> handleAuthorizationDeniedException(AuthorizationDeniedException ex) {
-		return ResponseEntity.status(HttpStatus.FORBIDDEN).body(Response.builder().message(ex.getMessage()).build());
+		return ResponseEntity.status(HttpStatus.FORBIDDEN).body(Response.builder()
+				.message(ex.getMessage()+ " You are not authorized to access this resource or perform this action.")
+				.status(HttpStatus.FORBIDDEN.value())
+				.build());
 	}
 	
 	// Global exception handler

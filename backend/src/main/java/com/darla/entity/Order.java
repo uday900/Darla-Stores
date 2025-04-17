@@ -41,7 +41,7 @@ public class Order {
     
     private String paymentMethod; // RAZORPAY, CASH_ON_DELIVERY
     
-    private String paymentStatus; // PENDING, COMPLETED, FAILED, REFUND_INITIATED, REFUNDED, CANCELED
+    private String paymentStatus; // PENDING, COMPLETED, FAILED, REFUND_INITIATED, REFUNDED
     
     private String shippingAddress;
 

@@ -11,11 +11,6 @@ function UserAccountInformation() {
   const [activeTab, setActiveTab] = useState('profile');
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [passwordError, setPasswordError] = useState('');
-
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [passwordStrength, setPasswordStrength] = useState({
     hasMinLength: false,
     hasUpperCase: false,
@@ -23,7 +18,6 @@ function UserAccountInformation() {
     hasNumber: false,
     hasSpecialChar: false,
   });
-  const [filteredOrders, setFilteredOrders] = useState([]);
 
   const [user, setUser] = useState({
   });
@@ -90,9 +84,7 @@ function UserAccountInformation() {
     if (password) {
       handlerFunction(password);
     }
-    else{
-      toast.error('Please enter your password to confirm account deletion');
-    }
+    
   };
 
   // const orders = [

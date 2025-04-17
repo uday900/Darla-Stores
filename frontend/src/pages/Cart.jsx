@@ -1,13 +1,16 @@
 import React, { useContext, useEffect, useState } from 'react';
 import emptyCartImage from '../assets/empty-cart.webp'
-import image from '../assets/2.jpg'
+import { Link, useNavigate } from 'react-router-dom';
 
 import { toast } from 'react-toastify';
 import UserContext from '../state-management/UserContext';
 import Loading from '../components/Loading';
 import { CiCircleMinus } from 'react-icons/ci';
 import api from '../api-services/apiConfig';
+const RAZORPAY_KEY = import.meta.env.VITE_RAZORPAY_KEY;
+
 function Cart() {
+  const navigate = useNavigate();
 const [paymentMode, setPaymentMode] = useState('Cash on Delivery');
 const [paymentLoading, setPaymentLoading] = useState(false);
 const [paymentDetails, setPaymentDetails] = useState(null);
@@ -18,13 +21,12 @@ const [errorDetails, setErrorDetails] = useState(null);
   const [grandTotal, setGrandTotal] = React.useState(0);
   // console.log(user)
   const [shippingAddress, setShippingAddress] = useState(
-    user?.street + ', ' 
-    + user?.city + ', ' 
-    + user?.district || '' + ', '
-    + user?.state + ', ' 
-    + user?.zipCode || '' 
-    + ', ' + user?.country || ''
+    [user.street, user.city, user.district, user.state, user.zipCode]
+      .filter((item) => item) // filters out null, undefined, and empty strings
+      .join(', ')
   );
+  
+  // console.log(shippingAddress, user.street , user.city, user.district, user.state, user.zipCode, user.country) 
 
 
 
@@ -39,7 +41,7 @@ const [errorDetails, setErrorDetails] = useState(null);
     // console.log(user)  
     fetchUserCart(user.id);
     // console.log(user)
-    console.log(cart, "cart");
+    // console.log(cart, "cart");
 
 
    }, []);
@@ -47,7 +49,7 @@ const [errorDetails, setErrorDetails] = useState(null);
    useEffect(() => {
     let total = 0;
     cart?.forEach((item) => {
-      total += item.price * item.qunaitity;
+      total += item.price * item.quantity;
     });
     setGrandTotal(total);
    }, [cart]);
@@ -109,7 +111,7 @@ const [errorDetails, setErrorDetails] = useState(null);
 
    const openRazorpay = (order) => {
     const options = {
-      key: "rzp_test_Oshunm39FDxDGQ",
+      key: RAZORPAY_KEY,
       amount: order.amount,
       currency: order.currency,
       name: "Darla Stores",
@@ -226,7 +228,9 @@ const [errorDetails, setErrorDetails] = useState(null);
       if (orderDataFromServer) {
         openRazorpay(orderDataFromServer);
       } else{
+        fetchUserCart(user.id);
         toast.success(response.data.message);
+        navigate('/user/orders');
       }
       // openRazorpay(orderDataFromServer);
       // const response = await fetch("http://localhost:8080/createOrder?amount=20&currency=INR&receipt=receipt1", {
@@ -240,7 +244,7 @@ const [errorDetails, setErrorDetails] = useState(null);
       setPaymentLoading(false);
     }
   };
-   const handleCheckOut = () =>{
+   const handleCheckOut =async () =>{
     // setting checkout;
     // checking payment mode is selected or not
         if (!paymentMode) {
@@ -256,7 +260,7 @@ const [errorDetails, setErrorDetails] = useState(null);
       
     // checkOut(user.id);
 
-    checkOutWithRazorPay();
+    await checkOutWithRazorPay();
     
    }
 
@@ -273,7 +277,10 @@ const [errorDetails, setErrorDetails] = useState(null);
           {cart?.length === 0 ? (
             <div className="flex justify-center items-center">
               <div>
-                <h1 className="text-3xl text-center mt-5">No items in cart</h1>
+                <p className="text-3xl text-center mt-5 font-bold">No items in cart
+                {/* show one button to go to home and buy */}
+                <Link to="/" className="text-blue-500 hover:text-blue-700 mx-2 underline font-bold">Buy Now</Link>
+                </p>
                 <img src={emptyCartImage} alt="Cart empty" />
               </div>
             </div>
@@ -321,13 +328,13 @@ const [errorDetails, setErrorDetails] = useState(null);
                         >
                           + 
                         </button>
-                        <span className="mx-2">{cartItem.qunaitity}</span>
+                        <span className="mx-2">{cartItem.quantity}</span>
                         <button
                         onClick={() => decrementQuantity(user.id, cartItem.id)}
-                          className={`${cartItem.qunaitity == 1 ? 
+                          className={`${cartItem.quantity == 1 ? 
                             'bg-slate-400 text-white text-sm py-1 px-3 rounded-lg shadow-md cursor-not-allowed' 
                             : 'bg-slate-400 text-white text-sm py-1 px-3 rounded-lg shadow-md hover:bg-slate-500 cursor-pointer'}`}  
-                          disabled={cartItem.qunaitity == 1}
+                          disabled={cartItem.quantity == 1}
                         >
                           -
                         </button>
@@ -344,7 +351,7 @@ const [errorDetails, setErrorDetails] = useState(null);
         <div className="bg-white p-6 sticky top-16 h-full rounded-lg border border-slate-200">
           <h2 className="text-2xl mb-4">Total Products</h2>
           <p className="text-lg">
-            Total Items: <span className="font-bold">{cart?.length}</span>
+            Total Items: <span className="font-bold">{cart?.map((item) => item.quantity).reduce((a, b) => a + b, 0)}</span>
           </p>
           <p className="text-lg">
             Grand Total: <span className="font-bold">₹{grandTotal}</span>
@@ -374,12 +381,13 @@ const [errorDetails, setErrorDetails] = useState(null);
             </label>
 
             {/* show shipping address */}
+            <p className="font-semibold ">Shipping Address: (Edit you if you want)</p>
             <textarea
               name="shippingAddress"  
               value={shippingAddress}
               onChange={(e) => setShippingAddress(e.target.value)}
               placeholder="Shipping Address"
-              className="mt-2 p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+              className="p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
             ></textarea>
           </div>
         </div>
