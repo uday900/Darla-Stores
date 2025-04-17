@@ -1,5 +1,10 @@
 
 # 🛍️ E-Commerce Backend API (Spring Boot)
+![Java](https://img.shields.io/badge/Java-17-blue)
+![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.x-green)
+![React](https://img.shields.io/badge/Frontend-React-blue)
+![PostgreSQL](https://img.shields.io/badge/Database-PostgreSQL-blue)
+![Redis](https://img.shields.io/badge/Redis-In--Memory-red)
 
 This project is a fully functional E-Commerce Full Stack Application built using Spring Boot, React and Postgresql, providing RESTful APIs to manage user authentication, product management, cart functionality, and order processing.
 
@@ -7,15 +12,13 @@ It supports both JWT-based authentication and OAuth2 login with Google, enabling
 
 The project is structured to follow clean coding practices, layered architecture, and includes validations, role-based access control, and user-friendly error handling.
 
+<!-- ![E-commerce Preview](./preview-image.png) -->
+
+
 ---
 ## 🔗 Live Demo
 
 > Deployment link coming soon...
-
-### 📂 Repositories
-
-- 🌐 **Frontend Repo**: [Frontend GitHub Repository](https://github.com/your-username/frontend-repo-name)
-- 🖥️ **Backend Repo**: [Backend GitHub Repository](https://github.com/your-username/backend-repo-name)
 
 ## 🚀 Features
 
@@ -23,7 +26,7 @@ The project is structured to follow clean coding practices, layered architecture
 - 🔐 User registration and login (standard + OAuth2)
 - 🔁 Forgot/Reset password functionality
 - ✏️ Profile update and password change
-- 📩 Email verification after registration
+- 📩 Sending Emails to confirmation like otp's, orders, status updates
 - 🧠 **OTP management using Redis** for secure and time-limited access
 - 🔒 JWT-based secure token management
 
@@ -33,12 +36,18 @@ The project is structured to follow clean coding practices, layered architecture
 - 📜 View past orders and their statuses
 - ❌ Cancel pending orders before they are delivered
 
+### 💰 Payment Integration
+- 💳 Secure payment gateway integrated using **Razorpay**
+- 🧾 Supports order payments and refunds
+- 🔔 Sends confirmation email upon successful payment
+
+
 ### ⭐ Reviews & Product Experience
 - ✍️ Add and delete product reviews
 - 🔍 Product search, detailed view, and filtered browsing by category
 
 ### 🧰 Admin Panel (Interactive UI)
-- 📦 Manage products, categories, carousels
+- 📦 Manage products, categories, carousels with individual or bulk
 - 🧑‍💼 View all users and their details
 - 📈 Track metrics and order statistics
 - 📬 Update order statuses, track payments, issue refunds
@@ -49,9 +58,32 @@ The project is structured to follow clean coding practices, layered architecture
 - 📬 Order confirmation and status update notifications
 - 🔔 Notifies user upon password change
 
-### ✅ Validation
-- ✅ DTO validation using `@Valid` to ensure robust input handling
 
+
+## 🛡️ Security
+
+- JWT authentication with `Bearer` tokens
+- OAuth2 login via Google/Facebook/GitHub
+- Role-based access: `@PreAuthorize("hasRole('ADMIN')")`
+- Encrypted password storage with `BCrypt`
+- Global exception handling and CORS config
+
+---
+
+## 🧪 Validation
+
+- DTO validation using `@Valid`
+- Common error messages returned with timestamps
+- Unique email checks and password strength enforcement
+
+---
+
+## 🔐 Admin Credentials (Demo)
+
+You can use the following credentials to log in as an admin and test the admin functionalities:
+
+- **Email:** `admin@darla.com`  
+- **Password:** `admin123`
 ---
 ## ⚙️ Tech Stack
 
@@ -96,6 +128,19 @@ The project is structured to follow clean coding practices, layered architecture
 ---
 
 ## 📁 Project Structure
+```
+project-root/
+│
+├── backend/             // Spring Boot Backend
+│   └── src/
+│
+├── frontend/            // React Frontend (or any JS framework)
+│   └── src/
+│
+├── redis/               // Redis setup (optional docker-compose or local)
+│
+└── README.md
+```
 #### 📁 Backend Project Folder Structure
 
 ```
@@ -137,24 +182,6 @@ src
 ├── index.css           # Global styles
 
 ```
----
-
-
-## 🧠 Project Structure
-
-```
-project-root/
-│
-├── backend/             // Spring Boot Backend
-│   └── src/
-│
-├── frontend/            // React Frontend (or any JS framework)
-│   └── src/
-│
-├── redis/               // Redis setup (optional docker-compose or local)
-│
-└── README.md
-```
 
 ---
 
@@ -177,18 +204,75 @@ cd backend
 ```
 
 ### 2. Configure `application.properties` or `application.yml`
-Make sure the following are set:
+
+```markdown
+## ⚙️ Backend Configuration Guide
+
+This project is powered by Spring Boot, PostgreSQL, Razorpay, and integrates features like Google OAuth and Email notifications.
+
+Before running the backend, set the following in your `application.properties` file:
+
+---
+
+### ✅ Essential Properties (`src/main/resources/application.properties`)
+
+#### 🔹 Application
 ```properties
-spring.datasource.url=jdbc:mysql://localhost:3306/your_db_name
-spring.datasource.username=root
-spring.datasource.password=yourpassword
-
-spring.redis.host=localhost
-spring.redis.port=6379
-
+spring.application.name=darlastoresbackend
+server.port=8080
 ```
 
-### 3. Build & Run the backend
+#### 🗄️ PostgreSQL Database
+```properties
+# create db if not with your custom name or darla_stores
+spring.datasource.url=jdbc:postgresql://localhost:5432/YOUR_DB_NAME
+spring.datasource.username=YOUR_DB_USERNAME
+spring.datasource.password=YOUR_DB_PASSWORD
+```
+
+#### 🧠 Hibernate
+```properties
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.show-sql=true
+spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
+```
+
+#### 🔐 Google OAuth (Optional: for social login)
+```properties
+spring.security.oauth2.client.registration.google.client-id=YOUR_GOOGLE_CLIENT_ID
+spring.security.oauth2.client.registration.google.client-secret=YOUR_GOOGLE_CLIENT_SECRET
+```
+
+#### 💳 Razorpay Integration
+```properties
+razorpay.api.key=YOUR_RAZORPAY_KEY
+razorpay.api.secret=YOUR_RAZORPAY_SECRET
+```
+
+#### 📧 Email Configuration (Gmail SMTP)
+```properties
+spring.mail.host=smtp.gmail.com
+spring.mail.port=587
+spring.mail.username=YOUR_EMAIL       # use your own email
+spring.mail.password=YOUR_EMAIL_APP_PASSWORD     # recommended to use App Password
+spring.mail.properties.mail.smtp.auth=true
+spring.mail.properties.mail.smtp.starttls.enable=true
+```
+
+#### 🖼️ File Upload Limits
+```properties
+spring.servlet.multipart.enabled=true
+spring.servlet.multipart.max-file-size=2MB
+spring.servlet.multipart.max-request-size=2MB
+```
+
+#### 🌐 Frontend URL (for CORS)
+```properties
+frontend.url=http://localhost:5173
+```
+### 3. Build & Run the backend`
+
+```
 ```bash
 ./mvnw spring-boot:run
 ```
@@ -283,14 +367,12 @@ You can use tools like **Postman** or **Thunder Client** to test backend APIs.
 
 Example:
 ```http
-GET http://localhost:8080/user/info?userId=1
+GET http://localhost:8080/categories
 ```
 
 ---
 
 ## End Points
----
-
 
 ## 🔐 Authentication APIs
 
@@ -312,7 +394,7 @@ GET http://localhost:8080/user/info?userId=1
 | GET    | `/category`                            | Get all categories                       |
 | GET    | `/category/{id}`                       | Get category by ID                       |
 | POST   | `/category`                            | Add a new category (Admin only)          |
-| POST   | `/category/add-categories`             | Add multiple categories (Admin only)     |
+| POST   | `/category/upload-csv`             | Add multiple categories through CSV File (Admin only)     |
 | PUT    | `/category/{id}`                       | Update a category by ID (Admin only)     |
 | DELETE | `/category/{id}`                       | Delete a category by ID (Admin only)     |
 
@@ -327,7 +409,7 @@ GET http://localhost:8080/user/info?userId=1
 | GET    | `/products`                              | Get all products (Admin only)              |
 | GET    | `/products/{id}`                         | Get product by ID                          |
 | POST   | `/products`                              | Add a new product (Admin only)             |
-| POST   | `/products/add-multiple`                 | Add multiple products (Admin only)         |
+| POST   | `/products/upload-csv`                 | Add multiple products through CSV File (Admin only)         |
 | PUT    | `/products/{id}`                         | Update a product by ID (Admin only)        |
 | DELETE | `/products/{id}`                         | Delete a product by ID (Admin only)        |
 | GET    | `/products/showcase`                     | Get showcase/featured products             |
@@ -381,17 +463,13 @@ GET http://localhost:8080/user/info?userId=1
 | PUT    | `/user/cart/decrement`      | Decrement product quantity       |
 | GET    | `/user/cart`                | Fetch user's cart items          |
 
----
-Got it! Since you're using the existing endpoint `/user/order/update` to **also handle cancellations**, we can update the documentation to reflect that this endpoint is **multipurpose**—used for both general status updates (by admin) and order cancellation (by user).
-
-Here’s the **updated API table**:
 
 ---
 
 ### 📦 **Order Management**
 | Method | Endpoint                          | Description                                                             |
 |--------|-----------------------------------|-------------------------------------------------------------------------|
-| POST   | `/user/order/place`               | Place an order                                            |
+| POST   | `/user/order/create`               | Place an order                                            |
 | POST   | `/user/order/checkout`            | Checkout entire cart                                      |
 | POST   | `/user/order/verify`              | Verify payment and order with Razorpay                                  |
 | POST   | `/user/order/payment-failure`     | Handle payment failure                                                  |
@@ -404,23 +482,6 @@ Here’s the **updated API table**:
 
 
 
-## 🛡️ Security
-
-- JWT authentication with `Bearer` tokens
-- OAuth2 login via Google/Facebook/GitHub
-- Role-based access: `@PreAuthorize("hasRole('ADMIN')")`
-- Encrypted password storage with `BCrypt`
-- Global exception handling and CORS config
-
----
-
-## 🧪 Validation
-
-- DTO validation using `@Valid`
-- Common error messages returned with timestamps
-- Unique email checks and password strength enforcement
-
----
 
 ## 🧑‍💻 Author
 
