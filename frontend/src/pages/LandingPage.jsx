@@ -37,6 +37,7 @@ const LandingPage = () => {
       useEffect(() => {
         const handlefetch = async () =>{
             const res= await fetchShowcaseProducts();
+            console.log(res);
             setSampleProducts(res);
         }
         handlefetch()

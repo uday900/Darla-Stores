@@ -33,7 +33,7 @@ public class Order {
      
     private Double totalAmount;
     
-    private String status; // PENDING, CONFIRMED, SHIPPED, OUT_OF_DELIVERY, DELIVERED, CANCELED, REFUND_ISSUED
+    private String status; // PENDING, CONFIRMED, SHIPPED, OUT_OF_DELIVERY, DELIVERED, CANCELLED, REFUND_ISSUED
     
     private String razorpayOrderId;
     

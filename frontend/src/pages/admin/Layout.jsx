@@ -15,7 +15,7 @@ const Layout = ({ children }) => {
     <div className="flex h-auto w-full">
       {/* Sidebar */}
       <aside
-        className={`bg-[##f8f9f9] border-r border-slate-200  shadow-lg h-screen p-5
+        className={`bg-[#f8f9f9] border-r border-slate-200  shadow-lg h-screen p-5
         fixed md:relative md:w-1/4 transition-transform duration-300 
         ${isSidebarOpen ? "translate-x-0 w-64" : "-translate-x-64"} md:translate-x-0`}
       >

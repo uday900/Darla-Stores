@@ -66,14 +66,18 @@ function ProductPage() {
     const isAuthenticated = localStorage.getItem("isAuthenticated");
     const user = JSON.parse(localStorage.getItem('user')); //localStorage.getItem("user")
 
-    const { product, loading,
+    const { product, 
+        loading,
         fetchProductById,
         fetchProductReviews,
         fetchProductsByCategory,
         addReview,
         deleteReview,
         reviews,
-        products
+        products,
+        message,
+        error,
+        clearLogs,
     } = useContext(ProductContext);
 
     const { loading: loading2, message: message2,
@@ -81,6 +85,18 @@ function ProductPage() {
 
     } = useContext(UserContext);
 
+    useEffect(() => {
+        if (error) {
+            toast.error(error);
+        }
+        if (message) {
+            toast.success(message);
+            fetchProductById(productId);
+            fetchProductReviews(productId);
+        }
+
+        clearLogs();
+    }, [error, message])
     useEffect(() => {
         // fetchProductReviews(productId)
         console.log(reviews);
@@ -154,6 +170,9 @@ function ProductPage() {
 
             addReview(formData);
         }
+
+        setRating("5");
+        setReview("");
 
         // console.log('Adding review:', { rating, review });
     };

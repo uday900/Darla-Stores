@@ -487,6 +487,6 @@ GET http://localhost:8080/categories
 
 **DARLA UDAYA KIRAN**  
 📧 [udaykirandarla2002@gmail.com](mailto:udaykirandarla2002@gmail.com)  
-🌐 [LinkedIn](https://www.linkedin.com/in/vishnu-vardhan-darla-69763a224)
+🌐 [LinkedIn](https://www.linkedin.com/in/darla-uday-kiran-18a450239)
 
 ---

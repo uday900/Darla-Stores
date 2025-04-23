@@ -41,8 +41,7 @@ function ManageUsers() {
   const filteredUsers = users.filter(
     (user) =>
       user?.name.toLowerCase().includes(search.toLowerCase()) ||
-      user?.email.toLowerCase().includes(search.toLowerCase()) ||
-      user?.phoneNumber.includes(search)
+      user?.id === parseInt(search)
   );
 
   return (
@@ -52,7 +51,7 @@ function ManageUsers() {
       <div className="mb-4">
         <input
           type="text"
-          placeholder="Search by name, email, or phone..."
+          placeholder="Search by name or ID"
           className="w-full border border-gray-300 rounded-md p-2 focus:ring-indigo-500 focus:border-indigo-500"
           value={search}
           onChange={(e) => setSearch(e.target.value)}

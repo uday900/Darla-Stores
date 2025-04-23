@@ -4,8 +4,11 @@ import jakarta.persistence.Entity;
 
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.persistence.*;
 import jakarta.persistence.Id;
+import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Data;
 import lombok.*;
@@ -52,7 +55,9 @@ public class Product {
 	private byte[] imageData;
 	
 	@ManyToOne
-	@JoinColumn(name = "category_name")
+	@JoinColumn(name = "category_id")
+	@NotNull
+	@JsonIgnoreProperties("products")
 	private Category category;
 	
 	@Column(nullable = false, name = "created_at")

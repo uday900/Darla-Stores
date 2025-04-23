@@ -82,13 +82,13 @@ function UserOrders() {
 
 //   const handleCancelOrder = async (orderId) => {
 
-//     // logic to cancel the order, update status to CANCELED;
-//     updateOrder(orderId, 'CANCELED');
+//     // logic to cancel the order, update status to CANCELLED;
+//     updateOrder(orderId, 'CANCELLED');
 //   };
   const handleCancelOrder = async (orderId) => {
     const confirmed = window.confirm('Are you sure you want to cancel this order?');
     if (confirmed) {
-      await updateOrder(orderId, 'CANCELED');
+      await updateOrder(orderId, 'CANCELLED');
       // toast.success("Order cancelled successfully!");
     }
   };
@@ -161,7 +161,7 @@ function UserOrders() {
                   <p><span className="font-medium">Order Date:</span> {formatDateTime(order.createdAt || '')}</p>
               
               
-                  {order?.status !== 'CANCELED' && 
+                  {order?.status !== 'CANCELLED' && 
                   order?.status !== 'REFUND_ISSUED' &&
                   order?.status !== 'DELIVERED' && (
                     <button
@@ -193,7 +193,7 @@ function UserOrders() {
                 //   {order?.paymentId && <p><span className="font-medium">Payment ID:</span> {order?.paymentId}</p>}
 
                 //   <p><span className="font-medium">Delivery Address:</span> {order.shippingAddress || 'N/A'}</p>
-                //   <p>{order?.status !== 'CANCELED' && 
+                //   <p>{order?.status !== 'CANCELLED' && 
                 //   order?.status !== 'DELIVERED' 
                 //   && <button className="mt-2 cursor-pointer  text-white rounded-full bg-red-500 px-4 py-2 text-sm hover:bg-red-600 " 
                 //   onClick={() => handleCancelOrder(order.id)}

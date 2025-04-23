@@ -644,7 +644,7 @@ public class UserService {
 			for (Order existingOrder : order) {
 				// update order status to failed and cancel the order
 //				existingOrder.setPaymentStatus("FAILED");
-//				existingOrder.setStatus("CANCELED");
+//				existingOrder.setStatus("CANCELLED");
 //				orderRepository.save(existingOrder);
 
 				/*
@@ -655,7 +655,7 @@ public class UserService {
 			}
 
 			res.setStatus(400);
-			res.setMessage("Payment failed, order canceled successfully!");
+			res.setMessage("Payment failed, order CANCELLED successfully!");
 		} else {
 			res.setStatus(404);
 			res.setMessage("Order not found!");
@@ -757,13 +757,13 @@ public class UserService {
 		
 		/*
 		 * check if the order is delivered or
-		 * refund issued or canceled
+		 * refund issued or CANCELLED
 		 * then throw exception
 		 */
 		if ( order.getStatus().equals("DELIVERED") ||
 				order.getStatus().equals("REFUND_ISSUED") ||
-				order.getStatus().equals("CANCELED")) {
-			throw new RuntimeException("You are not allowed to update the order. It may be delivered or canceled or issued refund");
+				order.getStatus().equals("CANCELLED")) {
+			throw new RuntimeException("You are not allowed to update the order. It may be delivered or CANCELLED or issued refund");
 		}
 		
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -779,7 +779,7 @@ public class UserService {
 		 * 
 		 */
 		if (!isAdmin) {
-			if (!status.equals("CANCELED")) {
+			if (!status.equals("CANCELLED")) {
 				throw new RuntimeException("You are not allowed to update order status");
 			}
 			// check if the payment is done or not
@@ -801,11 +801,11 @@ public class UserService {
 				orderRepository.save(order);
 				
 				
-				ActivityLogs.addEntry("Order canceled without payment: Order ID " + orderId);
+				ActivityLogs.addEntry("Order CANCELLED without payment: Order ID " + orderId);
 			}
 			
 			res.setStatus(200);
-			res.setMessage("Order canceled successfully");
+			res.setMessage("Order CANCELLED successfully");
 			
 			// send email to user
 			sendOrderUpdateMail(orderId, status);
@@ -814,7 +814,7 @@ public class UserService {
 			return res;
 		}
 		// restrict canceling order for admin
-		if (status.equals("CANCELED")) {
+		if (status.equals("CANCELLED")) {
 			throw new RuntimeException("You are not allowed to cancel the order");
 		}
 
@@ -973,7 +973,7 @@ public class UserService {
 			String refundResponse = razorPayService.issueRefund(paymentId, refundAmountInPaise);
 
 			// Update order status
-			order.setStatus("CANCELED");
+			order.setStatus("CANCELLED");
 			order.setPaymentStatus("REFUNDED");
 			
 			// set the product stock to the original stock

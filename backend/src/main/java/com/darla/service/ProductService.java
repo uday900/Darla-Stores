@@ -15,6 +15,8 @@ import java.util.stream.Collectors;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -300,18 +302,28 @@ public class ProductService {
 		 * sending the showcase products with top 3 categories and top 10 products
 		 * topTenProducts
 		 */
+		Map<String, List<ProductDto>> showcaseProducts = new HashMap<>();
+		
 		List<ProductDto> topTenProducts = productRepository.findTopTenProducts().stream().map(Mapper::mapToProductDto)
 				.collect(Collectors.toList());
-		List<Category> categories = categoryRepository.findTop4Categories();
+		
+		// fetch top 5 categories
+		Pageable pageable = PageRequest.of(0, 5);
+//		List<Category> categories = categoryRepository.findTopFiveCategories(pageable);
+		List<Category> categories = categoryRepository.findCategoriesWithMoreThanFiveProductsNative();
+		System.out.println("categories: " );
 
-//		List<Product> productsByCategory = new ArrayList<>();
-		Map<String, List<ProductDto>> showcaseProducts = new HashMap<>();
+		
 		showcaseProducts.put("topTenProducts", topTenProducts);
-
 		for (Category category : categories) {
-			List<ProductDto> products = productRepository.findByCategoryName(category.getName()).stream()
-					.map(Mapper::mapToProductDto).collect(Collectors.toList());
-			showcaseProducts.put(category.getName(), products);
+//			List<ProductDto> products = productRepository.findByCategoryName(category.getName()).stream()
+//					.map(Mapper::mapToProductDto).collect(Collectors.toList());
+			showcaseProducts.put(
+					category.getName(),
+					productRepository.getFiveProductsByCategory(category.getName())
+						.stream()
+						.map(Mapper::mapToProductDto)
+						.collect(Collectors.toList()));
 		}
 		return showcaseProducts;
 

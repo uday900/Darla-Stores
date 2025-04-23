@@ -24,15 +24,16 @@ api.interceptors.request.use(
   }
 );
 
-let isSessionExpiredHandled = false; // Flag to track logout
+// let isSessionExpiredHandled = false; // Flag to track logout
+// let isSessionExpired = localStorage.getItem('isSessionExpired') === 'true';
+var isSessionExpired = false;
 
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    const token = localStorage.getItem('token');
-    if (error.response?.status === 401 && !isSessionExpiredHandled && token) {
-      isSessionExpiredHandled = true; // Set the flag to true
-
+    // const token = localStorage.getItem('token');
+    if (error.response?.status === 401 && !isSessionExpired) {
+      isSessionExpired = true;
       // Clear localStorage
       localStorage.removeItem('token');
       localStorage.removeItem('isAuthenticated');

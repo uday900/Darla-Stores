@@ -15,7 +15,7 @@ function ManageOrders() {
 
   // 'REFUND_ISSUED', 'REFUND_INITIATED', 
   const statusOptions = ['PENDING','CONFIRMED',  'SHIPPED', 'OUT_OF_DELIVERY', 'DELIVERED', 'COMPLETED'];
-  const statusOptionsForFilter = ['PENDING','CONFIRMED',  'SHIPPED', 'OUT_OF_DELIVERY', 'DELIVERED', 'CANCELED', 'COMPLETED', 'REFUND_ISSUED', 'REFUND_INITIATED'];
+  const statusOptionsForFilter = ['PENDING','CONFIRMED',  'SHIPPED', 'OUT_OF_DELIVERY', 'DELIVERED', 'CANCELLED', 'COMPLETED', 'REFUND_ISSUED', 'REFUND_INITIATED'];
 
   // state values
   const { orders, 
@@ -127,7 +127,7 @@ function ManageOrders() {
 
               <th className="p-3 border">Order At</th>
               
-              <th className="p-3 border">Update Order Status</th>
+              <th className="p-3 border">Update Status</th>
               <th className="p-3 border">Actions</th>
             </tr>
           </thead>
@@ -171,12 +171,23 @@ function ManageOrders() {
                       onChange={(e) =>
                         handleStatusChange(order.id, e.target.value)
                       }
-                      className="border rounded px-2 py-1"
+                      // className="border rounded px-2 py-1"
+                      className={`border rounded px-2 py-1 ${
+                        order.status == 'COMPLETED' || 
+                        order.status == 'REFUND_ISSUED' ||
+                        order.status == 'CANCELLED'
+                          ? 'cursor-not-allowed'
+                          : 'cursor-pointer'
+                      }`}
+                      disabled={order.status == 'COMPLETED' || 
+                        order.status == 'REFUND_ISSUED' ||
+                        order.status == 'CANCELLED'
+                      }
                     >
                       {statusOptions.map((status) => (
                         <option key={status} value={status}
                         >
-                          {status == 'COMPLETED' ? "COMPLETED (FOR PAYMENT STATUS)" : status}
+                          {status == 'COMPLETED' ? "COMPLETED (FOR PAYMENT, CASH ON DELIVERY)" : status}
 
                         </option>
                       ))}

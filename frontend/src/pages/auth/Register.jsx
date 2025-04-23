@@ -39,7 +39,7 @@ const Register = () => {
     
 
 
-    // 1️⃣ First useEffect: Parse query params only once
+    // 1 First useEffect: Parse query params only once
     useEffect(() => {
         const params = new URLSearchParams(window.location.search);
         const error = params.get('error');
@@ -49,7 +49,7 @@ const Register = () => {
         if (success) setSuccessResponseState(success);
     }, []);
 
-    // 2️⃣ Second useEffect: Trigger effects when states are updated
+    // 2️ Second useEffect: Trigger effects when states are updated
     useEffect(() => {
         if (errorResponseState) {
             toast.error(errorResponseState);
@@ -58,6 +58,19 @@ const Register = () => {
 
         if (successResponseState) {
             toast.success(successResponseState);
+            setFormData({
+                name: '',
+        email: '',
+        password: '',
+        confirmPassword: '',
+        city: '',
+        state: '',
+        country: '',
+        district: '',
+        street: '',
+        phoneNumber: '',
+        zipCode: ''
+            });
             setTimeout(() => {
                 navigate('/login');
             }, 2000);

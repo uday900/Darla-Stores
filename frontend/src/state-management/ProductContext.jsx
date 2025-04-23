@@ -54,6 +54,7 @@ export const ProductProvider = ({ children }) => {
         //  setMessage(response.data.message);
         toast.success(response.data);
         fetchProductReviews(review.productId);
+        fetchProductById(review.productId);
       } else {
         // setError(response.data.message);
         toast.error(response.data.message);
@@ -78,15 +79,18 @@ export const ProductProvider = ({ children }) => {
       // if(response.status == 4)
      
       if (response != null && response.status == 200) {
-        toast.success(response.data);
+        // toast.success(response.data);
         // fetchProductReviews(productId);
-        window.location.reload();
+        // window.location.reload();
         // console.log("first")
+        setMessage(response.data);
       } else {
-        toast.error("Error deleting review");
+        setError(response.data.message);
+        // toast.error("Error deleting review");
       }
     } catch (error) {
-      toast.error("Error deleting review");
+      // toast.error("Error deleting review");
+      setError(error.response.data.message || "Failed to delete review");
       console.log("Error deleting review:", error);
     } finally {
       setLoading(false);  // Stop loading after response or error
@@ -280,15 +284,10 @@ export const ProductProvider = ({ children }) => {
     } 
   };
 
-  // // === useEffect ===
-  // useEffect(() => {
-  //   fetchMetrics();
-  //   fetchCarousels();
-  // }, []);
-
-  // if (loading ) {
-  //   return <Loading />
-  // }
+  const clearLogs = () => {
+    setError(null);
+    setMessage(null);
+  }
 
   return (
     <ProductContext.Provider
@@ -298,6 +297,7 @@ export const ProductProvider = ({ children }) => {
         error,
         metrics,
         message,
+        clearLogs,
         fetchMetrics,
 
         searchQuery, setSearchQuery,
