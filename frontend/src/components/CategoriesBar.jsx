@@ -84,7 +84,7 @@ const CategoriesBar = () => {
                             WebkitOverflowScrolling: 'touch'
                         }}
                     >
-                        {categories.map((category, _) => (
+                        {/* {categories.map((category, _) => (
                             <div className='relative group ' key = {_}>
                                 <Link
                                     to={`/category/${category.name}`}
@@ -100,7 +100,30 @@ const CategoriesBar = () => {
                                 </span>
                             </div>
 
-                        ))}
+                        ))} */}
+
+{categories.map((category, index) => {
+  const isLast = index === categories.length - 1;
+  return (
+    <div className="relative group" key={index}>
+      <Link
+        to={`/category/${category.name}`}
+        className="text-sm font-medium text-gray-700 hover:text-indigo-600 whitespace-nowrap"
+      >
+        {category.name}
+      </Link>
+      <span
+        className={`absolute z-50 top-full mt-1 hidden group-hover:flex 
+                    bg-slate-500 text-white text-sm px-3 py-2 rounded shadow-md 
+                    w-max max-w-xs whitespace-normal
+                    ${isLast ? 'right-0' : 'left-1/2 -translate-x-1/2'}`}
+      >
+        {category?.description}
+      </span>
+    </div>
+  );
+})}
+
                     </div>
 
                     {/* Right Navigation Button - Hidden on Mobile */}

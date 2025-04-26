@@ -3,6 +3,8 @@ package com.darla.controller;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -56,13 +58,16 @@ public class ProductController {
 	
 	// fetch all products, only for admin
 	@GetMapping
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	public ResponseEntity<Response> fetchAllProducts() {
-		Response response = new Response();
-		List<ProductDto> products = productService.fetchAllProducts();
-		response.setProducts(products);
+//	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	public ResponseEntity<Page<ProductDto>> fetchAllProducts(
+			@RequestParam(required = false, defaultValue = "10") int size,
+			@RequestParam(required = false, defaultValue = "1") int page
+			) {
+//		Response response = new Response();
+		Page<ProductDto> products = productService.fetchAllProducts(size, page);
+//		response.setProducts(products);
 		
-		return ResponseEntity.ok(response);
+		return ResponseEntity.ok(products);
 	}
 	
 	// fetch product by id
@@ -125,11 +130,16 @@ public class ProductController {
 	
 	// fetch all products by category	
 	@GetMapping("/category")
-	public ResponseEntity<Response> fetchProductsByCategory(@RequestParam String category) {
+	public ResponseEntity<Response> fetchProductsByCategory(
+			@RequestParam String category,
+			@RequestParam(required = false, defaultValue = "10") int size,
+			@RequestParam(required = false, defaultValue = "1") int page
+			) {
 		Response response = new Response();
 		System.out.println("category: " + category);
-		List<ProductDto> products = productService.fetchProductsByCategory(category);
-		response.setProducts(products);
+		Page<ProductDto> products = productService.fetchProductsByCategory(category, size, page);
+//		response.setProducts(products);
+		response.setProductsPage(products);
 		return ResponseEntity.ok(response);
 	}
 	

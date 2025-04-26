@@ -197,7 +197,7 @@ export const UserProvider = ({ children }) => {
     try {
       const response = await api.get(`/user/info?userId=${userId}`);
       localStorage.setItem("user", JSON.stringify(response.data));
-      // window.location.reload();
+      window.location.reload();
       return response.data;
     } catch (error) {
       toast.error(error.response?.data?.message || "Failed to fetch user info");

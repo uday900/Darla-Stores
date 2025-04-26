@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -31,6 +32,8 @@ public class Response {
 	private Integer status;
 	
 	private List<ProductDto> products;
+	
+	private Page<ProductDto> productsPage;
 	
 	private ProductDto product;
 	

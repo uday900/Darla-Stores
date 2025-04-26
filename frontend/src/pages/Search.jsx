@@ -3,6 +3,7 @@ import { Link, Navigate, useNavigate, useParams } from 'react-router-dom';
 import { FaFilter, FaStar } from 'react-icons/fa';
 import CategoryContext from '../state-management/CategoryContext';
 import ProductContext from '../state-management/ProductContext';
+import Pagination from '../components/Pagination';
 
 function Search() {
     const params = new URLSearchParams(window.location.search)
@@ -11,6 +12,10 @@ function Search() {
     const [showAll, setShowAll] = useState(false);
    
     const [selectedBrands, setSelectedBrands] = useState([]);
+        const [uniqueBrands, setUniqueBrands] = useState([]);
+            const [priceRanges, setPriceRanges] = useState([]);
+        
+    
     const [isFilterVisible, setIsFilterVisible] = useState(false); // For mobile filter toggle
     const [selectedPriceRanges, setSelectedPriceRanges] = useState([]);
 
@@ -18,21 +23,61 @@ function Search() {
     const { categories, loading, error, message, fetchCategories } = useContext(CategoryContext);
     const { products, fetchProductsBySearch, loading: productsLoading , error: productsError,
         setSearchQuery, 
-        searchQuery
+        searchQuery,
+        currentPage,
+        setCurrentPage,
+        totalPages,
+        setTotalPages,
 
+        itemsPerPage,
+        setItemsPerPage
+        
     } = useContext(ProductContext)
     const [filterProducts, setFilterProducts] = useState();
     useEffect(()=>{
         fetchCategories()
-        console.log("log in search page")
+        // console.log("log in search page")
     },[])
     useEffect(()=>{
         setFilterProducts(products)
-        console.log(products);
+        // console.log(products);
+
+        // price filters
+        const prices = products.map((product)=> product.price);
+        if (prices.length === 0) return;
+        const minPrice = Math.min(...prices);
+        const maxPrice = Math.max(...prices);
+
+        const step = Math.ceil((maxPrice - minPrice) / 5);
+        const ranges = [];
+
+        for (let i = 0; i < 5; i++) {
+            const start = minPrice + i * step;
+            const end = i === 4 ? maxPrice : start + step - 1;
+            ranges.push({ min: start, max: end, label: `${start} - ${end}` });
+            // console.log(start, end, "i is", i, "step is", step);
+        }
+
+        setPriceRanges(ranges);
+
+        // set unique brands
+        // 🔹 Unique Brands Logic
+        const uniqueBrs = [];
+        const seenBrands = new Set();
+
+        products.forEach(product => {
+            if (!seenBrands.has(product.brand)) {
+                seenBrands.add(product.brand);
+                uniqueBrs.push(product.brand);
+            }
+        });
+
+        setUniqueBrands(uniqueBrs); // store in state
+        
     },[products])
     useEffect(()=>{
         // fetchCategories(),
-        console.log(query)
+        // console.log(query)
         if (query?.trim() == "") {
             navigate("/")
         }
@@ -41,12 +86,7 @@ function Search() {
         }
         handleFunction();
     },[query])
-    const priceRanges = [
-        { label: "0 - 500", min: 0, max: 500 },
-        { label: "500 - 1000", min: 500, max: 1000 },
-        { label: "1000 - 2000", min: 1000, max: 2000 },
-        { label: "2000+", min: 2000, max: Infinity },
-    ];
+    
 
     const handleBrandFilter = (e) => {
         if (e.target.checked) {
@@ -179,25 +219,25 @@ function Search() {
                     <div className="mb-6">
                         <h3 className="font-semibold mb-2">Brands</h3>
                         <ul className="space-y-1">
-                            {products.slice(0, showAll ? products.length : 4).map((product) => (
-                                <li key={product.id}>
+                            {uniqueBrands.slice(0, showAll ? uniqueBrands.length : 4).map((brand, index) => (
+                                <li key={index}>
                                     <label className="cursor-pointer">
                                         <input
                                             type="checkbox"
                                             className="mx-1 cursor-pointer"
-                                            value={product.brand}
+                                            value={brand}
                                             onClick={(e) => handleBrandFilter(e)}
                                         />
-                                        {product.brand}
+                                        {brand}
                                     </label>
                                 </li>
                             ))}
-                            {products.length > 4 && (
+                            {uniqueBrands.length > 4 && (
                                 <button
                                     className="text-purple-500 cursor-pointer"
                                     onClick={() => setShowAll(!showAll)}
                                 >
-                                    {showAll ? 'Show less' : `+ ${products.length - 4} more`}
+                                    {showAll ? 'Show less' : `+ ${uniqueBrands.length - 4} more`}
                                 </button>
                             )}
                         </ul>
@@ -238,6 +278,8 @@ function Search() {
 
                 {/* Products Section */}
                 <div className="w-full md:w-3/4 py-4 px-4">
+             
+
                     <div className="flex justify-between mb-4 items-center">
                         {/* Breadcrumb Navigation */}
                         <nav className="text-sm text-gray-500">
@@ -270,6 +312,8 @@ function Search() {
 
                         {filterProducts?.length === 0 && <p>No products found.</p>}
                     </div>
+
+                   
                 </div>
             </div>
         </>

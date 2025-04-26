@@ -5,82 +5,17 @@ import { FaFilter, FaStar } from 'react-icons/fa';
 import image1 from '../assets/2.jpg'
 import CategoryContext from '../state-management/CategoryContext';
 import ProductContext from '../state-management/ProductContext';
+import Pagination from '../components/Pagination';
 
 function CategoryPage() {
     const { categoryName } = useParams();
-    // dummy data
-    // const categories = [
-    //     {
-    //         name: 'Men',
-    //         description: 'Men\'s clothing',
 
-    //     },
-    //     {
-    //         name: 'Women',
-    //         description: 'Women\'s clothing',
-    //     },
-    //     {
-    //         name: 'Kids',
-    //         description: 'Kids\' clothing',
-    //     }
-    // ];
-    // const products = [
-    //     {
-    //         id: 1,
-    //         name: 'Product 1',
-    //         description: 'Product 1 description',
-    //         price: 100,
-    //         rating: 4.5,
-    //         image: image1,
-    //         category: 'Men',
-    //         brand: 'Brand 1'
-    //     },
-    //     {
-    //         id: 2,
-    //         name: 'Product 2',
-    //         description: 'Product 2 description',
-    //         price: 200,
-    //         rating: 4.5,
-    //         image: image1,
-    //         category: 'Men',
-    //         brand: 'Brand 2'
-    //     },
-    //     {
-    //         id: 3,
-    //         name: 'Product 3',
-    //         description: 'Product 3 description',
-    //         price: 300,
-    //         rating: 4.5,
-    //         image: image1,
-    //         category: 'Men',
-    //         brand: 'Brand 3'
-    //     },
-    //     {
-    //         id: 4,
-    //         name: 'Product 4',
-    //         description: 'Product 4 description',
-    //         price: 400,
-    //         rating: 4.5,
-    //         image: image1,
-    //         category: 'Men',
-    //         brand: 'Brand 4'
-    //     },
-    //     {
-    //         id: 5,
-    //         name: 'Product 5',
-    //         description: 'Product 5 description',
-    //         price: 501,
-    //         rating: 4.5,
-    //         image: image1,
-    //         category: 'Men',
-    //         brand: 'Brand 4'
-    //     },
-
-    // ];
 
     const [showAll, setShowAll] = useState(false);
 
+
     const [selectedBrands, setSelectedBrands] = useState([]);
+    const [uniqueBrands, setUniqueBrands] = useState([]);
     const [isFilterVisible, setIsFilterVisible] = useState(false); // For mobile filter toggle
     const [selectedPriceRanges, setSelectedPriceRanges] = useState([]);
 
@@ -89,50 +24,76 @@ function CategoryPage() {
 
     // state values
     const { categories, loading, error, message, fetchCategories } = useContext(CategoryContext);
-    const { products, fetchProductsByCategory, loading: productsLoading, error: productsError } = useContext(ProductContext)
+    const { products, 
+        fetchProductsByCategory, 
+        loading: productsLoading, 
+        error: productsError,
+
+        currentPage,
+        setCurrentPage,
+        totalPages,
+        setTotalPages,
+
+        itemsPerPage,
+        setItemsPerPage
+    } = useContext(ProductContext)
+
     const [filterProducts, setFilterProducts] = useState();
     useEffect(() => {
         fetchCategories()
     }, [])
     useEffect(() => {
-        setFilterProducts(products)
-
-        // t2 ---------
-        const prices = products.map((product) => product.price);
-        if (prices.length === 0) return;
-        console.log(prices);
-        const minPrice = Math.min(...prices);
-        const maxPrice = Math.max(...prices);
-
-        const step = Math.ceil((maxPrice - minPrice) / 5);
-        const ranges = [];
-        console.log(minPrice, maxPrice, step);
-        for (let i = 0; i < 5; i++) {
-            const start = minPrice + i * step;
-            const end = i === 4 ? maxPrice : start + step - 1;
-            ranges.push({ min:start, max:end, label: `${start} - ${end}` });
-            console.log(start, end, "i is", i, "step is", step);
-        }
-
-        setPriceRanges(ranges);
-
-        // t2 ---------
-    }, [products])
-    useEffect(() => {
         // fetchCategories(),
 
         const handleFunction = async () => {
-            await fetchProductsByCategory(categoryName);
+            await fetchProductsByCategory(categoryName, 10, 1);
         }
         handleFunction();
     }, [categoryName])
-    // const priceRanges = [
-    //     { label: "0 - 500", min: 0, max: 500 },
-    //     { label: "500 - 1000", min: 500, max: 1000 },
-    //     { label: "1000 - 2000", min: 1000, max: 2000 },
-    //     { label: "2000 - 5000", min: 2000, max: 5000 },
-    //     { label: "5000+", min: 5000, max: Infinity },
-    // ];
+    useEffect(() => {
+        setFilterProducts(products)
+
+        console.log(products)
+        // t2 ---------
+        if (products && products?.length > 0) {
+            const prices = products?.map((product) => product?.price);
+            if (prices?.length === 0) return;
+            // console.log(prices);
+            const minPrice = Math.min(...prices);
+            const maxPrice = Math.max(...prices);
+
+            const step = Math.ceil((maxPrice - minPrice) / 5);
+            const ranges = [];
+            // console.log(minPrice, maxPrice, step);
+            for (let i = 0; i < 5; i++) {
+                const start = minPrice + i * step;
+                const end = i === 4 ? maxPrice : start + step - 1;
+                ranges.push({ min: start, max: end, label: `${start} - ${end}` });
+                // console.log(start, end, "i is", i, "step is", step);
+            }
+
+            setPriceRanges(ranges);
+
+            // t2 ---------
+            // set unique brands
+            // 🔹 Unique Brands Logic
+            const uniqueBrs = [];
+            const seenBrands = new Set();
+
+            products?.forEach(product => {
+                if (!seenBrands.has(product.brand)) {
+                    seenBrands.add(product.brand);
+                    uniqueBrs.push(product.brand);
+                }
+            });
+
+            setUniqueBrands(uniqueBrs); // store in state
+            console.log(uniqueBrs)
+
+        }
+    }, [products])
+
+
 
     const handleBrandFilter = (e) => {
         if (e.target.checked) {
@@ -186,6 +147,9 @@ function CategoryPage() {
     }, [selectedBrands, selectedPriceRanges]);
 
 
+    useEffect(() => {
+        fetchProductsByCategory(categoryName, itemsPerPage, currentPage);
+    }, [currentPage, itemsPerPage])
     const Card = ({ product, categoryName }) => {
         return (
             <Link to={`/product/${product.id}`} className='hover:scale-105 transition-all duration-300'>
@@ -248,25 +212,25 @@ function CategoryPage() {
                     <div className="mb-6">
                         <h3 className="font-semibold mb-2">Brands</h3>
                         <ul className="space-y-1">
-                            {products.slice(0, showAll ? products.length : 4).map((product) => (
-                                <li key={product.id}>
+                            {uniqueBrands.slice(0, showAll ? uniqueBrands.length : 4).map((brand, index) => (
+                                <li key={index}>
                                     <label className="cursor-pointer">
                                         <input
                                             type="checkbox"
                                             className="mx-1 cursor-pointer"
-                                            value={product.brand}
+                                            value={brand}
                                             onClick={(e) => handleBrandFilter(e)}
                                         />
-                                        {product.brand}
+                                        {brand}
                                     </label>
                                 </li>
                             ))}
-                            {products.length > 4 && (
+                            {uniqueBrands.length > 4 && (
                                 <button
                                     className="text-purple-500 cursor-pointer"
                                     onClick={() => setShowAll(!showAll)}
                                 >
-                                    {showAll ? 'Show less' : `+ ${products.length - 4} more`}
+                                    {showAll ? 'Show less' : `+ ${uniqueBrands.length - 4} more`}
                                 </button>
                             )}
                         </ul>
@@ -307,9 +271,10 @@ function CategoryPage() {
 
                 {/* Products Section */}
                 <div className="w-full md:w-3/4 py-4 px-4">
+
                     <div className="flex justify-between mb-4 items-center">
                         {/* Breadcrumb Navigation */}
-                        <nav className="text-sm text-gray-500">
+                        <nav className="text-sm text-gray-500 ">
                             <ol className="list-reset flex">
                                 <li className="mr-2">Products</li>
                                 <li className="mr-2">&gt;</li>
@@ -325,19 +290,46 @@ function CategoryPage() {
                             <FaFilter /> Filter
                         </button>
 
-                        <div className="hidden md:flex gap-4">
+                        <div className='flex flex-wrap gap-2'>
+                        <div className="hidden md:flex gap-4 ">
                             <button className="text-purple-500">New</button>
                             <button>Recommended</button>
+                        </div>
+                        {/* Pagination selection for choosing how many products to show */}
+                        <div className="flex items-center space-x-2">
+                            <label htmlFor="pageSize" className="text-sm font-semibold">Products per page:</label>
+                            <select
+                                value={itemsPerPage}
+                                onChange={(e) => setItemsPerPage(e.target.value)}
+                                className="border border-gray-300 rounded-md text-sm md:text-base cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-400"
+                            >
+                                <option value={5}>5</option>
+                                <option value={10}>10</option>
+                                <option value={15}>15</option>
+                                <option value={20}>20</option>
+                                <option value={30}>30</option>
+                            </select>
+                        </div>
                         </div>
                     </div>
 
                     {/* Product Grid - Responsive */}
                     <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 gap-6">
-                        {filterProducts?.map((product, index) => (
+                        {filterProducts?.length > 0 && filterProducts?.map((product, index) => (
                             <Card key={index} product={product} categoryName={categoryName} />
                         ))}
 
                         {filterProducts?.length === 0 && <p>No products found.</p>}
+                    </div>
+
+                    {/* Display pagination on the right side bottom */}
+                    <div className="flex justify-end mt-6">
+                        <Pagination
+                            currentPage={currentPage}
+                            totalPages={totalPages}
+                            // setTotalPages={setTotalPages}
+                            setCurrentPage={setCurrentPage}
+                        />
                     </div>
                 </div>
             </div>

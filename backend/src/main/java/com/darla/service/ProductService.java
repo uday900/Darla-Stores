@@ -15,8 +15,10 @@ import java.util.stream.Collectors;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -58,12 +60,19 @@ public class ProductService {
 
 	// fetch all products, only for admin
 	@Transactional
-	public List<ProductDto> fetchAllProducts() {
-		List<Product> products = productRepository.findAll();
-		// send newest products first
-		products.sort((p1, p2) -> p2.getCreatedAt().compareTo(p1.getCreatedAt()));
+	public Page<ProductDto> fetchAllProducts(int size, int page) {
 		
-		return products.stream().map(Mapper::mapToProductDto).collect(Collectors.toList());
+//		List<Product> products = productRepository.findAll();
+//		// send newest products first
+//		products.sort((p1, p2) -> p2.getCreatedAt().compareTo(p1.getCreatedAt()));
+//		
+//		return products.stream().map(Mapper::mapToProductDto).collect(Collectors.toList());
+		
+		Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
+		Page<Product> productsPage = productRepository.findAll(pageable);
+		
+		return productsPage.map(Mapper::mapToProductDto);
+		
 	}
 
 	// fetch product by id
@@ -115,7 +124,7 @@ public class ProductService {
 
 	// fetch products by category
 	@Transactional
-	public List<ProductDto> fetchProductsByCategory(String category) {
+	public Page<ProductDto> fetchProductsByCategory(String category, int size, int page) {
 		if (category == null || category.isEmpty()) {
 			throw new NotFoundException("Category name cannot be null");
 		}
@@ -124,10 +133,16 @@ public class ProductService {
 		if (categoryObj.isEmpty()) {
 			throw new NotFoundException("Category with name " + category + " not found");
 		}
+		
+		Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
+		
+		Page<Product> productsPage = productRepository.findByCategoryName(category, pageable);
 
-		List<Product> products = productRepository.findByCategoryName(categoryObj.get().getName());
+//		List<Product> products = productRepository.findByCategoryName(categoryObj.get().getName());
 
-		return products.stream().map(Mapper::mapToProductDto).collect(Collectors.toList());
+//		return products.stream().map(Mapper::mapToProductDto).collect(Collectors.toList());
+		return productsPage.map(Mapper::mapToProductDto);
+	
 	}
 
 	// fetch products by search query

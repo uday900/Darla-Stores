@@ -17,8 +17,13 @@ export const ProductProvider = ({ children }) => {
   const [reviews, setReviews] = useState([])
 
   const [searchQuery, setSearchQuery] = useState('');
-
   const [carousels, setCarousels] = useState([]);
+
+  // === Pagination ===
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(null);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
+  
 
   
   async function fetchProductReviews(productId) {
@@ -108,6 +113,7 @@ export const ProductProvider = ({ children }) => {
       if (error.response?.status === 401) {
         window.location.href = "/login";
       }
+      
       setError(error);
       toast.error(error.response?.data?.message || "Failed to fetch metrics");
     } finally {
@@ -115,11 +121,13 @@ export const ProductProvider = ({ children }) => {
     }
   };
 
-  const fetchProducts = async () => {
+  const fetchProducts = async (size, page) => {
     setLoading(true);
     try {
-      const response = await api.get("/products");
-      setProducts(response.data.products);
+      const response = await api.get(`/products?size=${size}&page=${page-1}`);
+      setProducts(response.data.content);
+      setCurrentPage(page);
+      setTotalPages(response.data.totalPages);
     } catch (error) {
       toast.error(error.response?.data?.message || "Failed to fetch products");
     } finally {
@@ -140,14 +148,18 @@ export const ProductProvider = ({ children }) => {
     }
   };
 
-  const fetchProductsByCategory = async (category) => {
+  const fetchProductsByCategory = async (category, size , page) => {
     setLoading(true);
-    setProducts([])
+    console.log(category, size, page-1, "fetchProductsByCategory");
+    // setProducts([])
     try {
       // console.log(category, "sfadf")
-      const response = await api.get(`/products/category?category=${encodeURIComponent(category)}`);
+      const response = await api.get(`/products/category?category=${encodeURIComponent(category)}&size=${size}&page=${page-1}`);
       // console.log("calling fetchProductsByCategory ", category, response.data.products);
-      setProducts(response.data.products);
+      console.log(response);
+      setProducts(response.data.productsPage.content);
+      setCurrentPage(page);
+      setTotalPages(response.data.productsPage.totalPages);
   
       // return response.data.products;
     } catch (error) {
@@ -327,6 +339,13 @@ export const ProductProvider = ({ children }) => {
         fetchProductReviews,
         addReview,
         deleteReview,
+
+        // pagination
+        currentPage,
+        setCurrentPage,
+        totalPages,
+        setTotalPages,
+        itemsPerPage, setItemsPerPage,
       }}
     >
       {children}

@@ -3,6 +3,8 @@ package com.darla.repository;
 import java.util.List;
 
 import org.apache.commons.csv.CSVRecord;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -31,6 +33,8 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
 	@Query("select p from Product p where p.category.name = :categoryName order by p.createdAt desc limit 5")
 	List<Product> getFiveProductsByCategory(@Param("categoryName") String categoryName);
+
+	Page<Product> findByCategoryName(String category, Pageable pageable);
 
 
 
