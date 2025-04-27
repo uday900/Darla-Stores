@@ -229,7 +229,7 @@ const [errorDetails, setErrorDetails] = useState(null);
         openRazorpay(orderDataFromServer);
       } else{
         fetchUserCart(user.id);
-        toast.success(response.data.message);
+        toast.success("Order placed successfully");
         navigate('/user/orders');
       }
       // openRazorpay(orderDataFromServer);
@@ -279,7 +279,10 @@ const [errorDetails, setErrorDetails] = useState(null);
               <div>
                 <p className="text-3xl text-center mt-5 font-bold">No items in cart
                 {/* show one button to go to home and buy */}
-                <Link to="/" className="text-blue-500 hover:text-blue-700 mx-2 underline font-bold">Buy Now</Link>
+                <Link to="/" 
+                className="text-blue-500 hover:text-blue-700 mx-2 underline font-bold"
+                onClick={() => window.scrollTo({ top: 100, behavior: 'smooth' })}
+                >Buy Now</Link>
                 </p>
                 <img src={emptyCartImage} alt="Cart empty" />
               </div>

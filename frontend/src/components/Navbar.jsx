@@ -24,15 +24,6 @@ const Navbar = () => {
     const user = JSON.parse(localStorage.getItem('user'));
     const isAuthenticated = localStorage.getItem('isAuthenticated');
     const isAdmin = localStorage.getItem('isAdmin') === 'true';
-// useEffect(() => {
-//     const token = localStorage.getItem("token");
-//     // if(!token){
-//     //     console.log("token not found");
-//     //     logout();
-//     // }
-// }, []);
-    // For cart testing
-    // const cartItemsCount = 3;
 
 
     useEffect(() => {
@@ -98,11 +89,16 @@ const Navbar = () => {
                 <div className="flex justify-between items-center h-16">
                     {/* Left side - Firm Name */}
                     <div className="flex-shrink-0">
-                        <Link to="/" className="text-2xl font-bold ">
-                            {/* Darla <span className="text-indigo-600">Stores</span> */}
-                            <img src={logo} alt="logo" className="w-32"/>
-                        </Link>
-                    </div>
+  <Link
+    to="/"
+    className="text-2xl font-bold scroll-smooth cursor-pointer"
+    onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+  >
+    {/* Darla <span className="text-indigo-600">Stores</span> */}
+    <img src={logo} alt="logo" className="w-32" />
+  </Link>
+</div>
+
 
                     {/* Search Bar - Desktop & Tablet */}
                     <div className="hidden md:block lg:block flex-1 max-w-2xl mx-4">
@@ -113,6 +109,7 @@ const Navbar = () => {
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
                                 className="form-input w-full px-4 py-2 pr-10"
+                                required
                             />
                             {/* remove button */}
                             { searchQuery && (
@@ -125,11 +122,12 @@ const Navbar = () => {
                                 </button>
                             
                             )}
-                            <div
+                            <button
                             type="submit"
+                            onClick={()=>handleSearch}
                             className="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer">
                                 <FaSearch className="text-gray-400 hover:text-gray-500" />
-                            </div>
+                            </button>
                         </form>
                     </div>
 

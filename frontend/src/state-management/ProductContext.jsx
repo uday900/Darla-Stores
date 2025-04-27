@@ -201,7 +201,7 @@ export const ProductProvider = ({ children }) => {
     try {
       const response = await api.post("/products", product);
       toast.success(response.data.message);
-      fetchProducts();
+      fetchProducts(10, 1);
     } catch (error) {
       toast.error(error.response?.data?.message || "Failed to add product");
       if (error.response?.data?.errors) {
@@ -221,7 +221,7 @@ export const ProductProvider = ({ children }) => {
     try {
       const response = await api.put(`/products/${id}`, product);
       toast.success(response.data.message);
-      fetchProducts();
+      fetchProducts(10, 1);
       navigate('/admin/products');
     } catch (error) {
       toast.error(error.response?.data?.message || "Failed to update product");
@@ -242,7 +242,7 @@ export const ProductProvider = ({ children }) => {
     try {
       const response = await api.delete(`/products/${id}`);
       toast.success(response.data.message);
-      fetchProducts();
+      fetchProducts(10, 1);
       navigate('/admin/products');
     } catch (error) {
       toast.error(error.response?.data?.message || "Failed to update product");

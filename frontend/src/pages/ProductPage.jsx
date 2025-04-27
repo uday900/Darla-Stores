@@ -10,57 +10,11 @@ function ProductPage() {
     const { productId } = useParams();
     const navigate = useNavigate();
 
-    // const [reviews, setReviews] = useState([
-    //     {
-    //         id: 1,
-    //         userName: 'John Doe',
-    //         rating: 5,
-    //         comment: 'This is a great product!',
-    //         createdAt: '2021-01-01'
-    //     },
-    //     {
-    //         id: 2,
-    //         userName: 'Jane Smith',
-    //         rating: 4,
-    //         comment: 'I like this product.',
-    //         createdAt: '2021-01-02'
-    //     }
-    // ]);
     const [rating, setRating] = useState("5");
     const [review, setReview] = useState("");
     const [localReviews, setLocalReviews] = useState([]);
 
-    // const [product, setProduct] = useState({
-    //     id: 1,
-    //     name: 'Product 1',
-    //     description: 'Product 1 description',
-    //     price: 100,
-    //     rating: 4.5,
-    //     image: image1,
-    //     category: 'Men',
-    //     sizes: ['S', 'M', 'L', 'XL', 'XXL'],
-    //     colors: ['red', 'blue', 'green', 'yellow', 'purple'],
-    //     brand: 'Brand 1',
-
-
-    // },);
-
-    // dummy data
-    const categories = [
-        {
-            name: 'Men',
-            description: 'Men\'s clothing',
-
-        },
-        {
-            name: 'Women',
-            description: 'Women\'s clothing',
-        },
-        {
-            name: 'Kids',
-            description: 'Kids\' clothing',
-        }
-    ];
+   
 
     const isAdmin = localStorage.getItem("isAdmin");
     const isAuthenticated = localStorage.getItem("isAuthenticated");
@@ -117,7 +71,7 @@ function ProductPage() {
     useEffect(() => {
         const handleFunction = async () => {
             console.log(product.category, 'category')
-            await fetchProductsByCategory(product?.category)
+            await fetchProductsByCategory(product?.category, 10, 1)
             await fetchProductReviews(productId)
         }
 
