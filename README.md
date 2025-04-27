@@ -11,7 +11,7 @@ This project is a fully functional E-Commerce Full Stack Application built using
 
 The project is structured to follow clean coding practices, spring MVC layered architecture, and includes validations, role-based access control, and user-friendly error handling.
 
-<!-- ![E-commerce Preview](frontend\src\assets\thubnail.png) -->
+![E-commerce Preview](frontend/src/assets/thumbnail.png)
 👉 [Watch Full Demo Video Here]()
 
 
