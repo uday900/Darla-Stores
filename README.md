@@ -1,18 +1,18 @@
 
-# 🛍️ E-Commerce Backend API (Spring Boot)
+# 🛍️Full Stack E-Commerce Application (Spring Boot + React)
 ![Java](https://img.shields.io/badge/Java-17-blue)
-![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.x-green)
+![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.4-green)
 ![React](https://img.shields.io/badge/Frontend-React-blue)
 ![PostgreSQL](https://img.shields.io/badge/Database-PostgreSQL-blue)
-![Redis](https://img.shields.io/badge/Redis-In--Memory-red)
+![Redis](https://img.shields.io/badge/Redis-cacheMemory-red)
 
-This project is a fully functional E-Commerce Full Stack Application built using Spring Boot, React and Postgresql, providing RESTful APIs to manage user authentication, product management, cart functionality, and order processing.
+This project is a fully functional E-Commerce Full Stack Application built using Spring Boot, React and Postgresql, providing RESTful APIs to manage user authentication ( JWT + OAuth2 ), product & categories management, reviews & ratings, cart & checkout functionality, order processing, refund handling, Profile manage.
 
-It supports both JWT-based authentication and OAuth2 login with Google, enabling secure and flexible access control. Admin can manage users and orders, while regular users can update profiles, manage carts, and place orders.
 
-The project is structured to follow clean coding practices, layered architecture, and includes validations, role-based access control, and user-friendly error handling.
+The project is structured to follow clean coding practices, spring MVC layered architecture, and includes validations, role-based access control, and user-friendly error handling.
 
-<!-- ![E-commerce Preview](./preview-image.png) -->
+<!-- ![E-commerce Preview](frontend\src\assets\thubnail.png) -->
+👉 [Watch Full Demo Video Here]()
 
 
 ---
@@ -26,9 +26,11 @@ The project is structured to follow clean coding practices, layered architecture
 - 🔐 User registration and login (standard + OAuth2)
 - 🔁 Forgot/Reset password functionality
 - ✏️ Profile update and password change
-- 📩 Sending Emails to confirmation like otp's, orders, status updates
+- 📩 Sending Emails for confirmation like OTPs, orders, status updates
 - 🧠 **OTP management using Redis** for secure and time-limited access
 - 🔒 JWT-based secure token management
+- 🗑️ **User account deletion or deactivation** for managing account status
+
 
 ### 🛍️ Shopping Cart & Orders
 - 🛒 Add, remove, increment, and decrement products in the cart
@@ -45,9 +47,11 @@ The project is structured to follow clean coding practices, layered architecture
 ### ⭐ Reviews & Product Experience
 - ✍️ Add and delete product reviews
 - 🔍 Product search, detailed view, and filtered browsing by category
+- 📄 **Pagination** for product reviews with the ability to navigate through multiple pages
+
 
 ### 🧰 Admin Panel (Interactive UI)
-- 📦 Manage products, categories, carousels with individual or bulk
+- 📦 Manage products, categories, carousels with individual or bulk via CSV File
 - 🧑‍💼 View all users and their details
 - 📈 Track metrics and order statistics
 - 📬 Update order statuses, track payments, issue refunds
@@ -58,10 +62,7 @@ The project is structured to follow clean coding practices, layered architecture
 - 📬 Order confirmation and status update notifications
 - 🔔 Notifies user upon password change
 
-
-
 ## 🛡️ Security
-
 - JWT authentication with `Bearer` tokens
 - OAuth2 login via Google/Facebook/GitHub
 - Role-based access: `@PreAuthorize("hasRole('ADMIN')")`
@@ -76,14 +77,6 @@ The project is structured to follow clean coding practices, layered architecture
 - Common error messages returned with timestamps
 - Unique email checks and password strength enforcement
 
----
-
-## 🔐 Admin Credentials (Demo)
-
-You can use the following credentials to log in as an admin and test the admin functionalities:
-
-- **Email:** `admin@darla.com`  
-- **Password:** `admin123`
 ---
 ## ⚙️ Tech Stack
 
@@ -168,13 +161,7 @@ src
 ├── pages               # Route-based components
 │   ├── admin           # Admin-specific pages (metrics, management, etc.)
 │   ├── auth            # Login, registration, forgot password, etc.
-│   ├── Cart.jsx        # Shopping cart page
-│   ├── CategoryPage.jsx# Page to display product categories
-│   ├── CheckOutPage.jsx# Final checkout process
-│   ├── LandingPage.jsx # Home / landing page
-│   ├── ProductPage.jsx # Product detail view
-│   ├── Search.jsx      # Search results and filter view
-│   └── UserProfilePage.jsx # Profile and settings
+│   ├── Others          # Cart.jsx, UserDashboard.jsx etc.
 │
 ├── state-management    # Context API or other global state logic
 ├── App.jsx             # Main app structure and route definitions
@@ -191,88 +178,69 @@ src
 
 - **Java 17+** and **Maven**
 - **Node.js** and **npm/yarn**
-- **Redis** (locally or Docker)
+- **Redis** (locally or Docker(prefered) )
 - **MySQL/PostgreSQL** or the database you're using
 
 ---
-
+### 1. Clone the Repository
+First, clone the repository to your local machine:
+```bash
+git clone https://github.com/uday900/Darla-Stores-Ecommerce-Application.git
 ## 📦 Backend (Spring Boot)
+```
 
-### 1. Navigate to backend directory
+### 2. Navigate to backend directory
 ```bash
 cd backend
 ```
 
-### 2. Configure `application.properties` or `application.yml`
+### 3. Configure `application.properties`
 
-```markdown
-## ⚙️ Backend Configuration Guide
-
-This project is powered by Spring Boot, PostgreSQL, Razorpay, and integrates features like Google OAuth and Email notifications.
-
-Before running the backend, set the following in your `application.properties` file:
+Before running the backend, you'll need to configure the following essential properties in the `src/main/resources/application.properties` file:
 
 ---
 
 ### ✅ Essential Properties (`src/main/resources/application.properties`)
 
-#### 🔹 Application
-```properties
-spring.application.name=darlastoresbackend
-server.port=8080
-```
-
 #### 🗄️ PostgreSQL Database
+Configure your database settings:
 ```properties
-# create db if not with your custom name or darla_stores
 spring.datasource.url=jdbc:postgresql://localhost:5432/YOUR_DB_NAME
 spring.datasource.username=YOUR_DB_USERNAME
 spring.datasource.password=YOUR_DB_PASSWORD
 ```
 
-#### 🧠 Hibernate
-```properties
-spring.jpa.hibernate.ddl-auto=update
-spring.jpa.show-sql=true
-spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
-```
-
 #### 🔐 Google OAuth (Optional: for social login)
+If you're using Google OAuth for social login, set the credentials:
 ```properties
 spring.security.oauth2.client.registration.google.client-id=YOUR_GOOGLE_CLIENT_ID
 spring.security.oauth2.client.registration.google.client-secret=YOUR_GOOGLE_CLIENT_SECRET
 ```
 
 #### 💳 Razorpay Integration
+To enable Razorpay payment integration, update the API credentials:
 ```properties
 razorpay.api.key=YOUR_RAZORPAY_KEY
 razorpay.api.secret=YOUR_RAZORPAY_SECRET
 ```
 
 #### 📧 Email Configuration (Gmail SMTP)
+For email notifications (like order confirmations, password resets, etc.):
 ```properties
-spring.mail.host=smtp.gmail.com
-spring.mail.port=587
-spring.mail.username=YOUR_EMAIL       # use your own email
-spring.mail.password=YOUR_EMAIL_APP_PASSWORD     # recommended to use App Password
-spring.mail.properties.mail.smtp.auth=true
-spring.mail.properties.mail.smtp.starttls.enable=true
-```
-
-#### 🖼️ File Upload Limits
-```properties
-spring.servlet.multipart.enabled=true
-spring.servlet.multipart.max-file-size=2MB
-spring.servlet.multipart.max-request-size=2MB
+spring.mail.username=YOUR_EMAIL       # Use your own email
+spring.mail.password=YOUR_EMAIL_APP_PASSWORD     # Recommended to use App Password
 ```
 
 #### 🌐 Frontend URL (for CORS)
+If your frontend runs on a different port, update the URL to match:
 ```properties
 frontend.url=http://localhost:5173
 ```
-### 3. Build & Run the backend`
 
-```
+### 4. Build & Run the Backend
+
+Once the `application.properties` file is configured, you can build and run the backend:
+
 ```bash
 ./mvnw spring-boot:run
 ```
@@ -281,21 +249,27 @@ frontend.url=http://localhost:5173
 
 ---
 
-## 🌐 Frontend (React/Vite or any frontend)
+### 4. Navigate to frontend directory
 
-### 1. Navigate to frontend directory
 ```bash
 cd frontend
 ```
 
-### 2. Install dependencies
+### 5. Install dependencies
 ```bash
 npm install
 # or
 yarn install
 ```
+### 6. Configure environment variables
 
-### 3. Start development server
+Before running the frontend, you'll need to set up the following environment variables in a `.env` file in the root of the `frontend` directory:
+
+```bash
+VITE_BACKEND_API=http://localhost:8080 (backend url)
+VITE_RAZORPAY_KEY=YOUR_RAZORPAY_KEY
+```
+### 6. Start development server
 ```bash
 npm run dev
 # or
@@ -303,16 +277,6 @@ yarn dev
 ```
 
 > The frontend usually runs at `http://localhost:5173` (or configured port)
-
-### 4. Proxy Configuration (Optional)
-In `vite.config.js`, add proxy if making direct API calls:
-```js
-server: {
-  proxy: {
-    '/user': 'http://localhost:8080',
-  }
-}
-```
 
 ---
 
@@ -369,6 +333,13 @@ Example:
 ```http
 GET http://localhost:8080/categories
 ```
+
+## 🔐 Admin Credentials (Demo)
+
+You can use the following credentials to log in as an admin and test the admin functionalities:
+
+- **Email:** `admin@darla.com`  
+- **Password:** `admin123`
 
 ---
 
