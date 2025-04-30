@@ -12,7 +12,7 @@ This project is a fully functional E-Commerce Full Stack Application built using
 The project is structured to follow clean coding practices, spring MVC layered architecture, and includes validations, role-based access control, and user-friendly error handling.
 
 ![E-commerce Preview](data/thumbnail.png)
-👉 [Watch Full Demo Video Here]()
+👉 [Watch Full Demo Video Here](https://www.linkedin.com/posts/uday-kiran-darla_fullstackdevelopment-webdevelopment-ecommerceapp-activity-7322843326972383232-n9tw?utm_source=share&utm_medium=member_desktop&rcm=ACoAADtVFfoBZNk6Ydwke0gPeHqIlhCag7pIb0Y)
 
 
 ---
@@ -85,7 +85,7 @@ The project is structured to follow clean coding practices, spring MVC layered a
 - **Spring Boot** – REST API development
 - **Spring Security** – Authentication & Authorization (JWT & OAuth2)
 - **Spring Data JPA** – ORM with Hibernate
-- **Redis** – OTP and token management
+- **Redis** – OTP and token management (Dockerized)
 - **PostgreSQL** – Relational database
 - **Java MailSender** – Email services (verification, password reset, order updates)
 - **Lombok** – Boilerplate code reduction
@@ -108,6 +108,18 @@ The project is structured to follow clean coding practices, spring MVC layered a
 - **Redis** – In-memory data store used for:
   - Storing and verifying OTPs
   - Temporary token/session handling
+## 🛠️ **Tools**
+
+- **VS Code** – IDE for frontend development  
+- **Spring Tool Suite (STS)** – IDE for backend Java/Spring development  
+- **Postman** – API testing and development  
+- **Docker** – Containerization of Redis and backend services  
+- **Git & GitHub** – Version control and project hosting  
+
+## ⚡ **Performance Optimization**
+
+- **Backend**: Redis caching for fast data retrieval and reduced database load. Pagination and efficient querying to minimize payload size and optimize database performance.
+- **Frontend**: Lazy loading of components and images to speed up initial page load times. Optimized bundle size and responsive UI design for smooth user experience.
 
 ### 🔑 Core Entities (Tables):
 - **Users** – Handles user registration, profile info, roles (admin/user)
@@ -453,6 +465,102 @@ You can use the following credentials to log in as an admin and test the admin f
 
 
 
+## 🛠️ Challenges Faced
+
+### 🔐 Security (JWT & OAuth2)
+
+#### **JWT with 24-Hour Expiration:**
+- Generating secure JWT tokens with a 24-hour expiration using JJWT required precise payload and secret key configuration.
+- Validating tokens per request was complex, especially handling expired or tampered tokens without security leaks.
+- Crafting safe error responses for invalid tokens without exposing sensitive information was challenging.
+
+#### **OAuth2 Integration:**
+- Configuring Google OAuth2 with the correct client ID, secret, and redirect URIs was intricate.
+- Managing token exchange and user data retrieval in the OAuth2 flow was complex due to Google's API nuances.
+- Ensuring a smooth user experience while handling errors like revoked access required extensive testing.
+
+---
+
+### 💳 Payment Integration, Order Processing, and Refunds
+
+#### **Razorpay Payment Integration:**
+- Setting up Razorpay API keys and managing payment initiation, success, and failure scenarios was difficult.
+- Verifying payment signatures to prevent fraud demanded careful cryptographic checks.
+- Testing webhooks locally required tools like Ngrok to simulate callbacks.
+
+#### **Order Processing:**
+- Syncing order creation with payment confirmation to maintain database consistency during failures was complex.
+- Using Spring's `@Transactional` annotations to ensure rollback on failed payments was intricate.
+
+#### **Refunds:**
+- Handling refunds via Razorpay's API, including status updates and user notifications, was challenging.
+- Ensuring idempotency to avoid duplicate refunds and managing partial refunds for multi-item orders added complexity.
+
+---
+
+### 🖼️ Image Handling with Base64
+
+#### **Base64 Encoding/Decoding:**
+- Managing Base64 image uploads increased payload sizes, impacting API performance.
+- Decoding Base64 strings on the server and validating for corruption or malicious content was critical.
+
+#### **Storage and Performance:**
+- Storing Base64-derived images locally was simple but not scalable for large datasets.
+- Handling large Base64 strings strained server memory, requiring strict size/type limits.
+- Optimizing frontend image loading was tough due to Base64's lack of built-in compression.
+
+#### **Security Risks:**
+- Validating Base64 inputs to prevent injection attacks or oversized payloads was essential.
+- Ensuring only valid image formats (e.g., PNG, JPEG) were processed required robust safeguards.
+
+---
+
+### 🌐 CORS Fixing
+
+#### **Cross-Origin Configuration:**
+- Enabling CORS for React frontend (`http://localhost:5173`) to access Spring Boot backend (`http://localhost:8080`) was tricky.
+- Misconfigurations blocked requests, especially for authenticated endpoints with Authorization headers.
+
+#### **Preflight Request Issues:**
+- Managing OPTIONS requests for complex APIs (e.g., PUT, POST) required explicit CORS settings in Spring Security.
+- Browser rejections of preflight requests demanded precise allowed methods and headers.
+
+#### **Debugging Challenges:**
+- Diagnosing CORS errors was difficult due to vague browser messages.
+- Relying on Spring logs and browser developer tools to trace issues was time-consuming.
+
+---
+
+### 🗃️ Handling Database Relationships
+
+#### **JPA Relationship Complexity:**
+- Mapping JPA relationships (e.g., one-to-many for User-Order, many-to-many for Product-Category) was challenging to avoid lazy loading or N+1 query issues.
+- Configuring `FetchType` and `CascadeType` correctly balanced performance and data integrity.
+
+#### **Circular References:**
+- Serializing bidirectional relationships (e.g., Order-User) caused Jackson stack overflow errors.
+- Using `@JsonManagedReference`, `@JsonBackReference`, or DTOs to resolve circular references added complexity.
+
+#### **Database Consistency:**
+- Maintaining referential integrity during operations like category deletion with associated products required custom logic.
+- Handling cascading deletes or product reassignment was error-prone without thorough testing.
+
+---
+
+### 🐳 Understanding Docker and Integration
+
+#### **Learning Docker Basics:**
+- Grasping Docker concepts like containers, images, and networking involved a steep learning curve.
+- Configuring Docker for Redis and integrating with Spring Boot required studying Docker Compose.
+
+#### **Integration Challenges:**
+- Connecting Dockerized Redis to the backend involved tricky connection string and container-host communication setup.
+- Ensuring application access to `localhost:6379` with Redis in a container was complex during development.
+
+#### **Resource Management:**
+- Managing container resources (e.g., CPU, memory) to avoid performance issues on the development machine was difficult.
+- Debugging port conflicts or container crashes required learning Docker logs and commands.
+---
 
 ## 🧑‍💻 Author
 
