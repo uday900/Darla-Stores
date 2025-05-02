@@ -1,102 +1,102 @@
 name,description,price,brand,stock,colors,sizes,category,imagePath
-LG 1.5 Ton 5-Star Inverter AC,1.5 Ton split AC with inverter compressor and Wi-Fi control.,45000,LG,12,"Silver, White","1.5 Ton, 2 Ton",Ac,D:\\uday\\e-commerce-with-fullstack\\assets\\Ac\\1.jpg
-Samsung 1 Ton 4-Star Inverter AC,1 Ton split AC with energy-efficient inverter technology and smart features.,35000,Samsung,14,"Black, Grey","1 Ton, 1.5 Ton",Ac,D:\\uday\\e-commerce-with-fullstack\\assets\\Ac\\2.jpg
-Daikin 2 Ton 5-Star Inverter AC,2 Ton split AC with copper condenser and advanced PM2.5 filter.,55000,Daikin,10,"Grey, Silver",2 Ton,Ac,D:\\uday\\e-commerce-with-fullstack\\assets\\Ac\\3.jpg
-Carrier 1.5 Ton 3-Star AC,1.5 Ton window AC with auto restart and energy-saving mode.,30000,Carrier,8,"White, Blue",1.5 Ton,Ac,D:\\uday\\e-commerce-with-fullstack\\assets\\Ac\\4.jpg
-Hitachi 1.2 Ton 5-Star Inverter AC,1.2 Ton split AC with frost wash technology and silent operation.,40000,Hitachi,11,"Blue, Silver",1.2 Ton,Ac,D:\\uday\\e-commerce-with-fullstack\\assets\\Ac\\5.jpg
-Voltas 2 Ton 4-Star Inverter AC,2 Ton split AC with turbo cooling and smart remote control.,48000,Voltas,9,"Red, White",2 Ton,Ac,D:\\uday\\e-commerce-with-fullstack\\assets\\Ac\\6.jpg
-Panasonic 1.5 Ton 5-Star Inverter AC,1.5 Ton split AC with nanoe-G technology for better air quality.,47000,Panasonic,7,"Green, Silver",1.5 Ton,Ac,D:\\uday\\e-commerce-with-fullstack\\assets\\Ac\\7.jpg
-Blue Star 1 Ton 3-Star AC,1 Ton split AC with anti-corrosion coating and high cooling efficiency.,28000,Blue Star,13,"Yellow, White",1 Ton,Ac,D:\\uday\\e-commerce-with-fullstack\\assets\\Ac\\8.jpg
-Godrej 1.5 Ton 4-Star Inverter AC,1.5 Ton split AC with 6-in-1 convertible modes for versatile cooling.,42000,Godrej,5,"Purple, Silver",1.5 Ton,Ac,D:\\uday\\e-commerce-with-fullstack\\assets\\Ac\\9.jpg
-OGeneral 2 Ton 5-Star Inverter AC,2 Ton split AC with advanced air purification and energy-efficient design.,60000,OGeneral,4,"Brown, Grey",2 Ton,Ac,D:\\uday\\e-commerce-with-fullstack\\assets\\Ac\\10.jpg
-Harry Potter and the Sorcerer's Stone,Fantasy novel about a young wizard's journey.,500,J.K. Rowling,20,"Red, Blue","Paperback, Hardcover",Books,D:\\uday\\e-commerce-with-fullstack\\assets\\Books\\1.jpg
-The Great Gatsby,A classic novel set in the 1920s about love and wealth.,300,F. Scott Fitzgerald,15,"Green, Gold","Paperback, Hardcover",Books,D:\\uday\\e-commerce-with-fullstack\\assets\\Books\\2.jpg
-To Kill a Mockingbird,A novel about racial injustice in the Deep South.,400,Harper Lee,10,"Black, White","Paperback, Hardcover",Books,D:\\uday\\e-commerce-with-fullstack\\assets\\Books\\3.jpg
-1984,A dystopian novel about totalitarianism and surveillance.,350,George Orwell,12,"Blue, Grey","Paperback, Hardcover",Books,D:\\uday\\e-commerce-with-fullstack\\assets\\Books\\4.jpg
-The Catcher in the Rye,A story about teenage angst and alienation.,450,J.D. Salinger,8,"Orange, White","Paperback, Hardcover",Books,D:\\uday\\e-commerce-with-fullstack\\assets\\Books\\5.jpg
-Brave New World,A dystopian novel about a technologically advanced society.,400,Aldous Huxley,9,"Yellow, Black","Paperback, Hardcover",Books,D:\\uday\\e-commerce-with-fullstack\\assets\\Books\\6.jpg
-The Alchemist,A philosophical book about following your dreams.,350,Paulo Coelho,14,"Green, Blue","Paperback, Hardcover",Books,D:\\uday\\e-commerce-with-fullstack\\assets\\Books\\7.jpg
-Fahrenheit 451,A novel about a future where books are banned.,300,Ray Bradbury,11,"Red, Black","Paperback, Hardcover",Books,D:\\uday\\e-commerce-with-fullstack\\assets\\Books\\8.jpg
-The Hobbit,A fantasy novel about a hobbit's adventure.,450,J.R.R. Tolkien,13,"Brown, Green","Paperback, Hardcover",Books,D:\\uday\\e-commerce-with-fullstack\\assets\\Books\\9.jpg
-Crime and Punishment,A psychological novel about morality and redemption.,400,Fyodor Dostoevsky,7,"Blue, White","Paperback, Hardcover",Books,D:\\uday\\e-commerce-with-fullstack\\assets\\Books\\10.jpg
-HP Envy 14,"14-inch laptop with Intel i7 13th Gen, 16GB RAM, and 1TB SSD with backlit keyboard.",95000,HP,12,"Silver, Black","14-inch, 15-inch",Computers,D:\\uday\\e-commerce-with-fullstack\\assets\\Computers\\1.jpg
-Dell XPS 13,"13.4-inch laptop with Intel i7 12th Gen, 32GB RAM, and 1TB SSD, ultra-slim design.",120000,Dell,10,"Platinum, Silver","13.4-inch, 14-inch",Computers,D:\\uday\\e-commerce-with-fullstack\\assets\\Computers\\2.jpg
-Lenovo Legion 5,"15.6-inch gaming laptop with Ryzen 7, 16GB RAM, and 512GB SSD, RGB keyboard.",85000,Lenovo,8,"Phantom Blue, Black","15.6-inch, 17-inch",Computers,D:\\uday\\e-commerce-with-fullstack\\assets\\Computers\\3.jpg
-MacBook Pro 16 M2 Max,"16-inch laptop with M2 Max chip, 32GB RAM, and 1TB SSD, Retina display.",200000,Apple,5,"Space Grey, Silver",16-inch,Computers,D:\\uday\\e-commerce-with-fullstack\\assets\\Computers\\4.jpg
-ASUS ROG Strix,"15.6-inch gaming laptop with Intel i9, 32GB RAM, and 1TB SSD, high refresh rate display.",130000,ASUS,7,"Black, Red","15.6-inch, 17-inch",Computers,D:\\uday\\e-commerce-with-fullstack\\assets\\Computers\\5.jpg
-Microsoft Surface Laptop 5,"13.5-inch laptop with Intel i7, 16GB RAM, and 512GB SSD, sleek design.",110000,Microsoft,9,"Platinum, Black","13.5-inch, 15-inch",Computers,D:\\uday\\e-commerce-with-fullstack\\assets\\Computers\\6.jpg
-Razer Blade 15,"15.6-inch gaming laptop with Intel i7, 16GB RAM, and 1TB SSD, customizable RGB lighting.",140000,Razer,6,"Black, Green",15.6-inch,Computers,D:\\uday\\e-commerce-with-fullstack\\assets\\Computers\\7.jpg
-Lenovo ThinkPad X1 Carbon,"14-inch business laptop with Intel i5, 16GB RAM, and 512GB SSD, durable design.",90000,Lenovo,11,"Black, Grey",14-inch,Computers,D:\\uday\\e-commerce-with-fullstack\\assets\\Computers\\8.jpg
-MSI Katana 17,"17.3-inch gaming laptop with Intel i7, 32GB RAM, and 1TB SSD, high-performance cooling.",110000,MSI,4,"Black, Blue",17.3-inch,Computers,D:\\uday\\e-commerce-with-fullstack\\assets\\Computers\\9.jpg
-HP Spectre x360,"13.3-inch convertible laptop with Intel i7, 16GB RAM, and 1TB SSD, touch screen.",130000,HP,3,"Silver, Gold","13.3-inch, 14-inch",Computers,D:\\uday\\e-commerce-with-fullstack\\assets\\Computers\\10.jpg
-LG 260L 3-Star Frost Free Refrigerator,260L frost-free refrigerator with smart inverter compressor.,30000,LG,15,"Silver, Black","260L, 300L",Fridge,D:\\uday\\e-commerce-with-fullstack\\assets\\Fridge\\1.jpg
-Samsung 253L 2-Star Top Freezer Refrigerator,253L top freezer refrigerator with energy-efficient design.,25000,Samsung,10,"White, Grey","253L, 300L",Fridge,D:\\uday\\e-commerce-with-fullstack\\assets\\Fridge\\2.jpg
-Whirlpool 265L 3-Star Frost Free Refrigerator,265L frost-free refrigerator with adaptive intelligence.,28000,Whirlpool,12,"Black, Silver","265L, 300L",Fridge,D:\\uday\\e-commerce-with-fullstack\\assets\\Fridge\\3.jpg
-Godrej 190L 5-Star Direct Cool Refrigerator,190L direct cool refrigerator with a stylish design.,22000,Godrej,8,"Red, Blue","190L, 210L",Fridge,D:\\uday\\e-commerce-with-fullstack\\assets\\Fridge\\4.jpg
-Haier 320L 3-Star Frost Free Refrigerator,320L frost-free refrigerator with a sleek design and LED lighting.,32000,Haier,6,"Grey, Silver","320L, 350L",Fridge,D:\\uday\\e-commerce-with-fullstack\\assets\\Fridge\\5.jpg
-Bosch 252L 4-Star Frost Free Refrigerator,252L frost-free refrigerator with VitaFresh technology.,35000,Bosch,5,"Black, White","252L, 300L",Fridge,D:\\uday\\e-commerce-with-fullstack\\assets\\Fridge\\6.jpg
-LG 687L Side-by-Side Refrigerator,687L side-by-side refrigerator with smart features and ice dispenser.,80000,LG,3,"Silver, Black","687L, 700L",Fridge,D:\\uday\\e-commerce-with-fullstack\\assets\\Fridge\\7.jpg
-Samsung 501L 4-Star Side-by-Side Refrigerator,501L side-by-side refrigerator with digital inverter technology.,75000,Samsung,4,"Stainless Steel, Black","501L, 600L",Fridge,D:\\uday\\e-commerce-with-fullstack\\assets\\Fridge\\8.jpg
-Whirlpool 340L 3-Star Frost Free Refrigerator,340L frost-free refrigerator with 6th Sense technology.,40000,Whirlpool,7,"Blue, Silver","340L, 400L",Fridge,D:\\uday\\e-commerce-with-fullstack\\assets\\Fridge\\9.jpg
-Godrej 190L 4-Star Direct Cool Refrigerator,190L direct cool refrigerator with a stylish design.,21000,Godrej,9,"Green, White","190L, 210L",Fridge,D:\\uday\\e-commerce-with-fullstack\\assets\\Fridge\\10.jpg
-IKEA Hemnes 6-Drawer Dresser,Stylish dresser with six spacious drawers for storage.,15000,IKEA,10,"White, Black","60x40x80 cm, 80x50x100 cm",Furniture,D:\\uday\\e-commerce-with-fullstack\\assets\\Furniture\\1.jpg
-Urban Ladder Coffee Table,Modern coffee table with a sleek design and storage space.,8000,Urban Ladder,15,"Brown, Black","100x60x45 cm, 120x70x50 cm",Furniture,D:\\uday\\e-commerce-with-fullstack\\assets\\Furniture\\2.jpg
-Home Centre Sofa Set,Comfortable 3-seater sofa set with plush cushions.,25000,Home Centre,8,"Grey, Blue","200x90x85 cm, 220x100x90 cm",Furniture,D:\\uday\\e-commerce-with-fullstack\\assets\\Furniture\\3.jpg
-Pepperfry Dining Table,Stylish dining table with seating for six.,20000,Pepperfry,12,"Wooden, Glass","150x90x75 cm, 180x100x75 cm",Furniture,D:\\uday\\e-commerce-with-fullstack\\assets\\Furniture\\4.jpg
-FabIndia Wooden Bed,Queen-sized wooden bed with a traditional design.,30000,FabIndia,5,"Brown, Natural","160x200 cm, 180x200 cm",Furniture,D:\\uday\\e-commerce-with-fullstack\\assets\\Furniture\\5.jpg
-Hometown Recliner Chair,Comfortable recliner chair with adjustable settings.,12000,Hometown,7,"Grey, Brown",80x90x100 cm,Furniture,D:\\uday\\e-commerce-with-fullstack\\assets\\Furniture\\6.jpg
-Godrej Office Desk,Spacious office desk with multiple drawers.,15000,Godrej,6,"Black, Walnut",120x60x75 cm,Furniture,D:\\uday\\e-commerce-with-fullstack\\assets\\Furniture\\7.jpg
-HomeTown Bookshelf,Stylish bookshelf with five shelves for storage.,10000,HomeTown,9,"White, Brown",80x30x180 cm,Furniture,D:\\uday\\e-commerce-with-fullstack\\assets\\Furniture\\8.jpg
-Pepperfry TV Unit,Modern TV unit with storage for media devices.,18000,Pepperfry,4,"Black, Oak",150x40x50 cm,Furniture,D:\\uday\\e-commerce-with-fullstack\\assets\\Furniture\\9.jpg
-Urban Ladder Bedside Table,Compact bedside table with a drawer.,5000,Urban Ladder,11,"White, Brown",40x30x50 cm,Furniture,D:\\uday\\e-commerce-with-fullstack\\assets\\Furniture\\10.jpg
-Prestige Pressure Cooker,5L outer lid aluminium pressure cooker – gas compatible,1899,Prestige,20,"Silver, Black",35x20x18 cm,Kitchen,D:\uday\e-commerce-with-fullstack\assets\Kitchen\1.jpg
-Borosil Glass Mixing Bowl,"3-piece glass bowl set – microwave safe, transparent",799,Borosil,50,Transparent,15x15x15 cm,Kitchen,D:\uday\e-commerce-with-fullstack\assets\Kitchen\2.jpg
-Pigeon Non-stick Pan,"28cm non-stick fry pan with handle, induction base",699,Pigeon,35,"Black, Red",28x28x5 cm,Kitchen,D:\uday\e-commerce-with-fullstack\assets\Kitchen\3.jpg
-Milton Thermosteel Flask,1L stainless steel vacuum insulated flask – hot & cold,999,Milton,60,"Steel, Grey",8x8x30 cm,Kitchen,D:\uday\e-commerce-with-fullstack\assets\Kitchen\4.jpg
-Philips Mixer Grinder,"750W mixer with 3 stainless jars, pulse function",3499,Philips,18,"White, Blue",20x25x35 cm,Kitchen,D:\uday\e-commerce-with-fullstack\assets\Kitchen\5.jpg
-Cello Plastic Container Set,10 pcs airtight kitchen storage box – BPA-free plastic,499,Cello,80,"Blue, White",Varies,Kitchen,D:\uday\e-commerce-with-fullstack\assets\Kitchen\6.jpg
-Prestige Induction Cooktop,1200W portable induction stove with digital control,2399,Prestige,22,Black,30x28x7 cm,Kitchen,D:\uday\e-commerce-with-fullstack\assets\Kitchen\7.jpg
-Hawkins Contura Pressure Cooker,3L curved body aluminium pressure cooker,1550,Hawkins,25,Silver,30x20x15 cm,Kitchen,D:\uday\e-commerce-with-fullstack\assets\Kitchen\8.jpg
-Wonderchef Tandoor Grill,Electric tandoor and sandwich grill – 2000W,2899,Wonderchef,10,"Black, Red",35x30x15 cm,Kitchen,D:\uday\e-commerce-with-fullstack\assets\Kitchen\9.jpg
-Bajaj Electric Kettle,1.5L cordless electric kettle – auto cut-off,1299,Bajaj,30,"Black, Steel",20x15x25 cm,Kitchen,D:\uday\e-commerce-with-fullstack\assets\Kitchen\10.jpg
-Nike Sports T-Shirt,"Moisture-wicking sports t-shirt, comfortable fit",1499,Nike,100,"Blue, Red, Black",30x25x1 cm,Mens,D:\uday\e-commerce-with-fullstack\assets\Mens\1.jpg
-Adidas Polo Shirt,Classic polo shirt with breathable fabric and regular fit,1999,Adidas,60,"White, Grey, Navy",35x25x2 cm,Mens,D:\uday\e-commerce-with-fullstack\assets\Mens\2.jpg
-Puma Hoodie,Comfortable hoodie with front pocket and drawstring adjustable hood,2999,Puma,40,"Black, Charcoal, Blue",40x30x10 cm,Mens,D:\uday\e-commerce-with-fullstack\assets\Mens\3.jpg
-Levi's Hoodie,Soft cotton hoodie with graphic print on front,3499,Levi's,50,"Red, Grey, Black",45x30x12 cm,Mens,D:\uday\e-commerce-with-fullstack\assets\Mens\4.jpg
-Under Armour Hoodie,Performance hoodie with moisture-wicking fabric and relaxed fit,2799,Under Armour,60,"Green, Black, Navy",42x28x11 cm,Mens,D:\uday\e-commerce-with-fullstack\assets\Mens\5.jpg
-Levi's Jeans,Classic fit denim jeans with a comfortable stretch,2999,Levi's,70,"Dark Blue, Light Blue",40x25x5 cm,Mens,D:\uday\e-commerce-with-fullstack\assets\Mens\6.jpg
-Adidas Joggers,Comfortable cotton joggers with elastic waistband,2299,Adidas,80,"Black, Grey, Navy",45x30x8 cm,Mens,D:\uday\e-commerce-with-fullstack\assets\Mens\7.jpg
-Nike Running Shoes,Lightweight running shoes with breathable mesh upper,3999,Nike,50,"Black, White",28x12x10 cm,Mens,D:\uday\e-commerce-with-fullstack\assets\Mens\8.jpg
-Timberland Boots,Rugged boots with waterproof feature and durable leather,5499,Timberland,40,"Brown, Tan",30x15x12 cm,Mens,D:\uday\e-commerce-with-fullstack\assets\Mens\9.jpg
-Ray-Ban Sunglasses,Polarized sunglasses with UV protection,4999,Ray-Ban,30,"Black, Brown",14x5x3 cm,Mens,D:\uday\e-commerce-with-fullstack\assets\Mens\10.jpg
-iPhone 14,"128GB, A15 Bionic chip, 6.1-inch OLED display, Dual cameras",79999,Apple,40,"Black, White, Red",14.7x7.2x0.8 cm,Mobiles,D:\uday\e-commerce-with-fullstack\assets\Mobiles\1.jpg
-Samsung Galaxy S22,"128GB, 8GB RAM, 6.1-inch Dynamic AMOLED 2X, Triple cameras",74999,Samsung,50,"Phantom Black, White",15.7x7.3x0.8 cm,Mobiles,D:\uday\e-commerce-with-fullstack\assets\Mobiles\2.jpg
-OnePlus 9 Pro,"256GB, 12GB RAM, 6.7-inch Fluid AMOLED, Quad cameras",64999,OnePlus,30,"Morning Mist, Pine Green",16.4x7.4x0.8 cm,Mobiles,D:\uday\e-commerce-with-fullstack\assets\Mobiles\3.jpg
-Xiaomi Mi 11,"128GB, 8GB RAM, 6.81-inch AMOLED, Triple cameras",42999,Xiaomi,60,"Horizon Blue, Midnight Gray",16.5x7.5x0.8 cm,Mobiles,D:\uday\e-commerce-with-fullstack\assets\Mobiles\4.jpg
-Realme GT 5G,"128GB, 8GB RAM, 6.43-inch Super AMOLED, Triple cameras",28999,Realme,80,"Dashing Silver, Racing Yellow",16.4x7.4x0.8 cm,Mobiles,D:\uday\e-commerce-with-fullstack\assets\Mobiles\5.jpg
-Vivo V21e,"128GB, 8GB RAM, 6.44-inch AMOLED, Dual cameras",24999,Vivo,90,"Sunset Jazz, Midnight Blue",16.3x7.5x0.8 cm,Mobiles,D:\uday\e-commerce-with-fullstack\assets\Mobiles\6.jpg
-Oppo F19 Pro,"128GB, 6GB RAM, 6.43-inch AMOLED, Quad cameras",24999,Oppo,50,"Midnight Blue, Crystal Silver",16.3x7.4x0.8 cm,Mobiles,D:\uday\e-commerce-with-fullstack\assets\Mobiles\7.jpg
-Samsung Galaxy A52,"128GB, 6GB RAM, 6.5-inch Super AMOLED, Quad cameras",26999,Samsung,70,"Awesome Black, Awesome White",15.9x7.5x0.8 cm,Mobiles,D:\uday\e-commerce-with-fullstack\assets\Mobiles\8.jpg
-Motorola Edge 20,"128GB, 8GB RAM, 6.7-inch OLED, Triple cameras",29999,Motorola,40,"Frosted Champagne, Midnight Sky",16.4x7.4x0.8 cm,Mobiles,D:\uday\e-commerce-with-fullstack\assets\Mobiles\9.jpg
-Google Pixel 6,"128GB, 8GB RAM, 6.4-inch AMOLED, Dual cameras",59999,Google,25,"Stormy Black, Sorta Seafoam",15.8x7.5x0.9 cm,Mobiles,D:\uday\e-commerce-with-fullstack\assets\Mobiles\10.jpg
-Bose SoundLink Revolve,Portable Bluetooth speaker with 360° sound,12999,Bose,25,"Black, Silver",18x18x10 cm,Speakers,D:\uday\e-commerce-with-fullstack\assets\Speakers\1.jpg
-JBL Flip 5,Waterproof Bluetooth speaker with bass radiators,7999,JBL,40,"Black, Blue, Red",18x7x7 cm,Speakers,D:\uday\e-commerce-with-fullstack\assets\Speakers\2.jpg
-Sony SRS-XB12,Compact Bluetooth speaker with Extra Bass,4999,Sony,50,"Black, Blue, Pink",9x9x9 cm,Speakers,D:\uday\e-commerce-with-fullstack\assets\Speakers\3.jpg
-Ultimate Ears Megaboom 3,Waterproof and drop-proof Bluetooth speaker with 360° sound,14999,UE,20,"Black, Red, Blue",22x22x9 cm,Speakers,D:\uday\e-commerce-with-fullstack\assets\Speakers\4.jpg
-Marshall Stanmore II,Bluetooth speaker with superior sound quality and iconic design,24999,Marshall,15,"Black, Cream, Brown",35x20x18 cm,Speakers,D:\uday\e-commerce-with-fullstack\assets\Speakers\5.jpg
-Samsung 55-inch QLED,4K Ultra HD smart QLED TV with HDR10+ and Quantum Dot display,79999,Samsung,30,Black,123x72x15 cm,TVs,D:\uday\e-commerce-with-fullstack\assets\TV\1.jpg
-LG 50-inch LED,4K UHD Smart LED TV with webOS and AI Sound,45999,LG,50,Black,113x66x8 cm,TVs,D:\uday\e-commerce-with-fullstack\assets\TV\2.jpg
-Sony 65-inch Bravia,4K UHD Smart TV with OLED and Dolby Vision,129999,Sony,20,Black,145x85x10 cm,TVs,D:\uday\e-commerce-with-fullstack\assets\TV\3.jpg
-Xiaomi Mi TV 4X 55,4K UHD Smart TV with Android TV and Google Assistant,29999,Xiaomi,100,Black,123x72x10 cm,TVs,D:\uday\e-commerce-with-fullstack\assets\TV\4.jpg
-OnePlus 55-inch QLED,"4K QLED TV with Oxygen Play, Dolby Vision",59999,OnePlus,40,Black,123x72x12 cm,TVs,D:\uday\e-commerce-with-fullstack\assets\TV\5.jpg
-Rolex Submariner,Classic automatic diving watch with stainless steel case,799999,Rolex,10,"Silver, Black",40mm,Watches,D:\uday\e-commerce-with-fullstack\assets\Watches\1.jpg
-Casio G-Shock,Durable digital watch with shock resistance,5999,Casio,50,"Black, Blue, Red",50mm,Watches,D:\uday\e-commerce-with-fullstack\assets\Watches\2.jpg
-Fossil Hybrid HR,Hybrid smart watch with fitness tracking and notifications,9999,Fossil,70,"Black, Brown, Grey",44mm,Watches,D:\uday\e-commerce-with-fullstack\assets\Watches\3.jpg
-Apple Watch Series 7,Smartwatch with fitness tracking and cellular connectivity,43999,Apple,80,"Black, White, Gold",45mm,Watches,D:\uday\e-commerce-with-fullstack\assets\Watches\4.jpg
-Seiko Presage,Automatic mechanical watch with elegant design,24999,Seiko,30,"Silver, Blue",40mm,Watches,D:\uday\e-commerce-with-fullstack\assets\Watches\5.jpg
-Zara Women's Dress,Elegant casual dress with floral design,1999,Zara,100,"Black, Red, Blue",85x45x1 cm,Women,D:\uday\e-commerce-with-fullstack\assets\Women\1.jpg
-H&M Women’s Top,Soft cotton top with round neckline,799,H&M,150,"White, Pink, Black",50x35x2 cm,Women,D:\uday\e-commerce-with-fullstack\assets\Women\2.jpg
-Nike Women’s Sports Bra,Comfortable sports bra with moisture-wicking fabric,1299,Nike,80,"Black, Grey, Pink",35x25x2 cm,Women,D:\uday\e-commerce-with-fullstack\assets\Women\3.jpg
-Calvin Klein Women’s Jeans,"High-rise, slim-fit jeans with stretch material",3999,Calvin Klein,40,"Blue, Black, White",100x45x5 cm,Women,D:\uday\e-commerce-with-fullstack\assets\Women\4.jpg
-L’Oreal Paris Lipstick,Long-lasting matte lipstick in various shades,899,L’Oreal,120,"Red, Pink, Nude",15x5x2 cm,Women,D:\uday\e-commerce-with-fullstack\assets\Women\5.jpg
-Shop A to Z here,Everything you need in one place,20000,Darla,2,"White, Black",Normal,Mens,D:\uday\e-commerce-with-fullstack\assets\test-image.jpg
+LG 1.5 Ton 5-Star Inverter AC,1.5 Ton split AC with inverter compressor and Wi-Fi control.,45000,LG,12,"Silver, White","1.5 Ton, 2 Ton",Ac,https://darlastores.netlify.app/assets/Ac/1.jpg
+Samsung 1 Ton 4-Star Inverter AC,1 Ton split AC with energy-efficient inverter technology and smart features.,35000,Samsung,14,"Black, Grey","1 Ton, 1.5 Ton",Ac,https://darlastores.netlify.app/assets/Ac/2.jpg
+Daikin 2 Ton 5-Star Inverter AC,2 Ton split AC with copper condenser and advanced PM2.5 filter.,55000,Daikin,10,"Grey, Silver",2 Ton,Ac,https://darlastores.netlify.app/assets/Ac/3.jpg
+Carrier 1.5 Ton 3-Star AC,1.5 Ton window AC with auto restart and energy-saving mode.,30000,Carrier,8,"White, Blue",1.5 Ton,Ac,https://darlastores.netlify.app/assets/Ac/4.jpg
+Hitachi 1.2 Ton 5-Star Inverter AC,1.2 Ton split AC with frost wash technology and silent operation.,40000,Hitachi,11,"Blue, Silver",1.2 Ton,Ac,https://darlastores.netlify.app/assets/Ac/5.jpg
+Voltas 2 Ton 4-Star Inverter AC,2 Ton split AC with turbo cooling and smart remote control.,48000,Voltas,9,"Red, White",2 Ton,Ac,https://darlastores.netlify.app/assets/Ac/6.jpg
+Panasonic 1.5 Ton 5-Star Inverter AC,1.5 Ton split AC with nanoe-G technology for better air quality.,47000,Panasonic,7,"Green, Silver",1.5 Ton,Ac,https://darlastores.netlify.app/assets/Ac/7.jpg
+Blue Star 1 Ton 3-Star AC,1 Ton split AC with anti-corrosion coating and high cooling efficiency.,28000,Blue Star,13,"Yellow, White",1 Ton,Ac,https://darlastores.netlify.app/assets/Ac/8.jpg
+Godrej 1.5 Ton 4-Star Inverter AC,1.5 Ton split AC with 6-in-1 convertible modes for versatile cooling.,42000,Godrej,5,"Purple, Silver",1.5 Ton,Ac,https://darlastores.netlify.app/assets/Ac/9.jpg
+OGeneral 2 Ton 5-Star Inverter AC,2 Ton split AC with advanced air purification and energy-efficient design.,60000,OGeneral,4,"Brown, Grey",2 Ton,Ac,https://darlastores.netlify.app/assets/Ac/10.jpg
+Harry Potter and the Sorcerer's Stone,Fantasy novel about a young wizard's journey.,500,J.K. Rowling,20,"Red, Blue","Paperback, Hardcover",Books,https://darlastores.netlify.app/assets/Books/1.jpg
+The Great Gatsby,A classic novel set in the 1920s about love and wealth.,300,F. Scott Fitzgerald,15,"Green, Gold","Paperback, Hardcover",Books,https://darlastores.netlify.app/assets/Books/2.jpg
+To Kill a Mockingbird,A novel about racial injustice in the Deep South.,400,Harper Lee,10,"Black, White","Paperback, Hardcover",Books,https://darlastores.netlify.app/assets/Books/3.jpg
+1984,A dystopian novel about totalitarianism and surveillance.,350,George Orwell,12,"Blue, Grey","Paperback, Hardcover",Books,https://darlastores.netlify.app/assets/Books/4.jpg
+The Catcher in the Rye,A story about teenage angst and alienation.,450,J.D. Salinger,8,"Orange, White","Paperback, Hardcover",Books,https://darlastores.netlify.app/assets/Books/5.jpg
+Brave New World,A dystopian novel about a technologically advanced society.,400,Aldous Huxley,9,"Yellow, Black","Paperback, Hardcover",Books,https://darlastores.netlify.app/assets/Books/6.jpg
+The Alchemist,A philosophical book about following your dreams.,350,Paulo Coelho,14,"Green, Blue","Paperback, Hardcover",Books,https://darlastores.netlify.app/assets/Books/7.jpg
+Fahrenheit 451,A novel about a future where books are banned.,300,Ray Bradbury,11,"Red, Black","Paperback, Hardcover",Books,https://darlastores.netlify.app/assets/Books/8.jpg
+The Hobbit,A fantasy novel about a hobbit's adventure.,450,J.R.R. Tolkien,13,"Brown, Green","Paperback, Hardcover",Books,https://darlastores.netlify.app/assets/Books/9.jpg
+Crime and Punishment,A psychological novel about morality and redemption.,400,Fyodor Dostoevsky,7,"Blue, White","Paperback, Hardcover",Books,https://darlastores.netlify.app/assets/Books/10.jpg
+HP Envy 14,"14-inch laptop with Intel i7 13th Gen, 16GB RAM, and 1TB SSD with backlit keyboard.",95000,HP,12,"Silver, Black","14-inch, 15-inch",Computers,https://darlastores.netlify.app/assets/Computers/1.jpg
+Dell XPS 13,"13.4-inch laptop with Intel i7 12th Gen, 32GB RAM, and 1TB SSD, ultra-slim design.",120000,Dell,10,"Platinum, Silver","13.4-inch, 14-inch",Computers,https://darlastores.netlify.app/assets/Computers/2.jpg
+Lenovo Legion 5,"15.6-inch gaming laptop with Ryzen 7, 16GB RAM, and 512GB SSD, RGB keyboard.",85000,Lenovo,8,"Phantom Blue, Black","15.6-inch, 17-inch",Computers,https://darlastores.netlify.app/assets/Computers/3.jpg
+MacBook Pro 16 M2 Max,"16-inch laptop with M2 Max chip, 32GB RAM, and 1TB SSD, Retina display.",200000,Apple,5,"Space Grey, Silver",16-inch,Computers,https://darlastores.netlify.app/assets/Computers/4.jpg
+ASUS ROG Strix,"15.6-inch gaming laptop with Intel i9, 32GB RAM, and 1TB SSD, high refresh rate display.",130000,ASUS,7,"Black, Red","15.6-inch, 17-inch",Computers,https://darlastores.netlify.app/assets/Computers/5.jpg
+Microsoft Surface Laptop 5,"13.5-inch laptop with Intel i7, 16GB RAM, and 512GB SSD, sleek design.",110000,Microsoft,9,"Platinum, Black","13.5-inch, 15-inch",Computers,https://darlastores.netlify.app/assets/Computers/6.jpg
+Razer Blade 15,"15.6-inch gaming laptop with Intel i7, 16GB RAM, and 1TB SSD, customizable RGB lighting.",140000,Razer,6,"Black, Green",15.6-inch,Computers,https://darlastores.netlify.app/assets/Computers/7.jpg
+Lenovo ThinkPad X1 Carbon,"14-inch business laptop with Intel i5, 16GB RAM, and 512GB SSD, durable design.",90000,Lenovo,11,"Black, Grey",14-inch,Computers,https://darlastores.netlify.app/assets/Computers/8.jpg
+MSI Katana 17,"17.3-inch gaming laptop with Intel i7, 32GB RAM, and 1TB SSD, high-performance cooling.",110000,MSI,4,"Black, Blue",17.3-inch,Computers,https://darlastores.netlify.app/assets/Computers/9.jpg
+HP Spectre x360,"13.3-inch convertible laptop with Intel i7, 16GB RAM, and 1TB SSD, touch screen.",130000,HP,3,"Silver, Gold","13.3-inch, 14-inch",Computers,https://darlastores.netlify.app/assets/Computers/10.jpg
+LG 260L 3-Star Frost Free Refrigerator,260L frost-free refrigerator with smart inverter compressor.,30000,LG,15,"Silver, Black","260L, 300L",Fridge,https://darlastores.netlify.app/assets/Fridge/1.jpg
+Samsung 253L 2-Star Top Freezer Refrigerator,253L top freezer refrigerator with energy-efficient design.,25000,Samsung,10,"White, Grey","253L, 300L",Fridge,https://darlastores.netlify.app/assets/Fridge/2.jpg
+Whirlpool 265L 3-Star Frost Free Refrigerator,265L frost-free refrigerator with adaptive intelligence.,28000,Whirlpool,12,"Black, Silver","265L, 300L",Fridge,https://darlastores.netlify.app/assets/Fridge/3.jpg
+Godrej 190L 5-Star Direct Cool Refrigerator,190L direct cool refrigerator with a stylish design.,22000,Godrej,8,"Red, Blue","190L, 210L",Fridge,https://darlastores.netlify.app/assets/Fridge/4.jpg
+Haier 320L 3-Star Frost Free Refrigerator,320L frost-free refrigerator with a sleek design and LED lighting.,32000,Haier,6,"Grey, Silver","320L, 350L",Fridge,https://darlastores.netlify.app/assets/Fridge/5.jpg
+Bosch 252L 4-Star Frost Free Refrigerator,252L frost-free refrigerator with VitaFresh technology.,35000,Bosch,5,"Black, White","252L, 300L",Fridge,https://darlastores.netlify.app/assets/Fridge/6.jpg
+LG 687L Side-by-Side Refrigerator,687L side-by-side refrigerator with smart features and ice dispenser.,80000,LG,3,"Silver, Black","687L, 700L",Fridge,https://darlastores.netlify.app/assets/Fridge/7.jpg
+Samsung 501L 4-Star Side-by-Side Refrigerator,501L side-by-side refrigerator with digital inverter technology.,75000,Samsung,4,"Stainless Steel, Black","501L, 600L",Fridge,https://darlastores.netlify.app/assets/Fridge/8.jpg
+Whirlpool 340L 3-Star Frost Free Refrigerator,340L frost-free refrigerator with 6th Sense technology.,40000,Whirlpool,7,"Blue, Silver","340L, 400L",Fridge,https://darlastores.netlify.app/assets/Fridge/9.jpg
+Godrej 190L 4-Star Direct Cool Refrigerator,190L direct cool refrigerator with a stylish design.,21000,Godrej,9,"Green, White","190L, 210L",Fridge,https://darlastores.netlify.app/assets/Fridge/10.jpg
+IKEA Hemnes 6-Drawer Dresser,Stylish dresser with six spacious drawers for storage.,15000,IKEA,10,"White, Black","60x40x80 cm, 80x50x100 cm",Furniture,https://darlastores.netlify.app/assets/Furniture/1.jpg
+Urban Ladder Coffee Table,Modern coffee table with a sleek design and storage space.,8000,Urban Ladder,15,"Brown, Black","100x60x45 cm, 120x70x50 cm",Furniture,https://darlastores.netlify.app/assets/Furniture/2.jpg
+Home Centre Sofa Set,Comfortable 3-seater sofa set with plush cushions.,25000,Home Centre,8,"Grey, Blue","200x90x85 cm, 220x100x90 cm",Furniture,https://darlastores.netlify.app/assets/Furniture/3.jpg
+Pepperfry Dining Table,Stylish dining table with seating for six.,20000,Pepperfry,12,"Wooden, Glass","150x90x75 cm, 180x100x75 cm",Furniture,https://darlastores.netlify.app/assets/Furniture/4.jpg
+FabIndia Wooden Bed,Queen-sized wooden bed with a traditional design.,30000,FabIndia,5,"Brown, Natural","160x200 cm, 180x200 cm",Furniture,https://darlastores.netlify.app/assets/Furniture/5.jpg
+Hometown Recliner Chair,Comfortable recliner chair with adjustable settings.,12000,Hometown,7,"Grey, Brown",80x90x100 cm,Furniture,https://darlastores.netlify.app/assets/Furniture/6.jpg
+Godrej Office Desk,Spacious office desk with multiple drawers.,15000,Godrej,6,"Black, Walnut",120x60x75 cm,Furniture,https://darlastores.netlify.app/assets/Furniture/7.jpg
+HomeTown Bookshelf,Stylish bookshelf with five shelves for storage.,10000,HomeTown,9,"White, Brown",80x30x180 cm,Furniture,https://darlastores.netlify.app/assets/Furniture/8.jpg
+Pepperfry TV Unit,Modern TV unit with storage for media devices.,18000,Pepperfry,4,"Black, Oak",150x40x50 cm,Furniture,https://darlastores.netlify.app/assets/Furniture/9.jpg
+Urban Ladder Bedside Table,Compact bedside table with a drawer.,5000,Urban Ladder,11,"White, Brown",40x30x50 cm,Furniture,https://darlastores.netlify.app/assets/Furniture/10.jpg
+Prestige Pressure Cooker,5L outer lid aluminium pressure cooker – gas compatible,1899,Prestige,20,"Silver, Black",35x20x18 cm,Kitchen,https://darlastores.netlify.app/assets/Kitchen/1.jpg
+Borosil Glass Mixing Bowl,"3-piece glass bowl set – microwave safe, transparent",799,Borosil,50,Transparent,15x15x15 cm,Kitchen,https://darlastores.netlify.app/assets/Kitchen/2.jpg
+Pigeon Non-stick Pan,"28cm non-stick fry pan with handle, induction base",699,Pigeon,35,"Black, Red",28x28x5 cm,Kitchen,https://darlastores.netlify.app/assets/Kitchen/3.jpg
+Milton Thermosteel Flask,1L stainless steel vacuum insulated flask – hot & cold,999,Milton,60,"Steel, Grey",8x8x30 cm,Kitchen,https://darlastores.netlify.app/assets/Kitchen/4.jpg
+Philips Mixer Grinder,"750W mixer with 3 stainless jars, pulse function",3499,Philips,18,"White, Blue",20x25x35 cm,Kitchen,https://darlastores.netlify.app/assets/Kitchen/5.jpg
+Cello Plastic Container Set,10 pcs airtight kitchen storage box – BPA-free plastic,499,Cello,80,"Blue, White",Varies,Kitchen,https://darlastores.netlify.app/assets/Kitchen/6.jpg
+Prestige Induction Cooktop,1200W portable induction stove with digital control,2399,Prestige,22,Black,30x28x7 cm,Kitchen,https://darlastores.netlify.app/assets/Kitchen/7.jpg
+Hawkins Contura Pressure Cooker,3L curved body aluminium pressure cooker,1550,Hawkins,25,Silver,30x20x15 cm,Kitchen,https://darlastores.netlify.app/assets/Kitchen/8.jpg
+Wonderchef Tandoor Grill,Electric tandoor and sandwich grill – 2000W,2899,Wonderchef,10,"Black, Red",35x30x15 cm,Kitchen,https://darlastores.netlify.app/assets/Kitchen/9.jpg
+Bajaj Electric Kettle,1.5L cordless electric kettle – auto cut-off,1299,Bajaj,30,"Black, Steel",20x15x25 cm,Kitchen,https://darlastores.netlify.app/assets/Kitchen/10.jpg
+Nike Sports T-Shirt,"Moisture-wicking sports t-shirt, comfortable fit",1499,Nike,100,"Blue, Red, Black",30x25x1 cm,Mens,https://darlastores.netlify.app/assets/Mens/1.jpg
+Adidas Polo Shirt,Classic polo shirt with breathable fabric and regular fit,1999,Adidas,60,"White, Grey, Navy",35x25x2 cm,Mens,https://darlastores.netlify.app/assets/Mens/2.jpg
+Puma Hoodie,Comfortable hoodie with front pocket and drawstring adjustable hood,2999,Puma,40,"Black, Charcoal, Blue",40x30x10 cm,Mens,https://darlastores.netlify.app/assets/Mens/3.jpg
+Levi's Hoodie,Soft cotton hoodie with graphic print on front,3499,Levi's,50,"Red, Grey, Black",45x30x12 cm,Mens,https://darlastores.netlify.app/assets/Mens/4.jpg
+Under Armour Hoodie,Performance hoodie with moisture-wicking fabric and relaxed fit,2799,Under Armour,60,"Green, Black, Navy",42x28x11 cm,Mens,https://darlastores.netlify.app/assets/Mens/5.jpg
+Levi's Jeans,Classic fit denim jeans with a comfortable stretch,2999,Levi's,70,"Dark Blue, Light Blue",40x25x5 cm,Mens,https://darlastores.netlify.app/assets/Mens/6.jpg
+Adidas Joggers,Comfortable cotton joggers with elastic waistband,2299,Adidas,80,"Black, Grey, Navy",45x30x8 cm,Mens,https://darlastores.netlify.app/assets/Mens/7.jpg
+Nike Running Shoes,Lightweight running shoes with breathable mesh upper,3999,Nike,50,"Black, White",28x12x10 cm,Mens,https://darlastores.netlify.app/assets/Mens/8.jpg
+Timberland Boots,Rugged boots with waterproof feature and durable leather,5499,Timberland,40,"Brown, Tan",30x15x12 cm,Mens,https://darlastores.netlify.app/assets/Mens/9.jpg
+Ray-Ban Sunglasses,Polarized sunglasses with UV protection,4999,Ray-Ban,30,"Black, Brown",14x5x3 cm,Mens,https://darlastores.netlify.app/assets/Mens/10.jpg
+iPhone 14,"128GB, A15 Bionic chip, 6.1-inch OLED display, Dual cameras",79999,Apple,40,"Black, White, Red",14.7x7.2x0.8 cm,Mobiles,https://darlastores.netlify.app/assets/Mobiles/1.jpg
+Samsung Galaxy S22,"128GB, 8GB RAM, 6.1-inch Dynamic AMOLED 2X, Triple cameras",74999,Samsung,50,"Phantom Black, White",15.7x7.3x0.8 cm,Mobiles,https://darlastores.netlify.app/assets/Mobiles/2.jpg
+OnePlus 9 Pro,"256GB, 12GB RAM, 6.7-inch Fluid AMOLED, Quad cameras",64999,OnePlus,30,"Morning Mist, Pine Green",16.4x7.4x0.8 cm,Mobiles,https://darlastores.netlify.app/assets/Mobiles/3.jpg
+Xiaomi Mi 11,"128GB, 8GB RAM, 6.81-inch AMOLED, Triple cameras",42999,Xiaomi,60,"Horizon Blue, Midnight Gray",16.5x7.5x0.8 cm,Mobiles,https://darlastores.netlify.app/assets/Mobiles/4.jpg
+Realme GT 5G,"128GB, 8GB RAM, 6.43-inch Super AMOLED, Triple cameras",28999,Realme,80,"Dashing Silver, Racing Yellow",16.4x7.4x0.8 cm,Mobiles,https://darlastores.netlify.app/assets/Mobiles/5.jpg
+Vivo V21e,"128GB, 8GB RAM, 6.44-inch AMOLED, Dual cameras",24999,Vivo,90,"Sunset Jazz, Midnight Blue",16.3x7.5x0.8 cm,Mobiles,https://darlastores.netlify.app/assets/Mobiles/6.jpg
+Oppo F19 Pro,"128GB, 6GB RAM, 6.43-inch AMOLED, Quad cameras",24999,Oppo,50,"Midnight Blue, Crystal Silver",16.3x7.4x0.8 cm,Mobiles,https://darlastores.netlify.app/assets/Mobiles/7.jpg
+Samsung Galaxy A52,"128GB, 6GB RAM, 6.5-inch Super AMOLED, Quad cameras",26999,Samsung,70,"Awesome Black, Awesome White",15.9x7.5x0.8 cm,Mobiles,https://darlastores.netlify.app/assets/Mobiles/8.jpg
+Motorola Edge 20,"128GB, 8GB RAM, 6.7-inch OLED, Triple cameras",29999,Motorola,40,"Frosted Champagne, Midnight Sky",16.4x7.4x0.8 cm,Mobiles,https://darlastores.netlify.app/assets/Mobiles/9.jpg
+Google Pixel 6,"128GB, 8GB RAM, 6.4-inch AMOLED, Dual cameras",59999,Google,25,"Stormy Black, Sorta Seafoam",15.8x7.5x0.9 cm,Mobiles,https://darlastores.netlify.app/assets/Mobiles/10.jpg
+Bose SoundLink Revolve,Portable Bluetooth speaker with 360° sound,12999,Bose,25,"Black, Silver",18x18x10 cm,Speakers,https://darlastores.netlify.app/assets/Speakers/1.jpg
+JBL Flip 5,Waterproof Bluetooth speaker with bass radiators,7999,JBL,40,"Black, Blue, Red",18x7x7 cm,Speakers,https://darlastores.netlify.app/assets/Speakers/2.jpg
+Sony SRS-XB12,Compact Bluetooth speaker with Extra Bass,4999,Sony,50,"Black, Blue, Pink",9x9x9 cm,Speakers,https://darlastores.netlify.app/assets/Speakers/3.jpg
+Ultimate Ears Megaboom 3,Waterproof and drop-proof Bluetooth speaker with 360° sound,14999,UE,20,"Black, Red, Blue",22x22x9 cm,Speakers,https://darlastores.netlify.app/assets/Speakers/4.jpg
+Marshall Stanmore II,Bluetooth speaker with superior sound quality and iconic design,24999,Marshall,15,"Black, Cream, Brown",35x20x18 cm,Speakers,https://darlastores.netlify.app/assets/Speakers/5.jpg
+Samsung 55-inch QLED,4K Ultra HD smart QLED TV with HDR10+ and Quantum Dot display,79999,Samsung,30,Black,123x72x15 cm,TVs,https://darlastores.netlify.app/assets/TV/1.jpg
+LG 50-inch LED,4K UHD Smart LED TV with webOS and AI Sound,45999,LG,50,Black,113x66x8 cm,TVs,https://darlastores.netlify.app/assets/TV/2.jpg
+Sony 65-inch Bravia,4K UHD Smart TV with OLED and Dolby Vision,129999,Sony,20,Black,145x85x10 cm,TVs,https://darlastores.netlify.app/assets/TV/3.jpg
+Xiaomi Mi TV 4X 55,4K UHD Smart TV with Android TV and Google Assistant,29999,Xiaomi,100,Black,123x72x10 cm,TVs,https://darlastores.netlify.app/assets/TV/4.jpg
+OnePlus 55-inch QLED,"4K QLED TV with Oxygen Play, Dolby Vision",59999,OnePlus,40,Black,123x72x12 cm,TVs,https://darlastores.netlify.app/assets/TV/5.jpg
+Rolex Submariner,Classic automatic diving watch with stainless steel case,799999,Rolex,10,"Silver, Black",40mm,Watches,https://darlastores.netlify.app/assets/Watches/1.jpg
+Casio G-Shock,Durable digital watch with shock resistance,5999,Casio,50,"Black, Blue, Red",50mm,Watches,https://darlastores.netlify.app/assets/Watches/2.jpg
+Fossil Hybrid HR,Hybrid smart watch with fitness tracking and notifications,9999,Fossil,70,"Black, Brown, Grey",44mm,Watches,https://darlastores.netlify.app/assets/Watches/3.jpg
+Apple Watch Series 7,Smartwatch with fitness tracking and cellular connectivity,43999,Apple,80,"Black, White, Gold",45mm,Watches,https://darlastores.netlify.app/assets/Watches/4.jpg
+Seiko Presage,Automatic mechanical watch with elegant design,24999,Seiko,30,"Silver, Blue",40mm,Watches,https://darlastores.netlify.app/assets/Watches/5.jpg
+Zara Women's Dress,Elegant casual dress with floral design,1999,Zara,100,"Black, Red, Blue",85x45x1 cm,Women,https://darlastores.netlify.app/assets/Women/1.jpg
+H&M Women’s Top,Soft cotton top with round neckline,799,H&M,150,"White, Pink, Black",50x35x2 cm,Women,https://darlastores.netlify.app/assets/Women/2.jpg
+Nike Women’s Sports Bra,Comfortable sports bra with moisture-wicking fabric,1299,Nike,80,"Black, Grey, Pink",35x25x2 cm,Women,https://darlastores.netlify.app/assets/Women/3.jpg
+Calvin Klein Women’s Jeans,"High-rise, slim-fit jeans with stretch material",3999,Calvin Klein,40,"Blue, Black, White",100x45x5 cm,Women,https://darlastores.netlify.app/assets/Women/4.jpg
+L’Oreal Paris Lipstick,Long-lasting matte lipstick in various shades,899,L’Oreal,120,"Red, Pink, Nude",15x5x2 cm,Women,https://darlastores.netlify.app/assets/Women/5.jpg
+Shop A to Z here,Everything you need in one place,20000,Darla,2,"White, Black",Normal,Mens,https://darlastores.netlify.app/assets/test-image.jpg
