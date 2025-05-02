@@ -18,7 +18,14 @@ The project is structured to follow clean coding practices, spring MVC layered a
 ---
 ## 🔗 Live Demo
 
-> Deployment link coming soon...
+> 👉 [Deploy link](https://darlastores.netlify.app/)
+
+## 🛠️ **Deployment**
+
+- **Frontend Deployment**: [Netlify](https://www.netlify.com/)
+- **Backend Deployment**: [Render](https://render.com/)
+- **Database**: [Neon](https://neon.tech/) (PostgreSQL)
+- **Caching / Queue**: [Upstash](https://upstash.com/) (Redis)
 
 ## 🚀 Features
 
@@ -108,13 +115,13 @@ The project is structured to follow clean coding practices, spring MVC layered a
 - **Redis** – In-memory data store used for:
   - Storing and verifying OTPs
   - Temporary token/session handling
-## 🛠️ **Tools**
+## 🛠️ **Tools and Platforms**
 
 - **VS Code** – IDE for frontend development  
 - **Spring Tool Suite (STS)** – IDE for backend Java/Spring development  
 - **Postman** – API testing and development  
 - **Docker** – Containerization of Redis and backend services  
-- **Git & GitHub** – Version control and project hosting  
+- **Git & GitHub** – Version control and project hosting
 
 ## ⚡ **Performance Optimization**
 
@@ -241,6 +248,16 @@ For email notifications (like order confirmations, password resets, etc.):
 ```properties
 spring.mail.username=YOUR_EMAIL       # Use your own email
 spring.mail.password=YOUR_EMAIL_APP_PASSWORD     # Recommended to use App Password
+```
+### 🔁 Redis Configuration (Upstash) or dockerize with docker-compose.yml file
+
+For caching, session management, or pub/sub features, configure Redis in your Spring Boot application:
+
+```properties
+spring.redis.url=rediss://<your-upstash-endpoint>    # Use the Upstash Redis URL
+spring.redis.username=default                         # Upstash default user
+spring.redis.password=<your-upstash-password>         # Found in your Upstash dashboard
+
 ```
 
 #### 🌐 Frontend URL (for CORS)
