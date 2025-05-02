@@ -363,12 +363,16 @@ Example:
 GET http://localhost:8080/categories
 ```
 
-## 🔐 Admin Credentials (Demo)
+## 🔐 Default Credentials (Demo)
 
-You can use the following credentials to log in as an admin and test the admin functionalities:
-
+You can use the following credentials to log in as an admin and test user to test both user and admin functionalities:
+#### admin credentials
 - **Email:** `admin@darla.com`  
 - **Password:** `admin123`
+
+#### Test user
+- **Email:** `test@gmail.com`
+- **Password:** `Welcome@123`
 
 ---
 
