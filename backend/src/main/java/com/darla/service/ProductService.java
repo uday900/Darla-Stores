@@ -1,7 +1,10 @@
 package com.darla.service;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.URI;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
@@ -61,18 +64,18 @@ public class ProductService {
 	// fetch all products, only for admin
 	@Transactional
 	public Page<ProductDto> fetchAllProducts(int size, int page) {
-		
+
 //		List<Product> products = productRepository.findAll();
 //		// send newest products first
 //		products.sort((p1, p2) -> p2.getCreatedAt().compareTo(p1.getCreatedAt()));
 //		
 //		return products.stream().map(Mapper::mapToProductDto).collect(Collectors.toList());
-		
+
 		Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
 		Page<Product> productsPage = productRepository.findAll(pageable);
-		
+
 		return productsPage.map(Mapper::mapToProductDto);
-		
+
 	}
 
 	// fetch product by id
@@ -133,16 +136,16 @@ public class ProductService {
 		if (categoryObj.isEmpty()) {
 			throw new NotFoundException("Category with name " + category + " not found");
 		}
-		
+
 		Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
-		
+
 		Page<Product> productsPage = productRepository.findByCategoryName(category, pageable);
 
 //		List<Product> products = productRepository.findByCategoryName(categoryObj.get().getName());
 
 //		return products.stream().map(Mapper::mapToProductDto).collect(Collectors.toList());
 		return productsPage.map(Mapper::mapToProductDto);
-	
+
 	}
 
 	// fetch products by search query
@@ -279,7 +282,7 @@ public class ProductService {
 		 */
 
 		int totalProducts = productRepository.countProducts();
-		int totalUsers = userRepository.countUsers() -1 ; // excluding admin;
+		int totalUsers = userRepository.countUsers() - 1; // excluding admin;
 		int totalOrders = orderRepository.countOrders();
 		int totalCategories = categoryRepository.countCategories();
 		int totalCarousels = carouselRepository.countCarousels();
@@ -318,38 +321,32 @@ public class ProductService {
 		 * topTenProducts
 		 */
 		Map<String, List<ProductDto>> showcaseProducts = new HashMap<>();
-		
+
 		List<ProductDto> topTenProducts = productRepository.findTopTenProducts().stream().map(Mapper::mapToProductDto)
 				.collect(Collectors.toList());
-		
+
 		// fetch top 5 categories
 		Pageable pageable = PageRequest.of(0, 5);
 //		List<Category> categories = categoryRepository.findTopFiveCategories(pageable);
 		List<Category> categories = categoryRepository.findCategoriesWithMoreThanFiveProductsNative();
-		System.out.println("categories: " );
+		System.out.println("categories: ");
 
-		
 		showcaseProducts.put("topTenProducts", topTenProducts);
 		for (Category category : categories) {
 //			List<ProductDto> products = productRepository.findByCategoryName(category.getName()).stream()
 //					.map(Mapper::mapToProductDto).collect(Collectors.toList());
-			showcaseProducts.put(
-					category.getName(),
-					productRepository.getFiveProductsByCategory(category.getName())
-						.stream()
-						.map(Mapper::mapToProductDto)
-						.collect(Collectors.toList()));
+			showcaseProducts.put(category.getName(), productRepository.getFiveProductsByCategory(category.getName())
+					.stream().map(Mapper::mapToProductDto).collect(Collectors.toList()));
 		}
 		return showcaseProducts;
 
 	}
 
 	public Response uploadProducts(MultipartFile file) {
-		
+
 		List<ProductsDto> validProducts = new ArrayList<>();
-		Map<String, Object> errors = new HashMap<>();	
-		
-		
+		Map<String, Object> errors = new HashMap<>();
+
 		if (file.isEmpty() || file.getOriginalFilename().contains(".csv") == false) {
 			Response response = new Response();
 			response.setStatus(400);
@@ -357,91 +354,92 @@ public class ProductService {
 			return response;
 		}
 
-		
-		try( var reader = new InputStreamReader(file.getInputStream());
-				 var csvParser = CSVFormat.DEFAULT.withFirstRecordAsHeader().parse(reader)
-				
-				) {
-            int row = 1;
-   
-            for (CSVRecord record : csvParser) {
-            	row++;
-            	ProductsDto dto = ProductsDto.builder()
-                        .name(record.get("name"))
-                        .description(record.get("description"))
-                        .price(Double.parseDouble(record.get("price")))
-                        .brand(record.get("brand"))
-                        .stock(Integer.parseInt(record.get("stock")))
+		try (var reader = new InputStreamReader(file.getInputStream());
+				var csvParser = CSVFormat.DEFAULT.withFirstRecordAsHeader().parse(reader)
+
+		) {
+			int row = 1;
+
+			for (CSVRecord record : csvParser) {
+				row++;
+				ProductsDto dto = ProductsDto.builder().name(record.get("name")).description(record.get("description"))
+						.price(Double.parseDouble(record.get("price"))).brand(record.get("brand"))
+						.stock(Integer.parseInt(record.get("stock")))
 //                        .rating(Double.parseDouble(record.get("rating")))
-                        .colors(record.get("colors"))
-                        .sizes(record.get("sizes"))
-                        .category(record.get("category"))
-                        .imagePath(record.get("imagePath"))
-                        .build();
-            	
-                // validate the product dto
-                var violations = validator.validate(dto);
-                if (!violations.isEmpty()) {
-                    for (var v : violations) {
+						.colors(record.get("colors")).sizes(record.get("sizes")).category(record.get("category"))
+						.imagePath(record.get("imagePath")).build();
+
+				// validate the product dto
+				var violations = validator.validate(dto);
+				if (!violations.isEmpty()) {
+					for (var v : violations) {
 //                        errors.add(Map.of("row", row, "error", v.getMessage()));
-                    	errors.put("For the record "+row, v.getMessage());
-                    }
-                    continue;
-                }
-                
-                // check if category exists
-                Optional<Category> category = categoryRepository.findByName(dto.getCategory());
-                if (category.isEmpty()) {
+						errors.put("For the record " + row, v.getMessage());
+					}
+					continue;
+				}
+
+				// check if category exists
+				Optional<Category> category = categoryRepository.findByName(dto.getCategory());
+				if (category.isEmpty()) {
 //                    errors.add(Map.of("row", row, "error", "Category not found with name " + dto.getCategory()));
-                	errors.put("For the record "+ row, "Category not found with name " + dto.getCategory());
-                    continue;
-                }
-                
-                validProducts.add(dto);
-            	                
-            }
-            
-            System.out.println("transfer to dto");
-            
-            if (errors.isEmpty()) {
-            	System.out.println("no errors");
-                
-            	// save the valid products to the database
-                List<Product> products = validProducts.stream()
-                		.map(productDto ->{
-                	
-                			
-                			byte[] imageData = null;
-                			String imageName = null;
-                			try {
-								imageData = Files.readAllBytes(Paths.get(productDto.getImagePath()));
-								imageName = Paths.get(productDto.getImagePath()).getFileName().toString();
-							} catch (IOException e) {
-//								e.printStackTrace();
-								// handle the exception
-								throw new RuntimeException("Failed to read image file "+e.getMessage());
+					errors.put("For the record " + row, "Category not found with name " + dto.getCategory());
+					continue;
+				}
+
+				validProducts.add(dto);
+
+			}
+
+			System.out.println("transfer to dto");
+
+			if (errors.isEmpty()) {
+				System.out.println("no errors");
+
+				// save the valid products to the database
+				List<Product> products = validProducts.stream().map(productDto -> {
+
+					byte[] imageData = null;
+					String imageName = null;
+//                			try {
+//								imageData = Files.readAllBytes(Paths.get(productDto.getImagePath()));
+//								imageName = Paths.get(productDto.getImagePath()).getFileName().toString();
+//							} catch (IOException e) {
+////								e.printStackTrace();
+//								// handle the exception
+//								throw new RuntimeException("Failed to read image file "+e.getMessage());
+//							}
+					try {
+						if (productDto.getImagePath().startsWith("http")	) {
+							// Remote URL
+							try (InputStream in = new URL(productDto.getImagePath()).openStream()) {
+								imageData = in.readAllBytes();
+								imageName = Paths.get(new URI(productDto.getImagePath()).getPath()).getFileName()
+										.toString();
 							}
-                			
-                			Category category = categoryRepository.findByName(productDto.getCategory()).get();
-                			return Product.builder()
-                					.name(productDto.getName())
-                					.description(productDto.getDescription())
-                					.price(productDto.getPrice())
-                					.brand(productDto.getBrand())
-                					.stock(productDto.getStock())
-                					.rating(0.0) // set 1 for default
-                					.colors(productDto.getColors())
-                					.sizes(productDto.getSizes())
-                					
-                					.imageData(imageData)
-                					.imageName(imageName)
-                					.category(category)
-                					
-                					.build();
-                
-                }).collect(Collectors.toList());
-                
-                productRepository.saveAll(products);
+						} else {
+							// Local path
+							imageData = Files.readAllBytes(Paths.get(productDto.getImagePath()));
+							imageName = Paths.get(productDto.getImagePath()).getFileName().toString();
+						}
+					} catch (Exception e) {
+						throw new RuntimeException(
+								"Failed to read image: " + productDto.getImagePath() + " - " + e.getMessage());
+					}
+
+					Category category = categoryRepository.findByName(productDto.getCategory()).get();
+					return Product.builder().name(productDto.getName()).description(productDto.getDescription())
+							.price(productDto.getPrice()).brand(productDto.getBrand()).stock(productDto.getStock())
+							.rating(0.0) // set 1 for default
+							.colors(productDto.getColors()).sizes(productDto.getSizes())
+
+							.imageData(imageData).imageName(imageName).category(category)
+
+							.build();
+
+				}).collect(Collectors.toList());
+
+				productRepository.saveAll(products);
 			} else {
 
 				// return the errors
@@ -451,22 +449,22 @@ public class ProductService {
 				response.setErrors(errors);
 				return response;
 			}
-            
-        }catch(Exception e){
+
+		} catch (Exception e) {
 //                        	e.printStackTrace();
-            	Response response = new Response();
-            	response.setStatus(400);
-            	response.setMessage("Failed to parsing CSV file " + e.getMessage());
-            	return response;
-            }
-             Response response = new Response();
-             response.setStatus(200);
-             response.setMessage("Products uploaded and added successfully");
-             
-             // add entry to activity logs
-             ActivityLogs.addEntry("Multiple products added");	
-           
-             return response;
-}
+			Response response = new Response();
+			response.setStatus(400);
+			response.setMessage("Failed to parsing CSV file " + e.getMessage());
+			return response;
+		}
+		Response response = new Response();
+		response.setStatus(200);
+		response.setMessage("Products uploaded and added successfully");
+
+		// add entry to activity logs
+		ActivityLogs.addEntry("Multiple products added");
+
+		return response;
+	}
 
 }
